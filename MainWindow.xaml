@@ -14,10 +14,26 @@
     </Window.SystemBackdrop>
 
     <Grid>
-        <TextBlock
-    Text="Hello, WinUI 3!"
-    FontSize="24"
-    HorizontalAlignment="Center"
-    VerticalAlignment="Center" />
+        <StackPanel
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Width="360"
+            Spacing="32">
+
+            <TextBlock Text="Logowanie" FontSize="20" HorizontalAlignment="Center" />
+
+            <StackPanel Spacing="6">
+                <TextBlock Text="Email" />
+                <TextBox x:Name="EmailTextBox" PlaceholderText="email@przyklad.com" />
+            </StackPanel>
+
+            <StackPanel Spacing="6">
+                <TextBlock Text="Hasło" />
+                <PasswordBox x:Name="PasswordBox" PlaceholderText="Hasło" />
+            </StackPanel>
+
+            <Button x:Name="LoginButton" Content="Zaloguj" HorizontalAlignment="Stretch" Background="#4FC3F7" Foreground="White" />
+
+        </StackPanel>
     </Grid>
 </Window>
