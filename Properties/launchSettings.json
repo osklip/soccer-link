@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "SoccerLink (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "SoccerLink (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
