@@ -32,7 +32,7 @@
                 <PasswordBox x:Name="PasswordBox" PlaceholderText="Hasło" />
             </StackPanel>
 
-            <Button x:Name="LoginButton" Content="Zaloguj" HorizontalAlignment="Stretch" Background="#4FC3F7" Foreground="White" />
+            <Button x:Name="LoginButton" Content="Zaloguj" HorizontalAlignment="Stretch" Background="#4FC3F7" Foreground="White" Click="LoginButton_Click" />
 
         </StackPanel>
     </Grid>
