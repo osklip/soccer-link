@@ -1,4 +1,4 @@
-using Microsoft.UI.Xaml;
+ï»¿using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Data;
@@ -6,6 +6,7 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using SoccerLink.Services;
+using SoccerLink.Views;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -31,9 +32,22 @@ namespace SoccerLink
         }
         private async void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine("?? Testujê po³¹czenie z baz¹...");
-            await DatabaseConnection.TestConnectionAsync(); // ?? wywo³anie Twojej funkcji
-            Debug.WriteLine("? Zakoñczono test po³¹czenia!");
+            /*  Debug.WriteLine("?? TestujÄ™ poÅ‚Ä…czenie z bazÄ…");
+              await DatabaseConnection.TestConnectionAsync();
+              Debug.WriteLine("? ZakoÅ„czono test poÅ‚Ä…czenia"); */
+
+            var email = EmailTextBox.Text;
+            var password = PasswordBox.Password;
+            var loginSuccess = await LoginService.LoginAsync(email, password);
+            if (loginSuccess)
+            {
+                Debug.WriteLine("Logowanie powiodÅ‚o siÄ™.");
+                this.Content = new DashboardPage();
+            }
+            else
+            {
+                Debug.WriteLine("Logowanie nie powiodÅ‚o siÄ™.");
+            }
         }
     }
 }

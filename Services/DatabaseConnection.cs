@@ -26,10 +26,8 @@ namespace SoccerLink.Services
 
             var sql = "SELECT UzytkownikID, Email, Rola FROM Uzytkownik ORDER BY UzytkownikID;";
 
-            // ↓ ZAMIANA: Execute(...) zamiast Query(...)
             var result = await client.Execute(sql);
 
-            // result.Rows to IEnumerable<IEnumerable<Value>> – na potrzeby podglądu rzutujemy na stringi
             foreach (var row in result.Rows)
             {
                 var cells = row.ToArray();
