@@ -9,6 +9,6 @@
     mc:Ignorable="d">
 
     <Grid>
-        <TextBlock Text="Siema Eniu" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        <TextBlock Text="Tu będzie panel główny aplikacji" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" />
     </Grid>
 </Page>

@@ -8,5 +8,6 @@ namespace SoccerLink.ModelViews
 {
     internal class LoginViewModel
     {
+
     }
 }

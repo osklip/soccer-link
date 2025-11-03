@@ -36,8 +36,8 @@ namespace SoccerLink
               await DatabaseConnection.TestConnectionAsync();
               Debug.WriteLine("? Zakończono test połączenia"); */
 
-            var email = EmailTextBox.Text;
-            var password = PasswordBox.Password;
+            string email = EmailTextBox.Text;
+            string password = PasswordBox.Password;
             var loginSuccess = await LoginService.LoginAsync(email, password);
             if (loginSuccess)
             {

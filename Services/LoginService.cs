@@ -14,8 +14,9 @@ namespace SoccerLink.Services
 
         public static async Task<bool> LoginAsync(string email, string password)
         {
-            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))           
                 return false;
+
 
             using var client = await DatabaseClient.Create(o =>
             {
@@ -24,7 +25,7 @@ namespace SoccerLink.Services
                 o.UseHttps = true;
             });
 
-            // Jakaś podmianka , aby uniknąć SQL Injection
+            // Jakaś podmianka , aby uniknąć SQL Injection (nw po co ale podobno tak się robi)
             var safeEmail = email.Replace("'", "''").Trim();
 
             var sql = $"SELECT Haslo FROM Uzytkownik WHERE Email = '{safeEmail}' LIMIT 1;";
@@ -41,7 +42,7 @@ namespace SoccerLink.Services
             if (storedPassword == null)
                 return false;
 
-            // Tutaj można dodać hashowanie haseł itp.
+            // Miejsce na hash haseł, do zrobienia potem
             return storedPassword == password;
         }
     }
