@@ -28,7 +28,7 @@ namespace SoccerLink.Services
             // Jakaś podmianka , aby uniknąć SQL Injection (nw po co ale podobno tak się robi)
             var safeEmail = email.Replace("'", "''").Trim();
 
-            var sql = $"SELECT Haslo FROM Uzytkownik WHERE Email = '{safeEmail}' LIMIT 1;";
+            var sql = $"SELECT Haslo FROM Uzytkownik WHERE AdresEmail = '{safeEmail}' LIMIT 1;";
 
             var result = await client.Execute(sql);
 
