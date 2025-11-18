@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="SoccerLink.Views.RegisterPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:SoccerLink.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="#2F4450">
+        <Border
+            Width="600"
+            CornerRadius="16"
+            Background="#98C9FF"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Padding="28">
+
+            <StackPanel HorizontalAlignment="Stretch" Spacing="18">
+
+                <TextBlock
+                    Text="Rejestracja"
+                    FontSize="24"
+                    FontWeight="Bold"
+                    Foreground="#2A5670"
+                    HorizontalAlignment="Center"
+                    TextAlignment="Center" />
+
+                <!-- GRID 3 x 2 NA POLA FORMULARZA -->
+                <Grid Margin="0,8,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- LEWA KOLUMNA: Email / Hasło / Powtórz Hasło -->
+
+                    <!-- EMAIL -->
+                    <StackPanel Grid.Row="0" Grid.Column="0" Spacing="6" Margin="8,0,8,4">
+                        <TextBlock
+                            Text="Adres email"
+                            Foreground="#2A5670"
+                            FontWeight="Bold"
+                            FontSize="13" />
+
+                        <Grid Height="44">
+                            <Border Background="#8A9AA6" CornerRadius="10" Margin="0,6,0,0" />
+                            <Border Background="#BFBFBF" CornerRadius="10">
+                                <TextBox
+                                    x:Name="EmailTextBox"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    Foreground="Black"
+                                    Padding="12,8"
+                                    PlaceholderText="email@przyklad.com"
+                                    FontWeight="Bold" />
+                            </Border>
+                        </Grid>
+                    </StackPanel>
+
+                    <!-- HASŁO -->
+                    <StackPanel Grid.Row="1" Grid.Column="0" Spacing="6" Margin="8,8,8,4">
+                        <TextBlock
+                            Text="Hasło"
+                            Foreground="#2A5670"
+                            FontWeight="Bold"
+                            FontSize="13" />
+
+                        <Grid Height="44">
+                            <Border Background="#8A9AA6" CornerRadius="10" Margin="0,6,0,0" />
+                            <Border Background="#BFBFBF" CornerRadius="10">
+                                <PasswordBox
+                                    x:Name="PasswordBox"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    Foreground="Black"
+                                    Padding="12,8"
+                                    FontWeight="Bold"
+                                    PlaceholderText="Hasło" />
+                            </Border>
+                        </Grid>
+                    </StackPanel>
+
+                    <!-- POWTÓRZ HASŁO -->
+                    <StackPanel Grid.Row="2" Grid.Column="0" Spacing="6" Margin="8,8,8,0">
+                        <TextBlock
+                            Text="Powtórz Hasło"
+                            Foreground="#2A5670"
+                            FontWeight="Bold"
+                            FontSize="13" />
+
+                        <Grid Height="44">
+                            <Border Background="#8A9AA6" CornerRadius="10" Margin="0,6,0,0" />
+                            <Border Background="#BFBFBF" CornerRadius="10">
+                                <PasswordBox
+                                    x:Name="PasswordConfirmationBox"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    Foreground="Black"
+                                    Padding="12,8"
+                                    FontWeight="Bold"
+                                    PlaceholderText="Powtórz Hasło" />
+                            </Border>
+                        </Grid>
+                    </StackPanel>
+
+                    <!-- PRAWA KOLUMNA: Imię / Nazwisko / Telefon -->
+
+                    <!-- IMIĘ -->
+                    <StackPanel Grid.Row="0" Grid.Column="1" Spacing="6" Margin="8,0,8,4">
+                        <TextBlock
+                            Text="Imię"
+                            Foreground="#2A5670"
+                            FontWeight="Bold"
+                            FontSize="13" />
+
+                        <Grid Height="44">
+                            <Border Background="#8A9AA6" CornerRadius="10" Margin="0,6,0,0" />
+                            <Border Background="#BFBFBF" CornerRadius="10">
+                                <TextBox
+                                    x:Name="NameTextBox"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    Foreground="Black"
+                                    Padding="12,8"
+                                    PlaceholderText="Imię"
+                                    FontWeight="Bold" />
+                            </Border>
+                        </Grid>
+                    </StackPanel>
+
+                    <!-- NAZWISKO -->
+                    <StackPanel Grid.Row="1" Grid.Column="1" Spacing="6" Margin="8,8,8,4">
+                        <TextBlock
+                            Text="Nazwisko"
+                            Foreground="#2A5670"
+                            FontWeight="Bold"
+                            FontSize="13" />
+
+                        <Grid Height="44">
+                            <Border Background="#8A9AA6" CornerRadius="10" Margin="0,6,0,0" />
+                            <Border Background="#BFBFBF" CornerRadius="10">
+                                <TextBox
+                                    x:Name="SurnameTextBox"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    Foreground="Black"
+                                    Padding="12,8"
+                                    PlaceholderText="Nazwisko"
+                                    FontWeight="Bold" />
+                            </Border>
+                        </Grid>
+                    </StackPanel>
+
+                    <!-- NUMER TELEFONU -->
+                    <StackPanel Grid.Row="2" Grid.Column="1" Spacing="6" Margin="8,8,8,0">
+                        <TextBlock
+                            Text="Numer telefonu"
+                            Foreground="#2A5670"
+                            FontWeight="Bold"
+                            FontSize="13" />
+
+                        <Grid Height="44">
+                            <Border Background="#8A9AA6" CornerRadius="10" Margin="0,6,0,0" />
+                            <Border Background="#BFBFBF" CornerRadius="10">
+                                <TextBox
+                                    x:Name="PhoneNumberTextBox"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    Foreground="Black"
+                                    Padding="12,8"
+                                    PlaceholderText="123 456 789"
+                                    FontWeight="Bold" />
+                            </Border>
+                        </Grid>
+                    </StackPanel>
+
+                </Grid>
+
+                <!-- PRZYCISK ZAREJESTRUJ SIĘ -->
+                <StackPanel HorizontalAlignment="Center" Margin="0,24,0,0">
+                    <Grid Width="200" Height="44">
+                        <Border Background="#8A9AA6" CornerRadius="10" Margin="0,6,0,0" />
+                        <Border Background="#BFBFBF" CornerRadius="10">
+                            <Button
+                                x:Name="RegisterButton"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                HorizontalAlignment="Stretch"
+                                Click="RegisterButton_Click">
+                                <TextBlock
+                                    Text="Zarejestruj się"
+                                    Foreground="#2A5670"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    FontWeight="Bold" />
+                            </Button>
+                        </Border>
+                    </Grid>
+
+                    <TextBlock
+                        x:Name="StatusTextBlock"
+                        Margin="0,8,0,0"
+                        Foreground="Red"
+                        FontSize="12"
+                        TextAlignment="Center" />
+                </StackPanel>
+
+            </StackPanel>
+        </Border>
+    </Grid>
+</Page>
+

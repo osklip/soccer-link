@@ -13,9 +13,6 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
-
 namespace SoccerLink.Views
 {
     /// <summary>
@@ -23,9 +20,48 @@ namespace SoccerLink.Views
     /// </summary>
     public sealed partial class DashboardPage : Page
     {
+        private readonly DispatcherTimer _dateTimer;
+
         public DashboardPage()
         {
             InitializeComponent();
+
+            UpdateHeaderDateTime();
+
+            _dateTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+            _dateTimer.Tick += (s, e) => UpdateHeaderDateTime();
+            _dateTimer.Start();
         }
+
+        private void UpdateHeaderDateTime()
+        {
+            HeaderText.Text = $"{DateTime.Now:D} {DateTime.Now:HH:mm}";
+        }
+
+        private void MessageButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Content = new MessagesPage();
+        }
+
+        private void CalendarButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Content = new CalendarPage();
+        }
+
+        private void StatsButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Content = new StatsNaviPage();
+        }
+
+        private void UpcomingEventButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Content = new UpcomingEventPage();
+        }
+
+        private void TeamManagementButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Content = new TeamManagementPage();
+        }
+
     }
 }

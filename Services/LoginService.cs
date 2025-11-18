@@ -17,7 +17,6 @@ namespace SoccerLink.Services
             if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))           
                 return false;
 
-
             using var client = await DatabaseClient.Create(o =>
             {
                 o.Url = Url;
