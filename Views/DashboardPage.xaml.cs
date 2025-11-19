@@ -58,6 +58,11 @@ namespace SoccerLink.Views
             this.Content = new UpcomingEventPage();
         }
 
+        private void NextEventButton_Click(object sender, RoutedEventArgs e)
+        {
+            //this.Content = new NextEventPage();
+        }
+
         private void TeamManagementButton_Click(object sender, RoutedEventArgs e)
         {
             this.Content = new TeamManagementPage();

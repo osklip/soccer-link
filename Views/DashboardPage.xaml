@@ -49,16 +49,85 @@
             </Button>
         </Border>
 
-        <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="8" Background="#32404A" CornerRadius="10" BorderBrush="#9ECBFF" BorderThickness="3" Padding="18">
-            <Button x:Name="UpcomingEventButton" Click="UpcomingEventButton_Click" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="14">
-                    <TextBlock Text="Nadchodzące wydarzenie: " Foreground="#CDE6F8" FontWeight="Bold" FontSize="20" TextAlignment="Center" />
-                    <TextBlock Text="Data: " Foreground="#CDE6F8" FontWeight="Bold" FontSize="20" TextAlignment="Center" />
-                    <TextBlock Text="Miejsce: " Foreground="#CDE6F8" FontWeight="Bold" FontSize="20" TextAlignment="Center" />
-                    <TextBlock Text="Kliknij, żeby wyświetlić szczegóły..." Foreground="#CDE6F8" FontWeight="Bold" FontSize="20" TextAlignment="Center" />
-                </StackPanel>
-            </Button>
+        <Border Grid.Row="2"
+        Grid.Column="0"
+        Grid.ColumnSpan="2"
+        Margin="8"
+        Background="#32404A"
+        CornerRadius="10"
+        BorderBrush="#9ECBFF"
+        BorderThickness="3"
+        Padding="18">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <!-- Najbliższe wydarzenie -->
+                    <RowDefinition Height="*" />
+                    <!-- Kolejne wydarzenie -->
+                </Grid.RowDefinitions>
+
+                <!-- SEKCJA 1: Najbliższe wydarzenie -->
+                <Button x:Name="UpcomingEventButton"
+                Grid.Row="0"
+                Click="UpcomingEventButton_Click"
+                Background="Transparent"
+                BorderThickness="0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch">
+                    <StackPanel HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Spacing="8">
+                        <TextBlock Text="Najbliższe wydarzenie"
+                           Foreground="#CDE6F8"
+                           FontWeight="Bold"
+                           FontSize="20"
+                           TextAlignment="Center" />
+                        <TextBlock Text="Data: ..."
+                           Foreground="#CDE6F8"
+                           FontWeight="Bold"
+                           FontSize="18"
+                           TextAlignment="Center" />
+                        <TextBlock Text="Miejsce: ..."
+                           Foreground="#CDE6F8"
+                           FontWeight="Bold"
+                           FontSize="18"
+                           TextAlignment="Center" />
+                    </StackPanel>
+                </Button>
+
+                <!-- SEKCJA 2: Kolejne wydarzenie -->
+                <Button x:Name="NextEventButton"
+                Grid.Row="1"
+                Click="NextEventButton_Click"
+                Background="Transparent"
+                BorderThickness="0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Margin="0,10,0,0">
+                    <StackPanel HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Spacing="8">
+                        <TextBlock Text="Kolejne wydarzenie"
+                           Foreground="#CDE6F8"
+                           FontWeight="Bold"
+                           FontSize="20"
+                           TextAlignment="Center" />
+                        <TextBlock Text="Data: ..."
+                           Foreground="#CDE6F8"
+                           FontWeight="Bold"
+                           FontSize="18"
+                           TextAlignment="Center" />
+                        <TextBlock Text="Miejsce: ..."
+                           Foreground="#CDE6F8"
+                           FontWeight="Bold"
+                           FontSize="18"
+                           TextAlignment="Center" />
+                    </StackPanel>
+                </Button>
+            </Grid>
         </Border>
+
 
         <Border Grid.Row="2" Grid.Column="2" Margin="8" Background="#32404A" CornerRadius="10" BorderBrush="#9ECBFF" BorderThickness="3" Padding="12">
             <Button x:Name="TeamManagementButton" Click="TeamManagementButton_Click" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">

@@ -14,8 +14,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Remove="Assets\calendar_icon.png" />
-    <Content Remove="Assets\calendar_icon2.jpg" />
     <Content Remove="Assets\messages_icon.png" />
+    <Content Remove="Assets\players_icon.png" />
+    <Content Remove="Assets\squad_icon.png" />
     <Content Remove="Assets\teammanagementimage.png" />
     <Content Remove="Assets\teamstats_icon.png" />
   </ItemGroup>
@@ -25,6 +26,7 @@
     <None Remove="Views\DashboardPage.xaml" />
     <None Remove="Views\LoginPage.xaml" />
     <None Remove="Views\MessagesPage.xaml" />
+    <None Remove="Views\PlayerListPage.xaml" />
     <None Remove="Views\RegisterPage.xaml" />
     <None Remove="Views\StatsNaviPage.xaml" />
     <None Remove="Views\TeamManagementPage.xaml" />
@@ -58,6 +60,11 @@
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.6901" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.251003001" />
     <PackageReference Include="Nelknet.LibSQL.Data" Version="0.2.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\PlayerListPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\RegisterPage.xaml">

@@ -21,25 +21,11 @@ namespace SoccerLink.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class TeamManagementPage : Page
+    public sealed partial class PlayerListPage : Page
     {
-        public TeamManagementPage()
+        public PlayerListPage()
         {
             InitializeComponent();
-        }
-        private void BackButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.Content = new DashboardPage();
-        }
-
-        private void ManagePlayersButton_Click(object sender, RoutedEventArgs e)
-        {
-            //this.Content = new DashboardPage();
-        }
-
-        private void ManageSquadButton_Click(object sender, RoutedEventArgs e)
-        {
-            //this.Content = new DashboardPage();
         }
     }
 }
