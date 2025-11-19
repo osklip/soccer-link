@@ -5,6 +5,7 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using SoccerLink.Models;
 using SoccerLink.Services;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.System;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -32,21 +34,13 @@ namespace SoccerLink.Views
 
         private async void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            /*  Debug.WriteLine("?? Testujê po³¹czenie z baz¹");
-              await DatabaseConnection.TestConnectionAsync();
-              Debug.WriteLine("? Zakoñczono test po³¹czenia"); */
-
             string email = EmailTextBox.Text;
             string password = PasswordBox.Password;
-            var loginSuccess = await LoginService.LoginAsync(email, password);
-            if (loginSuccess)
+            var trener = await LoginService.LoginAsync(email, password);
+            if (trener != null)
             {
-                Debug.WriteLine("Logowanie powiod³o siê.");
+                SessionService.SetUser(trener);
                 this.Content = new DashboardPage();
-            }
-            else
-            {
-                Debug.WriteLine("Logowanie nie powiod³o siê.");
             }
         }
 

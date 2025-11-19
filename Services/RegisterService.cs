@@ -1,4 +1,6 @@
 ﻿using Libsql.Client;
+using Microsoft.UI.Xaml.Controls.Primitives;
+using SoccerLink.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,15 +29,14 @@ namespace SoccerLink.Services
                 o.UseHttps = true;
             });
 
-            // "Sanityzacja" stringów jak w LoginService
             var safeEmail = email.Replace("'", "''").Trim();
             var safePassword = password.Replace("'", "''").Trim();
             var safeFirstName = firstName.Replace("'", "''").Trim();
             var safeLastName = lastName.Replace("'", "''").Trim();
             var safePhoneNumber = phoneNumber.Replace("'", "''").Trim();
 
-            // 1. Sprawdź, czy użytkownik o takim emailu już istnieje
-            var checkSql = $"SELECT COUNT(1) FROM Uzytkownik WHERE AdresEmail = '{safeEmail}' LIMIT 1;";
+            var checkSql = $"SELECT COUNT(1) FROM (SELECT AdresEmail, NumerTelefonu FROM Trener WHERE AdresEmail = '{safeEmail}' OR NumerTelefonu = '{safePhoneNumber}' " +
+                           $"UNION ALL SELECT AdresEmail, NumerTelefonu FROM Zawodnik WHERE AdresEmail = '{safeEmail}' OR NumerTelefonu = '{safePhoneNumber}');";
             var checkResult = await client.Execute(checkSql);
 
             if (checkResult.Rows != null && checkResult.Rows.Any())
@@ -44,18 +45,15 @@ namespace SoccerLink.Services
                 var cells = firstRow.ToArray();
                 if (cells.Length > 0 && long.TryParse(cells[0]?.ToString(), out var count) && count > 0)
                 {
-                    // Użytkownik z takim emailem już istnieje
                     return false;
                 }
             }
 
-            // 2. Rejestracja nowego użytkownika
-            // Rola = 1, ProbyLogowania = 0
             var insertSql = $@"
-                            INSERT INTO Uzytkownik
-                            (AdresEmail, Haslo, Imie, Nazwisko, NumerTelefonu, Rola, ProbyLogowania)
+                            INSERT INTO Trener
+                            (AdresEmail, Haslo, NumerTelefonu, Imie, Nazwisko, ProbyLogowania)
                             VALUES
-                            ('{safeEmail}', '{safePassword}', '{safeFirstName}', '{safeLastName}', '{safePhoneNumber}', 1, 0);";
+                            ('{safeEmail}', '{safePassword}', '{safePhoneNumber}', '{safeFirstName}', '{safeLastName}', 0);";
 
             await client.Execute(insertSql);
 

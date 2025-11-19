@@ -22,41 +22,33 @@
 
         <TextBlock x:Name="HeaderText" Grid.Row="0" Grid.ColumnSpan="3" Foreground="#E6F6FF" FontWeight="Bold" FontSize="20" Margin="8,6" HorizontalAlignment="Left" />
 
-        <!-- Top-left outer card (now a single clickable card with inner small box merged) -->
         <Border Grid.Row="1" Grid.Column="0" Margin="8" Background="#32404A" CornerRadius="10" BorderBrush="#9ECBFF" BorderThickness="3">
             <Button x:Name="MessageButton" Click="MessageButton_Click" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                <!-- Header labels at the top of the card -->
-                    <StackPanel Margin="12" VerticalAlignment="Top" Spacing="6">
-                        <TextBlock Text="Wiadomości" Foreground="#CDE6F8" FontWeight="Bold" FontSize="20" TextAlignment="Center" />
+                <StackPanel Margin="12" VerticalAlignment="Top" Spacing="6">
+                    <TextBlock Text="Wiadomości" Foreground="#CDE6F8" FontWeight="Bold" FontSize="20" TextAlignment="Center" />
                     <Image Source="C:\Users\lipsk\source\repos\SoccerLink\Assets\messages_icon.png" Width="96" Height="96" />
                 </StackPanel>
-                    <!-- TODO: navigate to MailPage on Click (handle this Button.Click in code-behind) -->
             </Button>
         </Border>
 
-        <!-- Top-center outer card (fills the cell) -->
         <Border Grid.Row="1" Grid.Column="1" Margin="8" Background="#32404A" CornerRadius="10" BorderBrush="#9ECBFF" BorderThickness="3">
             <Button x:Name="CalendarButton" Click="CalendarButton_Click" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="8">
                     <TextBlock Text="Kalendarz" Foreground="#CDE6F8" FontWeight="Bold" FontSize="20" TextAlignment="Center" />
                     <Image Source="C:\Users\lipsk\source\repos\SoccerLink\Assets\calendar_icon.png" Width="96" Height="96" />
                 </StackPanel>
-                <!-- TODO: navigate to CalendarPage on Click -->
             </Button>
         </Border>
 
-        <!-- Top-right outer card (fills the cell) -->
         <Border Grid.Row="1" Grid.Column="2" Margin="8" Background="#32404A" CornerRadius="10" BorderBrush="#9ECBFF" BorderThickness="3">
             <Button x:Name="StatsButton" Click="StatsButton_Click" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="8">
                     <TextBlock Text="Statystyki" Foreground="#CDE6F8" FontWeight="Bold" FontSize="20" TextAlignment="Center" />
                     <Image Source="C:\Users\lipsk\source\repos\SoccerLink\Assets\teamstats_icon.png" Width="96" Height="96" />
                 </StackPanel>
-                <!-- TODO: navigate to TeamStatsPage on Click -->
             </Button>
         </Border>
 
-        <!-- Bottom-left outer card (spans col0-1) -->
         <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="8" Background="#32404A" CornerRadius="10" BorderBrush="#9ECBFF" BorderThickness="3" Padding="18">
             <Button x:Name="UpcomingEventButton" Click="UpcomingEventButton_Click" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="14">
@@ -65,18 +57,15 @@
                     <TextBlock Text="Miejsce: " Foreground="#CDE6F8" FontWeight="Bold" FontSize="20" TextAlignment="Center" />
                     <TextBlock Text="Kliknij, żeby wyświetlić szczegóły..." Foreground="#CDE6F8" FontWeight="Bold" FontSize="20" TextAlignment="Center" />
                 </StackPanel>
-                <!-- TODO: navigate to NextEventPage on Click -->
             </Button>
         </Border>
 
-        <!-- Bottom-right outer card (fills the cell) -->
         <Border Grid.Row="2" Grid.Column="2" Margin="8" Background="#32404A" CornerRadius="10" BorderBrush="#9ECBFF" BorderThickness="3" Padding="12">
             <Button x:Name="TeamManagementButton" Click="TeamManagementButton_Click" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="8">
                     <TextBlock Text="Zarządzaj zespołem" Foreground="#CDE6F8" FontWeight="Bold" FontSize="20" TextAlignment="Center" />
                     <Image Source="C:\Users\lipsk\source\repos\SoccerLink\Assets\teammanagementimage.png" Width="96" Height="96" />
                 </StackPanel>
-                <!-- TODO: navigate to ManageTeamPage on Click -->
             </Button>
         </Border>
 
