@@ -9,7 +9,12 @@
     mc:Ignorable="d">
 
     <Grid Background="#405861" Padding="24">
-        <StackPanel Spacing="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Spacing="12" Margin="0,0,0,20">
             <Button x:Name="BackButton" 
                     Content="⟵ Powrót" 
                     Click="BackButton_Click" 
@@ -20,10 +25,58 @@
                     Foreground="#CDE6F8"
                     FontWeight="SemiBold" />
 
-            <TextBlock Text="Calendar Page" 
+            <TextBlock Text="Kalendarz Trenera" 
                        FontSize="24" 
                        FontWeight="Bold"
                        Foreground="#E6F6FF" />
         </StackPanel>
+
+        <Border Grid.Row="1"
+            Background="#32404A"
+            CornerRadius="10"
+            BorderBrush="#9ECBFF"
+            BorderThickness="3"
+            Padding="20">
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <CalendarView Grid.Column="0"
+                              x:Name="MainCalendar"
+                              HorizontalAlignment="Left"
+                              VerticalAlignment="Top"
+                              Margin="0,0,30,0"
+                              DayOfWeekFormat="{}{dayofweek.abbreviated(2)}"
+                              Foreground="White"
+                              CalendarIdentifier="GregorianCalendar"
+                              FirstDayOfWeek="Monday" />
+
+                <StackPanel Grid.Column="1" Spacing="15" VerticalAlignment="Top">
+                    <TextBlock Text="Wydarzenia na wybrany dzień" 
+                               FontSize="20" 
+                               FontWeight="Bold"
+                               Foreground="#CDE6F8" />
+
+                    <Button x:Name="AddEventButton"
+                            Content="+ Dodaj Wydarzenie"
+                            Click="AddEventButton_Click"
+                            Background="#86A9C8"
+                            Foreground="#2F4450"
+                            FontWeight="Bold"
+                            CornerRadius="8"
+                            Padding="20,10"
+                            HorizontalAlignment="Left" />
+
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Frame x:Name="ModalFrame" 
+               Grid.RowSpan="2" 
+               Background="#80000000" 
+               Visibility="Collapsed" />
     </Grid>
 </Page>
