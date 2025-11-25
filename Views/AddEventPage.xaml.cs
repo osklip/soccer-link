@@ -9,26 +9,24 @@ namespace SoccerLink.Views
 {
     public sealed partial class AddEventPage : Page
     {
-        public Frame ParentFrame { get; set; }
+        // Usuniêto: public Frame ParentFrame { get; set; }
 
         public AddEventPage()
         {
             this.InitializeComponent();
 
-            // U¿ywamy zdarzenia Loaded, aby zagwarantowaæ, ¿e wszystkie elementy XAML (w tym NameTextBox) s¹ zainicjowane
             this.Loaded += AddEventPage_Loaded;
         }
 
         private void AddEventPage_Loaded(object sender, RoutedEventArgs e)
         {
             // Natychmiastowe wywo³anie logiki ComboBox po za³adowaniu strony
-            // Jest to najbezpieczniejszy moment, aby manipulowaæ widocznoœci¹ i placeholderami.
             EventTypeComboBox_SelectionChanged(EventTypeComboBox, null);
         }
 
         private void EventTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // Dodajemy sprawdzanie null, aby obs³u¿yæ ewentualne wczesne wywo³ania, chocia¿ Loaded powinno to naprawiæ
+            // OCHRONA PRZED NULL
             if (NameTextBox == null || TimeEndTextBox == null || SpecificFieldsStackPanel == null)
             {
                 return;
@@ -36,7 +34,7 @@ namespace SoccerLink.Views
 
             var selectedTag = (EventTypeComboBox.SelectedItem as ComboBoxItem)?.Tag?.ToString();
 
-            // Ustawiamy domyœlne widocznoœci na podstawie typu
+            // Ustawiamy domyœlne widocznoœci: koniec czasu jest widoczny, pola specyficzne ukryte
             SpecificFieldsStackPanel.Visibility = Visibility.Collapsed;
             TimeEndTextBox.Visibility = Visibility.Visible;
 
@@ -76,9 +74,17 @@ namespace SoccerLink.Views
             var timeStart = TimeStartTextBox.Text?.Trim();
             var timeEnd = TimeEndTextBox.Text?.Trim();
 
+            // Walidacja podstawowa
             if (string.IsNullOrWhiteSpace(nameOrType) || string.IsNullOrWhiteSpace(date) || string.IsNullOrWhiteSpace(place) || string.IsNullOrWhiteSpace(timeStart))
             {
                 StatusTextBlock.Text = "Wype³nij wymagane pola (Nazwa/Typ, Data, Miejsce, Start).";
+                return;
+            }
+
+            // Walidacja dla Treningu
+            if (type == "Trening" && string.IsNullOrWhiteSpace(timeEnd))
+            {
+                StatusTextBlock.Text = "Podaj Godzinê zakoñczenia dla Treningu.";
                 return;
             }
 
@@ -98,11 +104,6 @@ namespace SoccerLink.Views
                         break;
 
                     case "Trening":
-                        if (string.IsNullOrWhiteSpace(timeEnd))
-                        {
-                            StatusTextBlock.Text = "Podaj Godzinê zakoñczenia dla Treningu.";
-                            return;
-                        }
                         var trening = new Trening
                         {
                             Typ = nameOrType,
@@ -132,15 +133,9 @@ namespace SoccerLink.Views
                 StatusTextBlock.Text = "Wydarzenie zosta³o dodane!";
                 await Task.Delay(500);
 
-                if (ParentFrame != null && ParentFrame.CanGoBack)
-                {
-                    ParentFrame.GoBack();
-                }
-                else
-                {
-                    // U¿ywamy DashboardPage jako awaryjnej opcji nawigacji
-                    if (this.Content is Frame frame) frame.Content = new DashboardPage();
-                }
+                // NAWIGACJA: Powrót do CalendarPage
+                this.Content = new CalendarPage();
+
             }
             catch (InvalidOperationException ex)
             {
@@ -148,20 +143,14 @@ namespace SoccerLink.Views
             }
             catch (Exception ex)
             {
-                StatusTextBlock.Text = $"B³¹d: Nie uda³o siê dodaæ wydarzenia. {ex.Message}";
+                StatusTextBlock.Text = $"B³¹d: Nie uda³o siê dodaæ wydarzenia. SprawdŸ po³¹czenie i TOKEN: {ex.Message}";
             }
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            if (ParentFrame != null && ParentFrame.CanGoBack)
-            {
-                ParentFrame.GoBack();
-            }
-            else
-            {
-                this.Content = new CalendarPage();
-            }
+            // NAWIGACJA: Powrót do CalendarPage
+            this.Content = new CalendarPage();
         }
     }
 }
