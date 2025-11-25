@@ -34,12 +34,12 @@ namespace SoccerLink.Views
 
         private void ManagePlayersButton_Click(object sender, RoutedEventArgs e)
         {
-            //this.Content = new DashboardPage();
+            this.Content = new PlayerListPage();
         }
 
         private void ManageSquadButton_Click(object sender, RoutedEventArgs e)
         {
-            //this.Content = new DashboardPage();
+            this.Content = new DashboardPage();
         }
     }
 }

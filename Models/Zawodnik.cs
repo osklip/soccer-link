@@ -16,5 +16,7 @@ namespace SoccerLink.Models
         public string AdresEmail { get; set; }
         public int CzyDyspozycyjny { get; set; }
         public int NumerKoszulki { get; set; }
+        public string LepszaNoga { get; set; }
+        public int TrenerId { get; set; }  
     }
 }
