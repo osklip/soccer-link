@@ -27,69 +27,68 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <Button Grid.Row="0"
-                        x:Name="BackButton"
-                        Content="⟵ Powrót"
-                        HorizontalAlignment="Left"
-                    
-                        Margin="8,8,8,4"
-                        Padding="8,4"
-                        Background="#2F4450"
-                        Foreground="#CDE6F8"
-                        FontWeight="SemiBold"
-                        BorderThickness="0"
-                        Click="BackButton_Click" />
+                <Grid Grid.Row="0" Margin="8,8,8,4">
+                    <Button x:Name="BackButton"
+                            Content="⟵ Powrót"
+                            Click="BackButton_Click"
+                            HorizontalAlignment="Left"
+                            Padding="8,4"
+                            Background="#2F4450"
+                            Foreground="#CDE6F8"
+                            FontWeight="SemiBold"
+                            BorderThickness="0" />
+
+                    <Button x:Name="NewMessageButton"
+                            Content="+ Nowa wiadomość"
+                            Click="NewMessageButton_Click"
+                            HorizontalAlignment="Right"
+                            Padding="8,4"
+                            Background="#2F4450"
+                            Foreground="#CDE6F8"
+                            FontWeight="SemiBold"
+                            BorderThickness="0" />
+                </Grid>
 
                 <StackPanel Grid.Row="1"
                             Orientation="Horizontal"
-         
                             Margin="8,0,8,4"
                             VerticalAlignment="Center"
                             Spacing="8">
                     <TextBlock Text="Pokaż:"
-    
-                            VerticalAlignment="Center"
+                               VerticalAlignment="Center"
                                Margin="0,0,4,0"
                                Foreground="#2F4450"
                                FontWeight="Bold" />
                     <ComboBox x:Name="MessagesFilterComboBox"
-                    
                             Width="140"
                             Background="#BFBFBF"
                             CornerRadius="8"
                             SelectionChanged="MessagesFilterComboBox_SelectionChanged">
                         <ComboBoxItem Content="Odebrane" Tag="received" IsSelected="True" />
                         <ComboBoxItem Content="Wysłane" Tag="sent" />
-
                     </ComboBox>
                 </StackPanel>
 
                 <ListView Grid.Row="2"
                           x:Name="MessagesList"
-       
                           SelectionMode="Single"
                           SelectionChanged="MessagesList_SelectionChanged"
                           Background="#2F4450"
                           BorderThickness="0"
-   
                           Margin="4,4,4,8">
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="models:Wiadomosc">
-
                             <StackPanel Padding="8,4">
                                 <TextBlock Text="{x:Bind Temat}"
-     
                                         FontWeight="SemiBold"
                                         Foreground="#CDE6F8" />
                                 <TextBlock Text="{x:Bind NadawcaNazwa}"
                                            FontSize="12"
-                   
                                            Foreground="#CDE6F8"
                                            Opacity="0.7" />
                             </StackPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>
-
                 </ListView>
             </Grid>
         </Border>
@@ -111,12 +110,10 @@
                 Background="#2F4450"
                 CornerRadius="22"
                 Padding="14,10"
-                
                 Margin="0,0,0,10">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <TextBlock Text="Do:"
                            FontWeight="Bold"
-                          
                            Foreground="#CDE6F8"/>
                         <TextBlock x:Name="ToTextBlock"
                            Foreground="#CDE6F8"/>
@@ -129,12 +126,10 @@
                 CornerRadius="22"
                 Padding="14,10"
                 Margin="0,0,0,10">
-
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <TextBlock Text="Od:"
                            FontWeight="Bold"
                            Foreground="#CDE6F8"/>
-
                         <TextBlock x:Name="FromTextBlock"
                            Foreground="#CDE6F8"/>
                     </StackPanel>
@@ -150,7 +145,6 @@
                         <TextBlock Text="Temat:"
                            FontWeight="Bold"
                            Foreground="#CDE6F8"/>
-
                         <TextBlock x:Name="SubjectTextBlock"
                            Foreground="#CDE6F8"/>
                     </StackPanel>
@@ -162,19 +156,14 @@
                 Padding="16,12"
                 Margin="0,0,0,0"
                 VerticalAlignment="Stretch">
-
                     <ScrollViewer VerticalScrollBarVisibility="Auto">
                         <TextBlock x:Name="BodyTextBlock"
                            TextWrapping="Wrap"
                            Foreground="#CDE6F8"
-              
                            VerticalAlignment="Top"/>
                     </ScrollViewer>
                 </Border>
-
             </Grid>
         </Border>
-
     </Grid>
-
 </Page>
