@@ -44,15 +44,21 @@ namespace SoccerLink.Views
             var msg = (Wiadomosc)MessagesList.SelectedItem;
             if (msg is null) return;
 
-            ToTextBlock.Text = $"Do: {msg.TypOdbiorcy}";
-            FromTextBlock.Text = $"Od: {msg.NadawcaNazwa}";
-            SubjectTextBlock.Text = $"Temat: {msg.Temat}";
+            ToTextBlock.Text = $"{msg.TypOdbiorcy}";
+            FromTextBlock.Text = $"{msg.NadawcaNazwa}";
+            SubjectTextBlock.Text = $"{msg.Temat}";
             BodyTextBlock.Text = msg.Tresc;
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             this.Content = new DashboardPage();
+        }
+
+        private void NewMessageButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Nawigacja do nowego widoku formularza
+            this.Content = new NewMessagePage();
         }
 
         private void MessagesFilterComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

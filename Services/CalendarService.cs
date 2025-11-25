@@ -10,13 +10,10 @@ namespace SoccerLink.Services
 {
     class CalendarService
     {
-        // Używamy tokenu i URL z istniejących serwisów
         private const string Url = "https://soccerlinkdb-enbixd.aws-eu-west-1.turso.io";
         private const string Token = "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJleHAiOjE3OTU2MzcwODksImdpZCI6ImNhOWI1NGU3LTMwY2QtNDA5YS04YTMzLTcyMmRmZDFiYWY0YiIsImlhdCI6MTc2NDEwMTA4OSwicmlkIjoiYTBiNTRjM2YtZmZkYy00MjIyLWI2YTEtZGRhZTcxN2I1MmY4In0.dnupQBG2k5tiShROTpDhcHjm8b36JHLd4tebvAWESVZ-PtLlz40gq0ywuhf3c9MefzIFmZLkTVCZpgm5dw20Dg";
 
         private static string Escape(string value) => value.Replace("'", "''").Trim();
-
-        // --- Metody Add*Async (pozostają bez zmian) ---
 
         public static async Task AddMeczAsync(Mecz mecz)
         {
@@ -57,8 +54,6 @@ namespace SoccerLink.Services
             await client.Execute(sql);
         }
 
-        // --- Metoda GetUpcomingEventsAsync (pobieranie wszystkich nadchodzących wydarzeń) ---
-
         public static async Task<List<UpcomingEvent>> GetUpcomingEventsAsync()
         {
             if (SessionService.AktualnyTrener == null)
@@ -70,7 +65,6 @@ namespace SoccerLink.Services
             var trenerId = SessionService.AktualnyTrener.Id;
             string currentDate = DateTime.Now.ToString("yyyy-MM-dd");
 
-            // Poprawka: Dodanie formatu 'H:mm' (bez wiodącego zera) dla większej stabilności parsowania
             string[] dateTimeFormats = new[]
             {
                 "yyyy-MM-dd HH:mm",
@@ -104,7 +98,6 @@ namespace SoccerLink.Services
                         var data = cells[1]?.ToString() ?? "";
                         var godzina = cells[2]?.ToString() ?? "";
 
-                        // POPRAWIONE PARSOWANIE: Użycie wielu formatów
                         if (DateTime.TryParseExact($"{data} {godzina}", dateTimeFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dateTimeStart))
                         {
                             if (dateTimeStart > DateTime.Now)
@@ -140,7 +133,6 @@ namespace SoccerLink.Services
                         var godzinaStart = cells[2]?.ToString() ?? "";
                         var godzinaEnd = cells[3]?.ToString() ?? "";
 
-                        // POPRAWIONE PARSOWANIE: Użycie wielu formatów
                         if (DateTime.TryParseExact($"{data} {godzinaStart}", dateTimeFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dateTimeStart))
                         {
                             if (dateTimeStart > DateTime.Now)
@@ -176,7 +168,6 @@ namespace SoccerLink.Services
                         var godzinaStart = cells[2]?.ToString() ?? "";
                         var godzinaKoniec = cells[3]?.ToString() ?? "";
 
-                        // POPRAWIONE PARSOWANIE: Użycie wielu formatów
                         if (DateTime.TryParseExact($"{data} {godzinaStart}", dateTimeFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dateTimeStart))
                         {
                             if (dateTimeStart > DateTime.Now)

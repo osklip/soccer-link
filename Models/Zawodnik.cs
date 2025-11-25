@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SoccerLink.Models
 {
-    internal class Zawodnik
+    public class Zawodnik
     {
         public int ZawodnikId { get; set; }
         public string Imie { get; set; }

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="SoccerLink.Views.NewMessagePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:SoccerLink.Views"
+    xmlns:models="using:SoccerLink.Models"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="#405861" Padding="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Spacing="12" Margin="0,0,0,20">
+            <Button x:Name="BackButton" 
+                    Content="⟵ Powrót" 
+                    Click="BackButton_Click" 
+                    HorizontalAlignment="Left"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    FontSize="18"
+                    Foreground="#CDE6F8"
+                    FontWeight="SemiBold" />
+
+            <TextBlock Text="Utwórz nową wiadomość" 
+                       FontSize="24" 
+                       FontWeight="Bold"
+                       Foreground="#E6F6FF" />
+        </StackPanel>
+
+        <Border Grid.Row="1"
+            Background="#32404A"
+            CornerRadius="10"
+            BorderBrush="#9ECBFF"
+            BorderThickness="3"
+            Padding="25"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch">
+
+            <StackPanel Spacing="18">
+
+                <TextBlock Text="Adresat" Foreground="#CDE6F8" FontWeight="Bold" FontSize="16"/>
+                <Grid ColumnSpacing="20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <ComboBox x:Name="RecipientComboBox" 
+                              Grid.Column="0"
+                              PlaceholderText="Wybierz zawodnika..."
+                              Background="#BFBFBF" 
+                              CornerRadius="8"/>
+
+                    <Button x:Name="SendAllButton"
+                            Grid.Column="1"
+                            Content="Wyślij do wszystkich"
+                            Background="#86A9C8"
+                            Foreground="#2F4450"
+                            FontWeight="Bold"
+                            CornerRadius="8"
+                            Padding="16,8"/>
+                </Grid>
+
+                <TextBlock Text="Temat wiadomości" Foreground="#CDE6F8" FontWeight="Bold" FontSize="16"/>
+                <TextBox x:Name="SubjectTextBox" 
+                         PlaceholderText="Wpisz temat..."
+                         Background="#BFBFBF" 
+                         CornerRadius="8" 
+                         Padding="10,6"/>
+
+                <TextBlock Text="Treść wiadomości" Foreground="#CDE6F8" FontWeight="Bold" FontSize="16"/>
+                <TextBox x:Name="BodyTextBox" 
+                         Height="150"
+                         TextWrapping="Wrap"
+                         AcceptsReturn="True"
+                         VerticalAlignment="Stretch"
+                         Background="#BFBFBF" 
+                         CornerRadius="8" 
+                         Padding="10,6"/>
+
+                <Button x:Name="SendButton"
+                        Content="Wyślij wiadomość" 
+                        HorizontalAlignment="Center"
+                        Background="#2A5670" 
+                        Foreground="#E6F6FF" 
+                        FontWeight="Bold"
+                        CornerRadius="8"
+                        Padding="25,12"
+                        Margin="0,10,0,0"/>
+
+            </StackPanel>
+        </Border>
+    </Grid>
+</Page>

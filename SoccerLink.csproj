@@ -19,6 +19,7 @@
 		<None Remove="Views\DashboardPage.xaml" />
 		<None Remove="Views\LoginPage.xaml" />
 		<None Remove="Views\MessagesPage.xaml" />
+		<None Remove="Views\NewMessagePage.xaml" />
 		<None Remove="Views\PlayerListPage.xaml" />
 		<None Remove="Views\RegisterPage.xaml" />
 		<None Remove="Views\StatsNaviPage.xaml" />
@@ -57,8 +58,22 @@
 		<PackageReference Include="Nelknet.LibSQL.Data" Version="0.2.4" />
 	</ItemGroup>
 	<ItemGroup>
+	  <Page Update="Views\AddPlayerStatsPage.xaml">
+	    <SubType>Designer</SubType>
+	  </Page>
+	  <Page Update="Views\AddTeamStatsPage.xaml">
+	    <SubType>Designer</SubType>
+	  </Page>
+	  <Page Update="Views\NewMessagePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
+	</ItemGroup>
+	<ItemGroup>
 	  <Page Update="Views\AddEventPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
+	  <Page Update="Views\AddStatsHubPage.xaml">
+	    <SubType>Designer</SubType>
 	  </Page>
 	</ItemGroup>
 	<ItemGroup>

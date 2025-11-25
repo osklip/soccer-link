@@ -26,7 +26,7 @@
                     FontWeight="SemiBold" />
 
             <Grid>
-                <TextBlock Text="Kalendarz i Nadchodzące Wydarzenia" 
+                <TextBlock Text="Kalendarz" 
                            FontSize="24" 
                            FontWeight="Bold"
                            Foreground="#E6F6FF"
