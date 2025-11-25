@@ -14,6 +14,7 @@
             <RowDefinition Height="200" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1.0*" />
             <ColumnDefinition Width="1.4*" />
@@ -23,10 +24,11 @@
         <TextBlock x:Name="HeaderText" Grid.Row="0" Grid.ColumnSpan="3" Foreground="#E6F6FF" FontWeight="Bold" FontSize="20" Margin="8,6" HorizontalAlignment="Left" />
 
         <Border Grid.Row="1" Grid.Column="0" Margin="8" Background="#32404A" CornerRadius="10" BorderBrush="#9ECBFF" BorderThickness="3">
-            <Button x:Name="MessageButton" Click="MessageButton_Click" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                <StackPanel Margin="12" VerticalAlignment="Top" Spacing="6">
+            <Button x:Name="MessageButton" Click="MessageButton_Click" Background="Transparent" 
+                BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <StackPanel Margin="12" VerticalAlignment="Center" Spacing="6">
                     <TextBlock Text="Wiadomości" Foreground="#CDE6F8" FontWeight="Bold" FontSize="20" TextAlignment="Center" />
-                    <Image Source="C:\Users\lipsk\source\repos\SoccerLink\Assets\messages_icon.png" Width="96" Height="96" />
+                    <Image Source="/Assets/messages_icon.png" Width="96" Height="96" />
                 </StackPanel>
             </Button>
         </Border>
@@ -35,7 +37,7 @@
             <Button x:Name="CalendarButton" Click="CalendarButton_Click" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="8">
                     <TextBlock Text="Kalendarz" Foreground="#CDE6F8" FontWeight="Bold" FontSize="20" TextAlignment="Center" />
-                    <Image Source="C:\Users\lipsk\source\repos\SoccerLink\Assets\calendar_icon.png" Width="96" Height="96" />
+                    <Image Source="/Assets/calendar_icon.png" Width="96" Height="96" />
                 </StackPanel>
             </Button>
         </Border>
@@ -44,7 +46,7 @@
             <Button x:Name="StatsButton" Click="StatsButton_Click" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="8">
                     <TextBlock Text="Statystyki" Foreground="#CDE6F8" FontWeight="Bold" FontSize="20" TextAlignment="Center" />
-                    <Image Source="C:\Users\lipsk\source\repos\SoccerLink\Assets\teamstats_icon.png" Width="96" Height="96" />
+                    <Image Source="/Assets/teamstats_icon.png" Width="96" Height="96" />
                 </StackPanel>
             </Button>
         </Border>
@@ -62,12 +64,9 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
-                    <!-- Najbliższe wydarzenie -->
                     <RowDefinition Height="*" />
-                    <!-- Kolejne wydarzenie -->
                 </Grid.RowDefinitions>
 
-                <!-- SEKCJA 1: Najbliższe wydarzenie -->
                 <Button x:Name="UpcomingEventButton"
                 Grid.Row="0"
                 Click="UpcomingEventButton_Click"
@@ -96,7 +95,6 @@
                     </StackPanel>
                 </Button>
 
-                <!-- SEKCJA 2: Kolejne wydarzenie -->
                 <Button x:Name="NextEventButton"
                 Grid.Row="1"
                 Click="NextEventButton_Click"
@@ -128,12 +126,11 @@
             </Grid>
         </Border>
 
-
         <Border Grid.Row="2" Grid.Column="2" Margin="8" Background="#32404A" CornerRadius="10" BorderBrush="#9ECBFF" BorderThickness="3" Padding="12">
             <Button x:Name="TeamManagementButton" Click="TeamManagementButton_Click" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="8">
                     <TextBlock Text="Zarządzaj zespołem" Foreground="#CDE6F8" FontWeight="Bold" FontSize="20" TextAlignment="Center" />
-                    <Image Source="C:\Users\lipsk\source\repos\SoccerLink\Assets\teammanagementimage.png" Width="96" Height="96" />
+                    <Image Source="/Assets/teammanagementimage.png" Width="96" Height="96" />
                 </StackPanel>
             </Button>
         </Border>

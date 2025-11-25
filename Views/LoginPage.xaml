@@ -10,127 +10,119 @@
 
     <Grid Background="#2F4450">
         <Border
-    Width="320"
-    CornerRadius="16"
-    Background="#98C9FF"
-    HorizontalAlignment="Center"
-    VerticalAlignment="Center"
-    Padding="28">
+            Width="320"
+            CornerRadius="16"
+            Background="#98C9FF"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Padding="28">
 
             <StackPanel HorizontalAlignment="Stretch" Spacing="18">
 
                 <TextBlock
-            Text="Logowanie"
-            FontSize="24"
-            FontWeight="Bold"
-            Foreground="#2A5670"
-            HorizontalAlignment="Center"
-            TextAlignment="Center"/>
+                    Text="Logowanie"
+                    FontSize="24"
+                    FontWeight="Bold"
+                    Foreground="#2A5670"
+                    HorizontalAlignment="Center"
+                    TextAlignment="Center"/>
 
-                <!-- EMAIL -->
                 <StackPanel Spacing="6" HorizontalAlignment="Center">
                     <TextBlock
-                Text="Adres email"
-                Foreground="#2A5670"
-                FontWeight="Bold"
-                FontSize="13" />
-
-                    <Grid Width="220" Height="44">
-                        <Border Background="#8A9AA6" CornerRadius="10" Margin="0,6,0,0" />
-                        <Border Background="#BFBFBF" CornerRadius="10">
-                            <TextBox
-                        x:Name="EmailTextBox"
-                        Background="Transparent"
-                        BorderThickness="0"
-                        Foreground="Black"
-                        Padding="12,8"
-                        PlaceholderText="email@przyklad.com"
-                        FontWeight="Bold" />
-                        </Border>
-                    </Grid>
-                </StackPanel>
-
-                <!-- PASSWORD -->
-                <StackPanel Spacing="6" HorizontalAlignment="Center">
-                    <TextBlock
-                Text="Hasło"
-                Foreground="#2A5670"
-                FontWeight="Bold"
-                FontSize="13" />
-
-                    <Grid Width="220" Height="44">
-                        <Border Background="#8A9AA6" CornerRadius="10" Margin="0,6,0,0" />
-                        <Border Background="#BFBFBF" CornerRadius="10">
-                            <PasswordBox
-                        x:Name="PasswordBox"
-                        Background="Transparent"
-                        BorderThickness="0"
-                        Foreground="Black"
-                        Padding="12,8"
+                        Text="Adres email"
+                        Foreground="#2A5670"
                         FontWeight="Bold"
-                        PlaceholderText="Hasło" />
-                        </Border>
+                        FontSize="13" />
+
+                    <Grid Width="220" Height="44">
+                        <Border Background="#8A9AA6" CornerRadius="10" Margin="0,0,0,0" />
+                        <TextBox
+                            x:Name="EmailTextBox"
+                            Background="#BFBFBF"
+                            BorderThickness="0"
+                            CornerRadius="10"
+                            Foreground="Black"
+                            Padding="12,8"
+                            PlaceholderText="email@przyklad.com"
+                            FontWeight="Bold" />
+                    </Grid>
+                </StackPanel>
+
+                <StackPanel Spacing="6" HorizontalAlignment="Center">
+                    <TextBlock
+                        Text="Hasło"
+                        Foreground="#2A5670"
+                        FontWeight="Bold"
+                        FontSize="13" />
+
+                    <Grid Width="220" Height="44">
+                        <Border Background="#8A9AA6" CornerRadius="10" Margin="0,0,0,0" />
+                        <PasswordBox
+                            x:Name="PasswordBox"
+                            Background="#BFBFBF"
+                            BorderThickness="0"
+                            CornerRadius="10"
+                            Foreground="Black"
+                            Padding="12,8"
+                            FontWeight="Bold"
+                            PlaceholderText="Hasło" />
                     </Grid>
 
                     <TextBlock
-                Text="Nie pamiętam hasła"
-                Foreground="#2A5670"
-                FontSize="12"
-                HorizontalAlignment="Left"
-                Margin="4,8,0,0" />
+                        Text="Nie pamiętam hasła"
+                        Foreground="#2A5670"
+                        FontSize="12"
+                        HorizontalAlignment="Left"
+                        Margin="4,8,0,0" />
                 </StackPanel>
 
-                <!-- LOGIN BUTTON -->
                 <StackPanel HorizontalAlignment="Center">
                     <Grid Width="180" Height="44">
-                        <Border Background="#8A9AA6" CornerRadius="10" Margin="0,6,0,0" />
-                        <Border Background="#BFBFBF" CornerRadius="10">
-                            <Button
-                        x:Name="LoginButton"
-                        Background="Transparent"
-                        BorderThickness="0"
-                        HorizontalAlignment="Stretch"
-                        Click="LoginButton_Click">
+                        <Border Background="#8A9AA6" CornerRadius="10" Margin="0,0,0,0" />
+                        <Button
+                            x:Name="LoginButton"
+                            Background="#BFBFBF"
+                            BorderThickness="0"
+                            CornerRadius="10"
+                            HorizontalAlignment="Stretch"
+                            Click="LoginButton_Click">
 
-                                <TextBlock
-                            Text="Zaloguj się"
-                            Foreground="#2A5670"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            FontWeight="Bold" />
+                            <TextBlock
+                                Text="Zaloguj się"
+                                Foreground="#2A5670"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontWeight="Bold" />
 
-                            </Button>
-                        </Border>
+                        </Button>
                     </Grid>
                 </StackPanel>
 
-                <!-- REGISTER -->
                 <StackPanel Spacing="6" HorizontalAlignment="Center" Margin="0,6,0,0">
                     <TextBlock
-                Text="Nie masz konta?"
-                Foreground="#2A5670"
-                FontSize="13"
-                HorizontalAlignment="Center" />
+                        Text="Nie masz konta?"
+                        Foreground="#2A5670"
+                        FontSize="13"
+                        HorizontalAlignment="Center" />
 
                     <Grid Width="160" Height="36">
-                        <Border Background="#8A9AA6" CornerRadius="8" Margin="0,6,0,0" />
-                        <Border Background="#BFBFBF" CornerRadius="8">
-                            <Button
-                        x:Name="RegisterButton"
-                        Click="RegisterButton_Click"
-                        Background="Transparent"
-                        BorderThickness="0"
-                        HorizontalAlignment="Stretch">
+                        <Border Background="#8A9AA6" CornerRadius="8" Margin="0,0,0,0" />
+                        <Button
+                            x:Name="RegisterButton"
+                            Click="RegisterButton_Click"
+                            Background="#BFBFBF"
+                            BorderThickness="0"
+                            CornerRadius="8"
+                            HorizontalAlignment="Stretch">
 
-                                <TextBlock
-                            Text="Zarejestruj się"
-                            Foreground="#2A5670"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            FontWeight="Bold" />
+                            <TextBlock
+                                Text="Zarejestruj się"
+                                Foreground="#2A5670"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontWeight="Bold" />
 
-                            </Button>
-                        </Border>
+                        </Button>
                     </Grid>
                 </StackPanel>
 

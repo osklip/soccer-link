@@ -11,37 +11,30 @@
     <Grid Background="#405861" Padding="24">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <!-- pasek z powrotem -->
             <RowDefinition Height="*" />
-            <!-- główna zawartość -->
         </Grid.RowDefinitions>
 
-        <!-- GÓRNY PASEK: przycisk powrotu -->
         <Button x:Name="BackButton"
             Grid.Row="0"
-            Content="⟵"
+            Content="⟵ Powrót"
             Click="BackButton_Click"
-            Width="40"
-            Height="40"
             HorizontalAlignment="Left"
-            VerticalAlignment="Top"
             Background="Transparent"
             BorderThickness="0"
-            FontSize="24"
-            Foreground="Black" />
+            FontSize="18"
+            Foreground="#CDE6F8"
+            FontWeight="SemiBold"
+            Margin="0,0,0,12" />
 
-        <!-- GŁÓWNA ZAWARTOŚĆ – dwie wyspy -->
         <Grid Grid.Row="1"
           VerticalAlignment="Center"
           HorizontalAlignment="Center">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="60"/>
-                <!-- odstęp między wyspami -->
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <!-- WYSPA 1: Manage Players -->
             <Border Grid.Column="0"
                 Width="400"
                 Height="300"
@@ -63,12 +56,12 @@
                                FontWeight="Bold"
                                FontSize="20"
                                TextAlignment="Center"/>
-                        <Image Source="C:\Users\lipsk\source\repos\SoccerLink\Assets\players_icon.png" Width="150" Height="150" />
+                        <Image Source="/Assets/players_icon.png" Width="150" 
+                               Height="150" />
                     </StackPanel>
                 </Button>
             </Border>
 
-            <!-- WYSPA 2: Manage Squad -->
             <Border Grid.Column="2"
                 Width="400"
                 Height="300"
@@ -90,7 +83,7 @@
                                FontWeight="Bold"
                                FontSize="20"
                                TextAlignment="Center"/>
-                        <Image Source="C:\Users\lipsk\source\repos\SoccerLink\Assets\squad_icon.png" Width="150" Height="150" />
+                        <Image Source="/Assets/squad_icon.png" Width="150" Height="150" />
                     </StackPanel>
                 </Button>
             </Border>
