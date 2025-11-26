@@ -58,17 +58,6 @@
 		<PackageReference Include="Nelknet.LibSQL.Data" Version="0.2.4" />
 	</ItemGroup>
 	<ItemGroup>
-	  <Page Update="Views\AddPlayerStatsPage.xaml">
-	    <SubType>Designer</SubType>
-	  </Page>
-	  <Page Update="Views\AddTeamStatsPage.xaml">
-	    <SubType>Designer</SubType>
-	  </Page>
-	  <Page Update="Views\NewMessagePage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </Page>
-	</ItemGroup>
-	<ItemGroup>
 	  <Page Update="Views\AddEventPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </Page>
