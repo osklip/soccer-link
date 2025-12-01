@@ -26,7 +26,7 @@
                     FontWeight="SemiBold" />
 
             <Grid>
-                <TextBlock Text="Kalendarz" 
+                <TextBlock Text="Kalendarz i Wydarzenia Tygodnia" 
                            FontSize="24" 
                            FontWeight="Bold"
                            Foreground="#E6F6FF"
@@ -53,7 +53,39 @@
             Padding="12">
 
             <Grid>
-                <ListView x:Name="EventsListView" 
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="15" Margin="0,0,0,15">
+                    <Button x:Name="PrevWeekButton" 
+                            Content="⟵ Poprzedni tydzień" 
+                            Click="PrevWeekButton_Click"
+                            Background="#8A9AA6"
+                            Foreground="#2F4450"
+                            FontWeight="Bold"
+                            CornerRadius="6" />
+
+                    <TextBlock x:Name="WeekRangeTextBlock"
+                               Text="Ładowanie..."
+                               VerticalAlignment="Center"
+                               Foreground="#E6F6FF"
+                               FontWeight="SemiBold"
+                               FontSize="16" />
+
+                    <Button x:Name="NextWeekButton" 
+                            Content="Następny tydzień ⟶" 
+                            Click="NextWeekButton_Click"
+                            Background="#8A9AA6"
+                            Foreground="#2F4450"
+                            FontWeight="Bold"
+                            CornerRadius="6" />
+                </StackPanel>
+
+
+                <ListView Grid.Row="1" 
+                          x:Name="EventsListView" 
                           SelectionMode="None" 
                           Background="Transparent"
                           BorderThickness="0">
@@ -63,6 +95,7 @@
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
                                 <Border Grid.Column="0" Width="8" CornerRadius="4" 
@@ -75,13 +108,12 @@
                                     <StackPanel Orientation="Horizontal" Spacing="10">
                                         <TextBlock Text="{x:Bind EventType}" FontWeight="SemiBold" FontSize="13" Foreground="#86A9C8"/>
                                         <TextBlock Text="•" Foreground="#86A9C8"/>
+                                        <TextBlock Text="{x:Bind DisplayDate}" FontSize="13" Foreground="#CDE6F8"/>
                                         <TextBlock Text="{x:Bind DisplayTimeRange}" FontSize="13" Foreground="#CDE6F8"/>
                                     </StackPanel>
 
                                     <StackPanel Orientation="Horizontal" Spacing="10" Opacity="0.8">
-                                        <TextBlock Text="{x:Bind DisplayDate}" FontSize="12" />
-                                        <TextBlock Text="w" FontSize="12" FontStyle="Italic"/>
-                                        <TextBlock Text="{x:Bind Location}" FontSize="12"/>
+                                        <TextBlock Text="{x:Bind Location}" FontSize="12" FontStyle="Italic"/>
                                     </StackPanel>
 
                                     <TextBlock Text="{x:Bind Description}" 
@@ -90,12 +122,31 @@
                                                TextWrapping="Wrap"
                                                FontSize="12"/>
                                 </StackPanel>
+
+                                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center" Margin="15,0,0,0">
+                                    <Button Content="Edytuj" 
+                                            Tag="{x:Bind Id}"
+                                            Click="EditEventButton_Click"
+                                            Background="#9ECBFF" 
+                                            Foreground="#2F4450" 
+                                            Padding="10,4" 
+                                            CornerRadius="4"/>
+                                    <Button Content="Usuń" 
+                                            Tag="{x:Bind Id}"
+                                            Click="DeleteEventButton_Click"
+                                            Background="#C0392B" 
+                                            Foreground="White" 
+                                            Padding="10,4" 
+                                            CornerRadius="4"/>
+                                </StackPanel>
+
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
 
                 <TextBlock x:Name="StatusTextBlock" 
+                           Grid.Row="1"
                            HorizontalAlignment="Center" 
                            VerticalAlignment="Center" 
                            Foreground="#CDE6F8" 

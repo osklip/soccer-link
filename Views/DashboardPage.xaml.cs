@@ -1,37 +1,29 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
-using SoccerLink.Models;
 using SoccerLink.Services;
+using SoccerLink.Models;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 
 namespace SoccerLink.Views
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class DashboardPage : Page
     {
         private readonly DispatcherTimer _dateTimer;
-        private UpcomingEvent? _nextEvent;
-        private UpcomingEvent? _subsequentEvent;
+
+        // Pola przechowuj¹ce filtrowane najbli¿sze wydarzenia
+        private UpcomingEvent? _nextOtherEvent;
+        private UpcomingEvent? _subsequentOtherEvent;
+        private UpcomingEvent? _nextMatch;
+        private UpcomingEvent? _subsequentMatch;
 
         public DashboardPage()
         {
             InitializeComponent();
 
             UpdateHeaderDateTime();
-            LoadEventInfo();
+            LoadEventInfo(); // £adowanie informacji o wydarzeniach
 
             _dateTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
             _dateTimer.Tick += (s, e) => UpdateHeaderDateTime();
@@ -50,57 +42,99 @@ namespace SoccerLink.Views
 
             try
             {
-                // Wymagamy SessionService, aby pobraæ dane dla zalogowanego trenera
                 if (SessionService.AktualnyTrener == null) return;
 
                 var allEvents = await CalendarService.GetUpcomingEventsAsync();
 
                 if (allEvents != null && allEvents.Count > 0)
                 {
-                    _nextEvent = allEvents.FirstOrDefault();
-                    _subsequentEvent = allEvents.Skip(1).FirstOrDefault();
+                    // 1. FILTROWANIE I SORTOWANIE
+                    var matches = allEvents
+                                    .Where(e => e.EventType == "Mecz")
+                                    .OrderBy(e => e.DateTimeStart)
+                                    .ToList();
+
+                    var otherEvents = allEvents
+                                    .Where(e => e.EventType == "Trening" || e.EventType == "Wydarzenie")
+                                    .OrderBy(e => e.DateTimeStart)
+                                    .ToList();
+
+                    // 2. PRZYPISANIE 2 NAJBLI¯SZYCH WYDARZEÑ
+                    // Treningi / Wydarzenia (Lewa Kolumna)
+                    _nextOtherEvent = otherEvents.FirstOrDefault();
+                    _subsequentOtherEvent = otherEvents.Skip(1).FirstOrDefault();
+
+                    // Mecze (Prawa Kolumna)
+                    _nextMatch = matches.FirstOrDefault();
+                    _subsequentMatch = matches.Skip(1).FirstOrDefault();
 
                     UpdateEventDisplay();
                 }
             }
             catch (Exception ex)
             {
-                // Jeœli jest b³¹d, wyœwietlamy informacjê.
-                UpcomingEventTitleTextBlock.Text = "B³¹d ³adowania!";
-                NextEventTitleTextBlock.Text = "SprawdŸ po³¹czenie z baz¹.";
-                // Opcjonalnie: Logowanie b³êdu ex.Message
+                // Wyœwietlanie informacji o b³êdzie w panelu Treningi/Wydarzenia
+                OtherEventTitleTextBlock.Text = "B³¹d ³adowania wydarzeñ!";
+                OtherEventDateTextBlock.Text = $"Szczegó³y: {ex.Message}";
+                MatchTitleTextBlock.Text = "B³¹d ³adowania meczów!";
             }
         }
 
         private void ClearEventInfo()
         {
-            // Najbli¿sze wydarzenie (dawniej UpcomingEventButton)
-            UpcomingEventTitleTextBlock.Text = "Brak najbli¿szego wydarzenia";
-            UpcomingEventDateTextBlock.Text = "Data: ---";
-            UpcomingEventLocationTextBlock.Text = "Miejsce: ---";
+            // Treningi / Wydarzenia (Lewa Kolumna)
+            OtherEventTitleTextBlock.Text = "Brak najbli¿szego wydarzenia";
+            OtherEventDateTextBlock.Text = "Data: ---";
+            OtherEventLocationTextBlock.Text = "Miejsce: ---";
 
-            // Kolejne wydarzenie (dawniej NextEventButton)
-            NextEventTitleTextBlock.Text = "Brak kolejnego wydarzenia";
-            NextEventDateTextBlock.Text = "Data: ---";
-            NextEventLocationTextBlock.Text = "Miejsce: ---";
+            NextOtherEventTitleTextBlock.Text = "Brak kolejnego wydarzenia";
+            NextOtherEventDateTextBlock.Text = "Data: ---";
+            NextOtherEventLocationTextBlock.Text = "Miejsce: ---";
+
+            // Mecze (Prawa Kolumna)
+            MatchTitleTextBlock.Text = "Brak najbli¿szego meczu";
+            MatchDateTextBlock.Text = "Data: ---";
+            MatchLocationTextBlock.Text = "Miejsce: ---";
+
+            NextMatchTitleTextBlock.Text = "Brak kolejnego meczu";
+            NextMatchDateTextBlock.Text = "Data: ---";
+            NextMatchLocationTextBlock.Text = "Miejsce: ---";
         }
 
         private void UpdateEventDisplay()
         {
-            if (_nextEvent != null)
+            // LEWA KOLUMNA: Treningi / Wydarzenia
+            if (_nextOtherEvent != null)
             {
-                UpcomingEventTitleTextBlock.Text = _nextEvent.Title;
-                UpcomingEventDateTextBlock.Text = $"Data: {_nextEvent.DisplayDate} ({_nextEvent.DisplayTimeRange})";
-                UpcomingEventLocationTextBlock.Text = $"Miejsce: {_nextEvent.Location}";
+                OtherEventTitleTextBlock.Text = $"{_nextOtherEvent.EventType}: {_nextOtherEvent.Title}";
+                OtherEventDateTextBlock.Text = $"{_nextOtherEvent.DisplayDate} ({_nextOtherEvent.DisplayTimeRange})";
+                OtherEventLocationTextBlock.Text = $"{_nextOtherEvent.Location}";
             }
 
-            if (_subsequentEvent != null)
+            if (_subsequentOtherEvent != null)
             {
-                NextEventTitleTextBlock.Text = _subsequentEvent.Title;
-                NextEventDateTextBlock.Text = $"Data: {_subsequentEvent.DisplayDate} ({_subsequentEvent.DisplayTimeRange})";
-                NextEventLocationTextBlock.Text = $"Miejsce: {_subsequentEvent.Location}";
+                NextOtherEventTitleTextBlock.Text = $"{_subsequentOtherEvent.EventType}: {_subsequentOtherEvent.Title}";
+                NextOtherEventDateTextBlock.Text = $"{_subsequentOtherEvent.DisplayDate} ({_subsequentOtherEvent.DisplayTimeRange})";
+                NextOtherEventLocationTextBlock.Text = $"{_subsequentOtherEvent.Location}";
+            }
+
+            // PRAWA KOLUMNA: Mecze
+            if (_nextMatch != null)
+            {
+                MatchTitleTextBlock.Text = $"{_nextMatch.Title}";
+                MatchDateTextBlock.Text = $"{_nextMatch.DisplayDate} ({_nextMatch.DisplayTimeRange})";
+                MatchLocationTextBlock.Text = $"{_nextMatch.Location}";
+            }
+
+            if (_subsequentMatch != null)
+            {
+                NextMatchTitleTextBlock.Text = $"{_subsequentMatch.Title}";
+                NextMatchDateTextBlock.Text = $"{_subsequentMatch.DisplayDate} ({_subsequentMatch.DisplayTimeRange})";
+                NextMatchLocationTextBlock.Text = $"{_subsequentMatch.Location}";
             }
         }
+
+        // --- Metody nawigacyjne ---
 
         private void MessageButton_Click(object sender, RoutedEventArgs e)
         {
@@ -117,20 +151,9 @@ namespace SoccerLink.Views
             this.Content = new StatsNaviPage();
         }
 
-        private void UpcomingEventButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.Content = new CalendarPage();
-        }
-
-        private void NextEventButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.Content = new CalendarPage();
-        }
-
         private void TeamManagementButton_Click(object sender, RoutedEventArgs e)
         {
             this.Content = new TeamManagementPage();
         }
-
     }
 }

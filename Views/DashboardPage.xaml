@@ -61,81 +61,141 @@
         BorderThickness="3"
         Padding="18">
 
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
+            <Grid ColumnSpacing="20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-                <StackPanel Grid.Row="0"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Spacing="8">
+                <StackPanel Grid.Column="0">
 
-                    <TextBlock Text="Najbliższe wydarzenie"
-                           Foreground="#CDE6F8"
-                           FontWeight="Bold"
-                           FontSize="20"
-                           TextAlignment="Center" />
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Spacing="8">
+                        <TextBlock Text="Najbliższe Wydarzenie"
+                               Foreground="#CDE6F8"
+                               FontWeight="Bold"
+                               FontSize="18"
+                               TextAlignment="Center" />
 
-                    <TextBlock x:Name="UpcomingEventTitleTextBlock"
-                           Text="Ładowanie..."
-                           Foreground="#E6F6FF"
-                           FontWeight="Bold"
-                           FontSize="18"
-                           TextAlignment="Center" />
+                        <TextBlock x:Name="OtherEventTitleTextBlock"
+                               Text="Ładowanie..."
+                               Foreground="#E6F6FF"
+                               FontWeight="Bold"
+                               FontSize="16"
+                               TextAlignment="Center" />
 
-                    <TextBlock x:Name="UpcomingEventDateTextBlock"
-                           Text="Data: ---"
-                           Foreground="#CDE6F8"
-                           FontWeight="SemiBold"
-                           FontSize="16"
-                           TextAlignment="Center" />
+                        <TextBlock x:Name="OtherEventDateTextBlock"
+                               Text="Data: ---"
+                               Foreground="#CDE6F8"
+                               FontWeight="SemiBold"
+                               FontSize="14"
+                               TextAlignment="Center" />
 
-                    <TextBlock x:Name="UpcomingEventLocationTextBlock"
-                           Text="Miejsce: ---"
-                           Foreground="#CDE6F8"
-                           FontWeight="SemiBold"
-                           FontSize="16"
-                           TextAlignment="Center" />
+                        <TextBlock x:Name="OtherEventLocationTextBlock"
+                               Text="Miejsce: ---"
+                               Foreground="#CDE6F8"
+                               FontWeight="SemiBold"
+                               FontSize="14"
+                               TextAlignment="Center" />
+                    </StackPanel>
+
+                    <Border BorderThickness="0,0,0,1" BorderBrush="#9ECBFF" Margin="0,15,0,15"/>
+
+
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Bottom" Spacing="8">
+                        <TextBlock Text="Kolejne Wydarzenie"
+                               Foreground="#CDE6F8"
+                               FontWeight="Bold"
+                               FontSize="18"
+                               TextAlignment="Center" />
+
+                        <TextBlock x:Name="NextOtherEventTitleTextBlock"
+                               Text="Ładowanie..."
+                               Foreground="#E6F6FF"
+                               FontWeight="Bold"
+                               FontSize="16"
+                               TextAlignment="Center" />
+
+                        <TextBlock x:Name="NextOtherEventDateTextBlock"
+                               Text="Data: ---"
+                               Foreground="#CDE6F8"
+                               FontWeight="SemiBold"
+                               FontSize="14"
+                               TextAlignment="Center" />
+
+                        <TextBlock x:Name="NextOtherEventLocationTextBlock"
+                               Text="Miejsce: ---"
+                               Foreground="#CDE6F8"
+                               FontWeight="SemiBold"
+                               FontSize="14"
+                               TextAlignment="Center" />
+                    </StackPanel>
                 </StackPanel>
 
-                <Border Grid.Row="0" BorderThickness="0,0,0,1" BorderBrush="#9ECBFF" Margin="0,0,0,-8" VerticalAlignment="Bottom"/>
+
+                <StackPanel Grid.Column="1">
+
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Spacing="8">
+                        <TextBlock Text="Najbliższy Mecz"
+                               Foreground="#CDE6F8"
+                               FontWeight="Bold"
+                               FontSize="18"
+                               TextAlignment="Center" />
+
+                        <TextBlock x:Name="MatchTitleTextBlock"
+                               Text="Ładowanie..."
+                               Foreground="#E6F6FF"
+                               FontWeight="Bold"
+                               FontSize="16"
+                               TextAlignment="Center" />
+
+                        <TextBlock x:Name="MatchDateTextBlock"
+                               Text="Data: ---"
+                               Foreground="#CDE6F8"
+                               FontWeight="SemiBold"
+                               FontSize="14"
+                               TextAlignment="Center" />
+
+                        <TextBlock x:Name="MatchLocationTextBlock"
+                               Text="Miejsce: ---"
+                               Foreground="#CDE6F8"
+                               FontWeight="SemiBold"
+                               FontSize="14"
+                               TextAlignment="Center" />
+                    </StackPanel>
+
+                    <Border BorderThickness="0,0,0,1" BorderBrush="#9ECBFF" Margin="0,15,0,15"/>
 
 
-                <StackPanel Grid.Row="1"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Spacing="8"
-                        Margin="0,8,0,0">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Bottom" Spacing="8">
+                        <TextBlock Text="Kolejny Mecz"
+                               Foreground="#CDE6F8"
+                               FontWeight="Bold"
+                               FontSize="18"
+                               TextAlignment="Center" />
 
-                    <TextBlock Text="Kolejne wydarzenie"
-                           Foreground="#CDE6F8"
-                           FontWeight="Bold"
-                           FontSize="20"
-                           TextAlignment="Center" />
+                        <TextBlock x:Name="NextMatchTitleTextBlock"
+                               Text="Ładowanie..."
+                               Foreground="#E6F6FF"
+                               FontWeight="Bold"
+                               FontSize="16"
+                               TextAlignment="Center" />
 
-                    <TextBlock x:Name="NextEventTitleTextBlock"
-                           Text="Ładowanie..."
-                           Foreground="#E6F6FF"
-                           FontWeight="Bold"
-                           FontSize="18"
-                           TextAlignment="Center" />
+                        <TextBlock x:Name="NextMatchDateTextBlock"
+                               Text="Data: ---"
+                               Foreground="#CDE6F8"
+                               FontWeight="SemiBold"
+                               FontSize="14"
+                               TextAlignment="Center" />
 
-                    <TextBlock x:Name="NextEventDateTextBlock"
-                           Text="Data: ---"
-                           Foreground="#CDE6F8"
-                           FontWeight="SemiBold"
-                           FontSize="16"
-                           TextAlignment="Center" />
-
-                    <TextBlock x:Name="NextEventLocationTextBlock"
-                           Text="Miejsce: ---"
-                           Foreground="#CDE6F8"
-                           FontWeight="SemiBold"
-                           FontSize="16"
-                           TextAlignment="Center" />
+                        <TextBlock x:Name="NextMatchLocationTextBlock"
+                               Text="Miejsce: ---"
+                               Foreground="#CDE6F8"
+                               FontWeight="SemiBold"
+                               FontSize="14"
+                               TextAlignment="Center" />
+                    </StackPanel>
                 </StackPanel>
+
             </Grid>
         </Border>
 

@@ -8,6 +8,7 @@ namespace SoccerLink.Models
 {
     class UpcomingEvent
     {
+        public int Id { get; set; }
         public string EventType { get; set; }
         public string Title { get; set; }
         public DateTime DateTimeStart { get; set; }
