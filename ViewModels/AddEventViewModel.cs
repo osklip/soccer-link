@@ -8,7 +8,7 @@ namespace SoccerLink.ViewModels
 {
     public class AddEventViewModel : BaseViewModel
     {
-        private int _selectedTypeIndex = 0; // 0: Wydarzenie, 1: Trening, 2: Mecz
+        private int _selectedTypeIndex = 0; // 0: Wydarzenie, 1: Trening, 2: Mecz 33333
         private string _title = string.Empty;
         private DateTimeOffset? _date = DateTimeOffset.Now;
         private string _location = string.Empty;
