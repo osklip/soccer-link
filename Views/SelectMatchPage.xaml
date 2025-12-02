@@ -32,7 +32,7 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Text="{x:Bind Data}" Foreground="#86A9C8" VerticalAlignment="Center" Margin="0,0,20,0" FontWeight="Bold"/>
+                            <TextBlock Text="{x:Bind DataRozpoczecia}" Foreground="#86A9C8" VerticalAlignment="Center" Margin="0,0,20,0" FontWeight="Bold"/>
 
                             <StackPanel Grid.Column="1" VerticalAlignment="Center">
                                 <TextBlock Text="Mecz przeciwko:" FontSize="12" Foreground="#CDE6F8" Opacity="0.6"/>
