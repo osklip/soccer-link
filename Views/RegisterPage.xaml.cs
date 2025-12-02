@@ -85,7 +85,7 @@ namespace SoccerLink.Views
 
             StatusTextBlock.Text = "Konto zosta³o utworzone. Mo¿esz siê zalogowaæ.";
 
-            this.Content = new LoginPage();
+            this.Frame.Navigate(typeof(LoginPage));
         }
     }
 }

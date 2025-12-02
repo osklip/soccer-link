@@ -92,12 +92,12 @@ namespace SoccerLink.Views
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             // Powrót do listy (przez podmianê Content)
-            this.Content = new StatsPlayerPage();
+            this.Frame.Navigate(typeof(StatsPlayerPage));
         }
 
         private void HomeButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Content = new DashboardPage();
+            this.Frame.Navigate(typeof(DashboardPage));
         }
     }
 }

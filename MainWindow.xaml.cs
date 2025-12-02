@@ -29,7 +29,7 @@ namespace SoccerLink
         public MainWindow()
         {
             InitializeComponent();
-            this.Content = new LoginPage();
+            RootFrame.Navigate(typeof(LoginPage));
         }
     }
 }

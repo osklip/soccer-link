@@ -29,17 +29,17 @@ namespace SoccerLink.Views
         }
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Content = new DashboardPage();
+            this.Frame.Navigate(typeof(DashboardPage));
         }
 
         private void ManagePlayersButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Content = new PlayerListPage();
+            this.Frame.Navigate(typeof(PlayerListPage));
         }
 
         private void ManageSquadButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Content = new DashboardPage();
+            this.Frame.Navigate(typeof(DashboardPage));
         }
     }
 }

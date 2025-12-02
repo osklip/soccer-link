@@ -14,6 +14,6 @@
     </Window.SystemBackdrop>
 
     <Grid Background="#2F4450">
-        
+        <Frame x:Name="RootFrame"/>
     </Grid>
 </Window>

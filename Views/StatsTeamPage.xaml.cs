@@ -81,13 +81,13 @@ namespace SoccerLink.Views
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Content = new StatsNaviPage();
+            this.Frame.Navigate(typeof(StatsNaviPage));
         }
 
         // Obs³uga klikniêcia w domek
         private void HomeButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Content = new DashboardPage();
+            this.Frame.Navigate(typeof(DashboardPage));
         }
     }
 }

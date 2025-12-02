@@ -21,7 +21,7 @@ namespace SoccerLink.Views
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Content = new CalendarPage();
+            this.Frame.Navigate(typeof(CalendarPage));
         }
 
         private async void DeleteButton_Click(object sender, RoutedEventArgs e)

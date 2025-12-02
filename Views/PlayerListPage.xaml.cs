@@ -49,7 +49,7 @@ namespace SoccerLink.Views
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             // Nawigacja powrotna do strony zarz¹dzania zespo³em
-            this.Content = new TeamManagementPage();
+            this.Frame.Navigate(typeof(TeamManagementPage));
         }
     }
 }

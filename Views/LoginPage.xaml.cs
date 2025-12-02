@@ -40,13 +40,13 @@ namespace SoccerLink.Views
             if (trener != null)
             {
                 SessionService.SetUser(trener);
-                this.Content = new DashboardPage();
+                this.Frame.Navigate(typeof(DashboardPage));
             }
         }
 
         private void RegisterButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Content = new RegisterPage();
+            this.Frame.Navigate(typeof(RegisterPage));
         }
     }
 }

@@ -27,24 +27,24 @@ namespace SoccerLink.Views
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Content = new DashboardPage();
+            this.Frame.Navigate(typeof(DashboardPage));
         }
 
         private void SoloStatsButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Content = new StatsPlayerPage();
+            this.Frame.Navigate(typeof(StatsPlayerPage));
         }
 
         private void TeamStatsButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Content = new StatsTeamPage();
+            this.Frame.Navigate(typeof(StatsTeamPage));
         }
 
         // NOWA METODA
         private void AddStatsButton_Click(object sender, RoutedEventArgs e)
         {
             // Nawigacja do strony wyboru meczu
-            this.Content = new SelectMatchPage();
+            this.Frame.Navigate(typeof(SelectMatchPage));
         }
     }
 }

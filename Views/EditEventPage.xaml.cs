@@ -133,7 +133,7 @@ namespace SoccerLink.Views
 
                 StatusTextBlock.Text = "Zapisano pomyœlnie!";
                 await Task.Delay(500);
-                this.Content = new CalendarPage();
+                this.Frame.Navigate(typeof(CalendarPage));
             }
             catch (Exception ex)
             {
@@ -143,7 +143,7 @@ namespace SoccerLink.Views
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Content = new CalendarPage();
+            this.Frame.Navigate(typeof(CalendarPage));
         }
     }
 }

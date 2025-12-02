@@ -138,22 +138,22 @@ namespace SoccerLink.Views
 
         private void MessageButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Content = new MessagesPage();
+            this.Frame.Navigate(typeof(MessagesPage));
         }
 
         private void CalendarButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Content = new CalendarPage();
+            this.Frame.Navigate(typeof(CalendarPage));
         }
 
         private void StatsButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Content = new StatsNaviPage();
+            this.Frame.Navigate(typeof(StatsNaviPage));
         }
 
         private void TeamManagementButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Content = new TeamManagementPage();
+            this.Frame.Navigate(typeof(TeamManagementPage));
         }
     }
 }

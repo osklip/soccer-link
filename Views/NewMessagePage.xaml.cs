@@ -100,7 +100,7 @@ namespace SoccerLink.Views
                 await Task.Delay(1000);
 
                 // Powrót do skrzynki odbiorczej
-                this.Content = new MessagesPage();
+                this.Frame.Navigate(typeof(MessagesPage));
             }
             catch (Exception ex)
             {
@@ -114,7 +114,7 @@ namespace SoccerLink.Views
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Content = new MessagesPage();
+            this.Frame.Navigate(typeof(MessagesPage));
         }
     }
 }
