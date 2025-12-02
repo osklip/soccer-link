@@ -2,6 +2,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 using SoccerLink.Models;
+using SoccerLink.ViewModels;
 using System;
 using System.Globalization;
 
@@ -10,32 +11,22 @@ namespace SoccerLink.Views
     public sealed partial class PlayerStatsDetailsPage : Page
     {
         private DispatcherTimer _timer;
-        private Zawodnik _selectedPlayer;
+        public PlayerStatsDetailsViewModel ViewModel { get; }
 
-        // 1. Domyœlny konstruktor (wymagany przez XAML)
         public PlayerStatsDetailsPage()
         {
-            InitializeComponent();
-            InitializeSeasons();
+            ViewModel = new PlayerStatsDetailsViewModel();
+            this.InitializeComponent();
             StartClock();
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
             if (e.Parameter is Zawodnik player)
             {
-                _selectedPlayer = player;
-                PlayerNameTextBlock.Text = $"{_selectedPlayer.Imie} {_selectedPlayer.Nazwisko}";
-                // Tutaj mo¿na dodaæ logikê ³adowania statystyk dla tego ID
+                await ViewModel.LoadStatsForPlayerAsync(player);
             }
-        }
-
-        private void InitializeSeasons()
-        {
-            SeasonComboBox.Items.Add("Season 24/25");
-            SeasonComboBox.Items.Add("Season 23/24");
-            SeasonComboBox.SelectedIndex = 0;
         }
 
         private void StartClock()
@@ -53,56 +44,10 @@ namespace SoccerLink.Views
             DateTextBlock.Text = DateTime.Now.ToString("dd MMM yyyy   HH:mm", polishCulture);
         }
 
-        private void SeasonComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (SeasonComboBox.SelectedItem is string selectedSeason)
-            {
-                LoadStatsForPlayer(selectedSeason);
-            }
-        }
-
-        private void LoadStatsForPlayer(string season)
-        {
-            // SYMULACJA DANYCH
-            if (season == "Season 24/25")
-            {
-                GoalsValue.Text = "0.8";
-                ShotsValue.Text = "3.2";
-                ShotsOnTargetValue.Text = "1.5";
-                ShotsOffTargetValue.Text = "1.7";
-                PassesValue.Text = "24";
-                CleanSheetsValue.Text = "0";
-                FoulsValue.Text = "1.2";
-                CardsValue.Text = "0.2 / 0";
-            }
-            else
-            {
-                GoalsValue.Text = "0.5";
-                ShotsValue.Text = "2.1";
-                ShotsOnTargetValue.Text = "1.0";
-                ShotsOffTargetValue.Text = "1.1";
-                PassesValue.Text = "18";
-                CleanSheetsValue.Text = "0";
-                FoulsValue.Text = "0.8";
-                CardsValue.Text = "0.1 / 1";
-            }
-        }
-
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            if (this.Frame.CanGoBack)
-            {
-                this.Frame.GoBack();
-            }
-            else
-            {
-                this.Frame.Navigate(typeof(StatsPlayerPage));
-            }
-        }
-
-        private void HomeButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(DashboardPage));
+            // Mo¿esz tu nawigowaæ bezpoœrednio do StatsPlayerPage
+            this.Frame.Navigate(typeof(StatsPlayerPage));
         }
     }
 }

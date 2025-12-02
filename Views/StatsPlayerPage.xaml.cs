@@ -1,7 +1,9 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using SoccerLink.Models; // Upewnij siê, ¿e masz ten namespace
-using System.Collections.Generic;
+using SoccerLink.Models;
+using SoccerLink.Services; // Pamiêtaj o imporcie serwisów
+using System;
+using System.Linq;
 
 namespace SoccerLink.Views
 {
@@ -10,27 +12,29 @@ namespace SoccerLink.Views
         public StatsPlayerPage()
         {
             InitializeComponent();
-            LoadMockPlayers();
+            this.Loaded += StatsPlayerPage_Loaded;
         }
 
-        private void LoadMockPlayers()
+        private async void StatsPlayerPage_Loaded(object sender, RoutedEventArgs e)
         {
-            // Tymczasowa lista "hardcoded", ¿ebyœ móg³ przetestowaæ nawigacjê
-            var players = new List<Zawodnik>
+            try
             {
-                new Zawodnik { Imie = "Jan", Nazwisko = "Kowalski", Pozycja = "Napastnik" },
-                new Zawodnik { Imie = "Piotr", Nazwisko = "Nowak", Pozycja = "Bramkarz" },
-                new Zawodnik { Imie = "Adam", Nazwisko = "Wiœniewski", Pozycja = "Obroñca" },
-                new Zawodnik { Imie = "Robert", Nazwisko = "Lewandowski", Pozycja = "Napastnik" }
-            };
-
-            PlayersListView.ItemsSource = players;
+                // Pobieramy prawdziwych zawodników z bazy
+                var players = await ZawodnikService.PobierzZawodnikowDlaAktualnegoTreneraAsync();
+                PlayersListView.ItemsSource = players;
+            }
+            catch (Exception ex)
+            {
+                // Opcjonalnie: obs³uga b³êdu
+                System.Diagnostics.Debug.WriteLine($"B³¹d ³adowania graczy: {ex.Message}");
+            }
         }
 
         private void PlayersListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (PlayersListView.SelectedItem is Zawodnik selectedPlayer)
             {
+                // Przekazujemy prawdziwy obiekt Zawodnika, który ma ID z bazy
                 this.Frame.Navigate(typeof(PlayerStatsDetailsPage), selectedPlayer);
             }
         }

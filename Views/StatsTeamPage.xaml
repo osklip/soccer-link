@@ -1,9 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 <Page
     x:Class="SoccerLink.Views.StatsTeamPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodels="using:SoccerLink.ViewModels"
     mc:Ignorable="d">
 
     <Page.Resources>
@@ -80,24 +82,18 @@
             </StackPanel>
 
             <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="4">
-                <TextBlock Text="Team Stats" 
+                <TextBlock Text="Team Stats (Średnie)" 
                            FontSize="28" 
                            FontWeight="Bold" 
                            Foreground="#1D2E38" 
                            HorizontalAlignment="Center"
                            FontStyle="Italic"/>
 
-                <ComboBox x:Name="SeasonComboBox"
-                          SelectionChanged="SeasonComboBox_SelectionChanged"
-                          MinWidth="150"
-                          HorizontalAlignment="Center"
-                          BorderThickness="0"
-                          Background="Transparent"
-                          FontSize="18"
-                          FontWeight="SemiBold"
-                          FontStyle="Italic"
-                          Foreground="#1D2E38">
-                </ComboBox>
+                <TextBlock Text="Wszystkie mecze" 
+                           Foreground="#1D2E38" 
+                           FontSize="16" 
+                           FontWeight="SemiBold" 
+                           HorizontalAlignment="Center"/>
             </StackPanel>
 
             <StackPanel Grid.Column="2" VerticalAlignment="Center">
@@ -128,34 +124,38 @@
                     <Border Style="{StaticResource CardLabelBorderStyle}">
                         <TextBlock Text="Bramek na mecz" Style="{StaticResource CardLabelTextStyle}"/>
                     </Border>
-                    <TextBlock x:Name="GoalsPerMatchValue" Text="-" Style="{StaticResource CardValueTextStyle}" Margin="0,55,0,0"/>
+                    <TextBlock Text="{x:Bind ViewModel.AvgGoals, Mode=OneWay}" 
+                               Style="{StaticResource CardValueTextStyle}" Margin="0,55,0,0"/>
                 </Grid>
             </Button>
 
             <Button Grid.Row="0" Grid.Column="1" Style="{StaticResource StatCardStyle}">
                 <Grid>
                     <Border Style="{StaticResource CardLabelBorderStyle}">
-                        <TextBlock Text="Oddane strzały na mecz" Style="{StaticResource CardLabelTextStyle}"/>
+                        <TextBlock Text="Strzały na mecz" Style="{StaticResource CardLabelTextStyle}"/>
                     </Border>
-                    <TextBlock x:Name="ShotsPerMatchValue" Text="-" Style="{StaticResource CardValueTextStyle}" Margin="0,55,0,0"/>
+                    <TextBlock Text="{x:Bind ViewModel.AvgShots, Mode=OneWay}" 
+                               Style="{StaticResource CardValueTextStyle}" Margin="0,55,0,0"/>
                 </Grid>
             </Button>
 
             <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource StatCardStyle}">
                 <Grid>
                     <Border Style="{StaticResource CardLabelBorderStyle}">
-                        <TextBlock Text="Strzały celne na mecz" Style="{StaticResource CardLabelTextStyle}"/>
+                        <TextBlock Text="Strzały celne" Style="{StaticResource CardLabelTextStyle}"/>
                     </Border>
-                    <TextBlock x:Name="ShotsOnTargetValue" Text="-" Style="{StaticResource CardValueTextStyle}" Margin="0,55,0,0"/>
+                    <TextBlock Text="{x:Bind ViewModel.AvgShotsOn, Mode=OneWay}" 
+                               Style="{StaticResource CardValueTextStyle}" Margin="0,55,0,0"/>
                 </Grid>
             </Button>
 
             <Button Grid.Row="0" Grid.Column="3" Style="{StaticResource StatCardStyle}">
                 <Grid>
                     <Border Style="{StaticResource CardLabelBorderStyle}">
-                        <TextBlock Text="Strzały niecelne na mecz" Style="{StaticResource CardLabelTextStyle}"/>
+                        <TextBlock Text="Strzały niecelne" Style="{StaticResource CardLabelTextStyle}"/>
                     </Border>
-                    <TextBlock x:Name="ShotsOffTargetValue" Text="-" Style="{StaticResource CardValueTextStyle}" Margin="0,55,0,0"/>
+                    <TextBlock Text="{x:Bind ViewModel.AvgShotsOff, Mode=OneWay}" 
+                               Style="{StaticResource CardValueTextStyle}" Margin="0,55,0,0"/>
                 </Grid>
             </Button>
 
@@ -164,7 +164,8 @@
                     <Border Style="{StaticResource CardLabelBorderStyle}">
                         <TextBlock Text="Posiadanie piłki" Style="{StaticResource CardLabelTextStyle}"/>
                     </Border>
-                    <TextBlock x:Name="PossessionValue" Text="-" Style="{StaticResource CardValueTextStyle}" Margin="0,55,0,0"/>
+                    <TextBlock Text="{x:Bind ViewModel.AvgPossession, Mode=OneWay}" 
+                               Style="{StaticResource CardValueTextStyle}" Margin="0,55,0,0"/>
                 </Grid>
             </Button>
 
@@ -173,7 +174,8 @@
                     <Border Style="{StaticResource CardLabelBorderStyle}">
                         <TextBlock Text="Rożne na mecz" Style="{StaticResource CardLabelTextStyle}"/>
                     </Border>
-                    <TextBlock x:Name="CornersValue" Text="-" Style="{StaticResource CardValueTextStyle}" Margin="0,55,0,0"/>
+                    <TextBlock Text="{x:Bind ViewModel.AvgCorners, Mode=OneWay}" 
+                               Style="{StaticResource CardValueTextStyle}" Margin="0,55,0,0"/>
                 </Grid>
             </Button>
 
@@ -182,7 +184,8 @@
                     <Border Style="{StaticResource CardLabelBorderStyle}">
                         <TextBlock Text="Czyste konta" Style="{StaticResource CardLabelTextStyle}"/>
                     </Border>
-                    <TextBlock x:Name="CleanSheetsValue" Text="-" Style="{StaticResource CardValueTextStyle}" Margin="0,55,0,0"/>
+                    <TextBlock Text="{x:Bind ViewModel.TotalCleanSheets, Mode=OneWay}" 
+                               Style="{StaticResource CardValueTextStyle}" Margin="0,55,0,0"/>
                 </Grid>
             </Button>
 
@@ -191,7 +194,8 @@
                     <Border Style="{StaticResource CardLabelBorderStyle}">
                         <TextBlock Text="Faule na mecz" Style="{StaticResource CardLabelTextStyle}"/>
                     </Border>
-                    <TextBlock x:Name="FoulsValue" Text="-" Style="{StaticResource CardValueTextStyle}" Margin="0,55,0,0"/>
+                    <TextBlock Text="{x:Bind ViewModel.AvgFouls, Mode=OneWay}" 
+                               Style="{StaticResource CardValueTextStyle}" Margin="0,55,0,0"/>
                 </Grid>
             </Button>
 

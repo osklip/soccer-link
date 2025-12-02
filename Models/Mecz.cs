@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SoccerLink.Models
 {
-    class Mecz
+    public class Mecz
     {
         public int MeczID { get; set; } // MeczyID INTEGER PRIMARY KEY AUTOINCREMENT
         public int SkladMeczowyID { get; set; } // SkladMeczowyID INTEGER NOT NULL

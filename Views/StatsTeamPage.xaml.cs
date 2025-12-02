@@ -1,5 +1,6 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using SoccerLink.ViewModels;
 using System;
 using System.Globalization;
 
@@ -8,10 +9,12 @@ namespace SoccerLink.Views
     public sealed partial class StatsTeamPage : Page
     {
         private DispatcherTimer _timer;
-
+        public StatsTeamViewModel ViewModel { get; }
         public StatsTeamPage()
         {
-            InitializeComponent();
+            ViewModel = new StatsTeamViewModel();
+            this.InitializeComponent();
+            this.Loaded += async (s, e) => await ViewModel.LoadStatsAsync();
             InitializeSeasons();
             StartClock();
         }
