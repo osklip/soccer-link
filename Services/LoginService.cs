@@ -13,19 +13,18 @@ namespace SoccerLink.Services
             if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
                 return null;
 
-            // Użycie centralnej konfiguracji
             using var client = await DatabaseConfig.CreateClientAsync();
 
-            // Zapytanie parametryzowane (zabezpieczenie przed SQL Injection)
+            // ZMIANA 1: Używamy '?' zamiast '@email'
             var sql = @"
                 SELECT TrenerID, AdresEmail, Haslo, Imie, Nazwisko, NumerTelefonu
                 FROM Trener
-                WHERE AdresEmail = @email
+                WHERE AdresEmail = ?
                 LIMIT 1;";
 
-            // Przekazanie parametrów
-            var parameters = new { email };
-            var result = await client.Execute(sql, parameters);
+            // ZMIANA 2: Przekazujemy 'email' bezpośrednio jako drugi argument
+            // Biblioteka podstawi go pod znak zapytania
+            var result = await client.Execute(sql, email);
 
             if (result.Rows == null || !result.Rows.Any())
                 return null;
@@ -33,7 +32,6 @@ namespace SoccerLink.Services
             var row = result.Rows.First().ToArray();
             var storedPassword = row[2]?.ToString();
 
-            // Porównanie haseł (bez hashowania - zgodnie z prośbą)
             if (storedPassword != password)
                 return null;
 
@@ -41,9 +39,9 @@ namespace SoccerLink.Services
             {
                 Id = int.Parse(row[0].ToString()),
                 AdresEmail = row[1].ToString(),
-                Imie = row[3].ToString(),       // Poprawiony indeks (w SQL Imie jest 4. kolumną, czyli index 3)
-                Nazwisko = row[4].ToString(),   // Poprawiony indeks
-                NumerTelefonu = row[5].ToString() // Poprawiony indeks
+                Imie = row[3].ToString(),
+                Nazwisko = row[4].ToString(),
+                NumerTelefonu = row[5].ToString()
             };
         }
     }

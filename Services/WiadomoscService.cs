@@ -1,6 +1,5 @@
 ﻿using Libsql.Client;
 using SoccerLink.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,23 +10,14 @@ namespace SoccerLink.Services
     {
         public static async Task<List<Wiadomosc>> PobierzWiadomosciDlaAktualnegoTreneraAsync()
         {
-            if (SessionService.AktualnyTrener == null)
-                return new List<Wiadomosc>();
-
+            if (SessionService.AktualnyTrener == null) return new List<Wiadomosc>();
             var trenerId = SessionService.AktualnyTrener.Id;
 
             using var client = await DatabaseConfig.CreateClientAsync();
 
             var sql = @"
                 SELECT 
-                    w.WiadomoscID,
-                    w.TypNadawcy,
-                    w.NadawcaID,
-                    w.TypOdbiorcy,
-                    w.OdbiorcaID,
-                    w.Tresc,
-                    w.DataWyslania,
-                    w.Temat,
+                    w.WiadomoscID, w.TypNadawcy, w.NadawcaID, w.TypOdbiorcy, w.OdbiorcaID, w.Tresc, w.DataWyslania, w.Temat,
                     CASE 
                         WHEN w.TypNadawcy = 'Zawodnik' THEN z.Imie || ' ' || z.Nazwisko
                         WHEN w.TypNadawcy = 'Trener'   THEN t.Imie || ' ' || t.Nazwisko
@@ -37,24 +27,21 @@ namespace SoccerLink.Services
                 LEFT JOIN Zawodnik z ON w.TypNadawcy = 'Zawodnik' AND w.NadawcaID = z.ZawodnikID
                 LEFT JOIN Trener   t ON w.TypNadawcy = 'Trener'   AND w.NadawcaID = t.TrenerID
                 WHERE 
-                    (w.TypOdbiorcy = 'Trener' AND w.OdbiorcaID = @trenerId)
+                    (w.TypOdbiorcy = 'Trener' AND w.OdbiorcaID = ?)
                     OR
-                    (w.TypNadawcy = 'Trener' AND w.NadawcaID = @trenerId)
+                    (w.TypNadawcy = 'Trener' AND w.NadawcaID = ?)
                 ORDER BY datetime(w.DataWyslania) DESC;
             ";
 
-            var parameters = new { trenerId };
-            var result = await client.Execute(sql, parameters);
+            // Przekazujemy trenerId dwukrotnie, bo w SQL są dwa znaki zapytania '?'
+            var result = await client.Execute(sql, trenerId, trenerId);
 
             var list = new List<Wiadomosc>();
-
-            if (result.Rows == null)
-                return list;
+            if (result.Rows == null) return list;
 
             foreach (var row in result.Rows)
             {
                 var cells = row.ToArray();
-
                 list.Add(new Wiadomosc
                 {
                     WiadomoscID = int.Parse(cells[0].ToString()),
@@ -68,7 +55,6 @@ namespace SoccerLink.Services
                     NadawcaNazwa = cells[8]?.ToString()
                 });
             }
-
             return list;
         }
     }

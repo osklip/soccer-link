@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SoccerLink.Models
 {
-    class UpcomingEvent
+    public class UpcomingEvent
     {
         public int Id { get; set; }
         public string EventType { get; set; }

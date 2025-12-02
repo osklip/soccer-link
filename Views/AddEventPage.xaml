@@ -5,32 +5,28 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converters="using:SoccerLink.Helpers"
     mc:Ignorable="d">
 
+    <Page.Resources>
+        <converters:BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </Page.Resources>
+
     <Grid Background="#405861">
-        <Border
-            Width="500"
-            CornerRadius="16"
-            Background="#98C9FF"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Padding="24">
+        <Border Width="500" CornerRadius="16" Background="#98C9FF" 
+                HorizontalAlignment="Center" VerticalAlignment="Center" Padding="24">
 
             <StackPanel Spacing="16">
-                <TextBlock Text="Dodaj Nowe Wydarzenie" 
-                           FontSize="24" 
-                           FontWeight="Bold" 
-                           Foreground="#2A5670" 
-                           HorizontalAlignment="Center"/>
+                <TextBlock Text="Dodaj Nowe Wydarzenie" FontSize="24" FontWeight="Bold" 
+                           Foreground="#2A5670" HorizontalAlignment="Center"/>
 
                 <StackPanel Orientation="Horizontal" Spacing="12">
                     <TextBlock Text="Typ:" VerticalAlignment="Center" Foreground="#2A5670" FontWeight="Bold"/>
                     <ComboBox x:Name="EventTypeComboBox" 
                               Width="380" 
-                              SelectionChanged="EventTypeComboBox_SelectionChanged"
+                              SelectedIndex="{x:Bind ViewModel.SelectedTypeIndex, Mode=TwoWay}"
                               Background="#BFBFBF"
-                              CornerRadius="8"
-                              SelectedIndex="0">
+                              CornerRadius="8">
                         <ComboBoxItem Content="Wydarzenie ogólne" Tag="Wydarzenie"/>
                         <ComboBoxItem Content="Trening" Tag="Trening"/>
                         <ComboBoxItem Content="Mecz" Tag="Mecz"/>
@@ -39,13 +35,22 @@
 
                 <StackPanel Spacing="10">
                     <TextBlock Text="Nazwa/Przeciwnik/Typ" Foreground="#2A5670" FontWeight="Bold"/>
-                    <TextBox x:Name="NameTextBox" PlaceholderText="Nazwa wydarzenia / Przeciwnik / Typ treningu" Background="#BFBFBF" CornerRadius="8" Padding="10,6" />
+                    <TextBox x:Name="NameTextBox" 
+                             PlaceholderText="{x:Bind ViewModel.TitlePlaceholder, Mode=OneWay}" 
+                             Text="{x:Bind ViewModel.Title, Mode=TwoWay}"
+                             Background="#BFBFBF" CornerRadius="8" Padding="10,6" />
 
                     <TextBlock Text="Data" Foreground="#2A5670" FontWeight="Bold"/>
-                    <CalendarDatePicker x:Name="DateDatePicker" PlaceholderText="Wybierz datę" Background="#BFBFBF" CornerRadius="8" />
+                    <CalendarDatePicker x:Name="DateDatePicker" 
+                                        Date="{x:Bind ViewModel.Date, Mode=TwoWay}"
+                                        PlaceholderText="Wybierz datę" 
+                                        Background="#BFBFBF" CornerRadius="8" />
 
                     <TextBlock Text="Miejsce" Foreground="#2A5670" FontWeight="Bold"/>
-                    <TextBox x:Name="MiejsceTextBox" PlaceholderText="Miejsce wydarzenia" Background="#BFBFBF" CornerRadius="8" Padding="10,6" />
+                    <TextBox x:Name="MiejsceTextBox" 
+                             Text="{x:Bind ViewModel.Location, Mode=TwoWay}"
+                             PlaceholderText="Miejsce wydarzenia" 
+                             Background="#BFBFBF" CornerRadius="8" Padding="10,6" />
                 </StackPanel>
 
                 <Grid>
@@ -57,18 +62,29 @@
 
                     <StackPanel Grid.Column="0" Spacing="4">
                         <TextBlock Text="Godzina rozpoczęcia" Foreground="#2A5670" FontWeight="Bold"/>
-                        <TextBox x:Name="TimeStartTextBox" PlaceholderText="HH:MM (np. 18:30)" Background="#BFBFBF" CornerRadius="8" Padding="10,6" />
+                        <TextBox x:Name="TimeStartTextBox" 
+                                 Text="{x:Bind ViewModel.TimeStart, Mode=TwoWay}"
+                                 PlaceholderText="HH:MM" 
+                                 Background="#BFBFBF" CornerRadius="8" Padding="10,6" />
                     </StackPanel>
 
-                    <StackPanel Grid.Column="2" Spacing="4">
-                        <TextBlock Text="Godzina zakończenia (opcjonalnie)" Foreground="#2A5670" FontWeight="Bold"/>
-                        <TextBox x:Name="TimeEndTextBox" PlaceholderText="HH:MM (dla Wydarzenia/Treningu)" Background="#BFBFBF" CornerRadius="8" Padding="10,6" />
+                    <StackPanel Grid.Column="2" Spacing="4" 
+                                Visibility="{x:Bind ViewModel.IsTimeEndVisible, Mode=OneWay, Converter={StaticResource BoolToVis}}">
+                        <TextBlock Text="Godzina zakończenia" Foreground="#2A5670" FontWeight="Bold"/>
+                        <TextBox x:Name="TimeEndTextBox" 
+                                 Text="{x:Bind ViewModel.TimeEnd, Mode=TwoWay}"
+                                 PlaceholderText="HH:MM" 
+                                 Background="#BFBFBF" CornerRadius="8" Padding="10,6" />
                     </StackPanel>
                 </Grid>
 
-                <StackPanel x:Name="SpecificFieldsStackPanel" Spacing="10" Visibility="Collapsed">
-                    <TextBlock Text="Opis (Wydarzenie Ogólne)" Foreground="#2A5670" FontWeight="Bold"/>
-                    <TextBox x:Name="OpisTextBox" Height="80" TextWrapping="Wrap" AcceptsReturn="True" Background="#BFBFBF" CornerRadius="8" Padding="10,6" />
+                <StackPanel x:Name="SpecificFieldsStackPanel" Spacing="10" 
+                            Visibility="{x:Bind ViewModel.IsDescriptionVisible, Mode=OneWay, Converter={StaticResource BoolToVis}}">
+                    <TextBlock Text="Opis" Foreground="#2A5670" FontWeight="Bold"/>
+                    <TextBox x:Name="OpisTextBox" 
+                             Text="{x:Bind ViewModel.Description, Mode=TwoWay}"
+                             Height="80" TextWrapping="Wrap" AcceptsReturn="True" 
+                             Background="#BFBFBF" CornerRadius="8" Padding="10,6" />
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="20" Margin="0,10,0,0">
@@ -91,7 +107,8 @@
                 </StackPanel>
 
                 <TextBlock x:Name="StatusTextBlock" 
-                           Foreground="Red" 
+                           Text="{x:Bind ViewModel.StatusMessage, Mode=OneWay}"
+                           Foreground="{x:Bind ViewModel.StatusColor, Mode=OneWay}"
                            HorizontalAlignment="Center" 
                            Margin="0,8,0,0"/>
 

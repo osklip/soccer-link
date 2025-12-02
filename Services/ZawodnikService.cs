@@ -1,6 +1,5 @@
 ﻿using Libsql.Client;
 using SoccerLink.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,46 +10,39 @@ namespace SoccerLink.Services
     {
         public static async Task<List<Zawodnik>> PobierzZawodnikowDlaAktualnegoTreneraAsync()
         {
-            if (SessionService.AktualnyTrener == null)
-                return new List<Zawodnik>();
-
+            if (SessionService.AktualnyTrener == null) return new List<Zawodnik>();
             var trenerId = SessionService.AktualnyTrener.Id;
 
             using var client = await DatabaseConfig.CreateClientAsync();
 
+            // Zastąpienie @trenerId znakiem '?'
             var sql = @"
-                SELECT 
-                    ZawodnikID, Imie, Nazwisko, Pozycja, NumerTelefonu, AdresEmail, CzyDyspozycyjny, NumerKoszulki
+                SELECT ZawodnikID, Imie, Nazwisko, Pozycja, NumerTelefonu, AdresEmail, CzyDyspozycyjny, NumerKoszulki
                 FROM Zawodnik
-                WHERE TrenerID = @trenerId
+                WHERE TrenerID = ?
                 ORDER BY Nazwisko, Imie;
             ";
 
-            var parameters = new { trenerId };
-            var result = await client.Execute(sql, parameters);
-
+            var result = await client.Execute(sql, trenerId);
             var list = new List<Zawodnik>();
 
-            if (result.Rows == null)
-                return list;
+            if (result.Rows == null) return list;
 
             foreach (var row in result.Rows)
             {
-                var cells = row.ToArray();
-
+                var c = row.ToArray();
                 list.Add(new Zawodnik
                 {
-                    ZawodnikId = int.Parse(cells[0].ToString()),
-                    Imie = cells[1]?.ToString() ?? string.Empty,
-                    Nazwisko = cells[2]?.ToString() ?? string.Empty,
-                    Pozycja = cells[3]?.ToString() ?? string.Empty,
-                    NumerTelefonu = cells[4]?.ToString() ?? string.Empty,
-                    AdresEmail = cells[5]?.ToString() ?? string.Empty,
-                    CzyDyspozycyjny = int.Parse(cells[6].ToString()),
-                    NumerKoszulki = int.Parse(cells[7].ToString())
+                    ZawodnikId = int.Parse(c[0].ToString()),
+                    Imie = c[1]?.ToString() ?? "",
+                    Nazwisko = c[2]?.ToString() ?? "",
+                    Pozycja = c[3]?.ToString() ?? "",
+                    NumerTelefonu = c[4]?.ToString() ?? "",
+                    AdresEmail = c[5]?.ToString() ?? "",
+                    CzyDyspozycyjny = int.Parse(c[6].ToString()),
+                    NumerKoszulki = int.Parse(c[7].ToString())
                 });
             }
-
             return list;
         }
     }

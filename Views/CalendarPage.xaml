@@ -6,7 +6,12 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="using:SoccerLink.Models"
+    xmlns:converters="using:SoccerLink.Helpers"
     mc:Ignorable="d">
+
+    <Page.Resources>
+        <converters:BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </Page.Resources>
 
     <Grid Background="#405861" Padding="24">
         <Grid.RowDefinitions>
@@ -46,11 +51,11 @@
         </StackPanel>
 
         <Border Grid.Row="1"
-            Background="#32404A"
-            CornerRadius="10"
-            BorderBrush="#9ECBFF"
-            BorderThickness="3"
-            Padding="12">
+                Background="#32404A"
+                CornerRadius="10"
+                BorderBrush="#9ECBFF"
+                BorderThickness="3"
+                Padding="12">
 
             <Grid>
                 <Grid.RowDefinitions>
@@ -67,8 +72,7 @@
                             FontWeight="Bold"
                             CornerRadius="6" />
 
-                    <TextBlock x:Name="WeekRangeTextBlock"
-                               Text="Ładowanie..."
+                    <TextBlock Text="{x:Bind ViewModel.WeekRangeText, Mode=OneWay}"
                                VerticalAlignment="Center"
                                Foreground="#E6F6FF"
                                FontWeight="SemiBold"
@@ -83,9 +87,9 @@
                             CornerRadius="6" />
                 </StackPanel>
 
-
                 <ListView Grid.Row="1" 
                           x:Name="EventsListView" 
+                          ItemsSource="{x:Bind ViewModel.EventsToShow, Mode=OneWay}"
                           SelectionMode="None" 
                           Background="Transparent"
                           BorderThickness="0">
@@ -131,6 +135,7 @@
                                             Foreground="#2F4450" 
                                             Padding="10,4" 
                                             CornerRadius="4"/>
+
                                     <Button Content="Usuń" 
                                             Tag="{x:Bind Id}"
                                             Click="DeleteEventButton_Click"
@@ -139,18 +144,18 @@
                                             Padding="10,4" 
                                             CornerRadius="4"/>
                                 </StackPanel>
-
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
 
-                <TextBlock x:Name="StatusTextBlock" 
-                           Grid.Row="1"
+                <TextBlock Grid.Row="1"
+                           Text="{x:Bind ViewModel.StatusMessage, Mode=OneWay}"
+                           Visibility="{x:Bind ViewModel.IsStatusVisible, Mode=OneWay, Converter={StaticResource BoolToVis}}"
                            HorizontalAlignment="Center" 
                            VerticalAlignment="Center" 
                            Foreground="#CDE6F8" 
-                           Visibility="Collapsed"/>
+                           FontSize="16"/>
             </Grid>
         </Border>
     </Grid>

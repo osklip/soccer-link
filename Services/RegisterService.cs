@@ -18,18 +18,20 @@ namespace SoccerLink.Services
 
             string cleanEmail = email.Trim();
             string cleanPhone = phoneNumber.Trim();
+            string cleanPass = password.Trim();
+            string cleanFirst = firstName.Trim();
+            string cleanLast = lastName.Trim();
 
-            // 1. Sprawdzenie czy użytkownik istnieje (parametryzowane)
-            // Sprawdzamy w obu tabelach
+            // 1. Sprawdzenie (4 znaki zapytania w odpowiedniej kolejności)
             var checkSql = @"
                 SELECT COUNT(1) FROM (
-                    SELECT AdresEmail FROM Trener WHERE AdresEmail = @email OR NumerTelefonu = @phone
+                    SELECT AdresEmail FROM Trener WHERE AdresEmail = ? OR NumerTelefonu = ?
                     UNION ALL 
-                    SELECT AdresEmail FROM Zawodnik WHERE AdresEmail = @email OR NumerTelefonu = @phone
+                    SELECT AdresEmail FROM Zawodnik WHERE AdresEmail = ? OR NumerTelefonu = ?
                 );";
 
-            var checkParams = new { email = cleanEmail, phone = cleanPhone };
-            var checkResult = await client.Execute(checkSql, checkParams);
+            // Przekazujemy parametry w kolejności występowania '?'
+            var checkResult = await client.Execute(checkSql, cleanEmail, cleanPhone, cleanEmail, cleanPhone);
 
             if (checkResult.Rows != null && checkResult.Rows.Any())
             {
@@ -37,25 +39,17 @@ namespace SoccerLink.Services
                 var cells = firstRow.ToArray();
                 if (cells.Length > 0 && long.TryParse(cells[0]?.ToString(), out var count) && count > 0)
                 {
-                    return false; // Użytkownik już istnieje
+                    return false;
                 }
             }
 
-            // 2. Rejestracja (INSERT parametryzowany)
+            // 2. Rejestracja (5 znaków zapytania)
             var insertSql = @"
                 INSERT INTO Trener (AdresEmail, Haslo, NumerTelefonu, Imie, Nazwisko, ProbyLogowania)
-                VALUES (@email, @password, @phone, @firstName, @lastName, 0);";
+                VALUES (?, ?, ?, ?, ?, 0);";
 
-            var insertParams = new
-            {
-                email = cleanEmail,
-                password = password.Trim(), // Hasło jawnym tekstem (zgodnie z życzeniem)
-                phone = cleanPhone,
-                firstName = firstName.Trim(),
-                lastName = lastName.Trim()
-            };
-
-            await client.Execute(insertSql, insertParams);
+            // Kolejność: email, hasło, telefon, imię, nazwisko
+            await client.Execute(insertSql, cleanEmail, cleanPass, cleanPhone, cleanFirst, cleanLast);
 
             return true;
         }

@@ -13,70 +13,32 @@ namespace SoccerLink.Services
         public static async Task AddMeczAsync(Mecz mecz)
         {
             if (SessionService.AktualnyTrener == null) throw new InvalidOperationException("Trener nie jest zalogowany.");
-
             using var client = await DatabaseConfig.CreateClientAsync();
 
-            var sql = @"
-                INSERT INTO Mecz (SkladMeczowyID, Przeciwnik, Data, Godzina, Miejsce, TrenerID)
-                VALUES (0, @przeciwnik, @data, @godzina, @miejsce, @trenerId);";
+            var sql = "INSERT INTO Mecz (SkladMeczowyID, Przeciwnik, Data, Godzina, Miejsce, TrenerID) VALUES (0, ?, ?, ?, ?, ?);";
 
-            var args = new
-            {
-                przeciwnik = mecz.Przeciwnik,
-                data = mecz.Data,
-                godzina = mecz.Godzina,
-                miejsce = mecz.Miejsce,
-                trenerId = SessionService.AktualnyTrener.Id
-            };
-
-            await client.Execute(sql, args);
+            // Kolejność argumentów musi pasować do '?'
+            await client.Execute(sql, mecz.Przeciwnik, mecz.Data, mecz.Godzina, mecz.Miejsce, SessionService.AktualnyTrener.Id);
         }
 
         public static async Task AddTreningAsync(Trening trening)
         {
             if (SessionService.AktualnyTrener == null) throw new InvalidOperationException("Trener nie jest zalogowany.");
-
             using var client = await DatabaseConfig.CreateClientAsync();
 
-            var sql = @"
-                INSERT INTO Trening (ListaObecnosciID, Typ, Data, GodzinaRozpoczecia, GodzinaZakonczenia, Miejsce, TrenerID)
-                VALUES (0, @typ, @data, @start, @end, @miejsce, @trenerId);";
+            var sql = "INSERT INTO Trening (ListaObecnosciID, Typ, Data, GodzinaRozpoczecia, GodzinaZakonczenia, Miejsce, TrenerID) VALUES (0, ?, ?, ?, ?, ?, ?);";
 
-            var args = new
-            {
-                typ = trening.Typ,
-                data = trening.Data,
-                start = trening.GodzinaRozpoczecia,
-                end = trening.GodzinaZakonczenia,
-                miejsce = trening.Miejsce,
-                trenerId = SessionService.AktualnyTrener.Id
-            };
-
-            await client.Execute(sql, args);
+            await client.Execute(sql, trening.Typ, trening.Data, trening.GodzinaRozpoczecia, trening.GodzinaZakonczenia, trening.Miejsce, SessionService.AktualnyTrener.Id);
         }
 
         public static async Task AddWydarzenieAsync(Wydarzenie wydarzenie)
         {
             if (SessionService.AktualnyTrener == null) throw new InvalidOperationException("Trener nie jest zalogowany.");
-
             using var client = await DatabaseConfig.CreateClientAsync();
 
-            var sql = @"
-                INSERT INTO Wydarzenie (Nazwa, Miejsce, Data, GodzinaStart, GodzinaKoniec, Opis, TrenerID)
-                VALUES (@nazwa, @miejsce, @data, @start, @end, @opis, @trenerId);";
+            var sql = "INSERT INTO Wydarzenie (Nazwa, Miejsce, Data, GodzinaStart, GodzinaKoniec, Opis, TrenerID) VALUES (?, ?, ?, ?, ?, ?, ?);";
 
-            var args = new
-            {
-                nazwa = wydarzenie.Nazwa,
-                miejsce = wydarzenie.Miejsce,
-                data = wydarzenie.Data,
-                start = wydarzenie.GodzinaStart,
-                end = wydarzenie.GodzinaKoniec,
-                opis = wydarzenie.Opis,
-                trenerId = SessionService.AktualnyTrener.Id
-            };
-
-            await client.Execute(sql, args);
+            await client.Execute(sql, wydarzenie.Nazwa, wydarzenie.Miejsce, wydarzenie.Data, wydarzenie.GodzinaStart, wydarzenie.GodzinaKoniec, wydarzenie.Opis, SessionService.AktualnyTrener.Id);
         }
 
         public static async Task<List<UpcomingEvent>> GetUpcomingEventsAsync()
@@ -86,23 +48,15 @@ namespace SoccerLink.Services
             var allEvents = new List<UpcomingEvent>();
             var trenerId = SessionService.AktualnyTrener.Id;
             string currentDate = DateTime.Now.ToString("yyyy-MM-dd");
-
             string[] dateTimeFormats = new[] { "yyyy-MM-dd HH:mm", "yyyy-MM-dd H:mm" };
 
             try
             {
                 using var client = await DatabaseConfig.CreateClientAsync();
 
-                // Parametry dla zapytań (filtrowanie po dacie w SQL!)
-                var queryArgs = new { trenerId, currentDate };
-
                 // 1. Mecze
-                var meczSql = @"
-                    SELECT Przeciwnik, Data, Godzina, Miejsce 
-                    FROM Mecz 
-                    WHERE TrenerID = @trenerId AND Data >= @currentDate 
-                    ORDER BY Data, Godzina;";
-                var meczResult = await client.Execute(meczSql, queryArgs);
+                var meczSql = "SELECT Przeciwnik, Data, Godzina, Miejsce FROM Mecz WHERE TrenerID = ? AND Data >= ? ORDER BY Data, Godzina;";
+                var meczResult = await client.Execute(meczSql, trenerId, currentDate);
 
                 if (meczResult.Rows != null)
                 {
@@ -119,9 +73,9 @@ namespace SoccerLink.Services
                                 allEvents.Add(new UpcomingEvent
                                 {
                                     EventType = "Mecz",
-                                    Title = cells[0]?.ToString() ?? "Brak przeciwnika",
+                                    Title = cells[0]?.ToString() ?? "Brak",
                                     DateTimeStart = dateTimeStart,
-                                    Location = cells[3]?.ToString() ?? "Brak miejsca",
+                                    Location = cells[3]?.ToString() ?? "",
                                     TimeEnd = string.Empty
                                 });
                             }
@@ -130,12 +84,8 @@ namespace SoccerLink.Services
                 }
 
                 // 2. Treningi
-                var treningSql = @"
-                    SELECT Typ, Data, GodzinaRozpoczecia, GodzinaZakonczenia, Miejsce 
-                    FROM Trening 
-                    WHERE TrenerID = @trenerId AND Data >= @currentDate 
-                    ORDER BY Data, GodzinaRozpoczecia;";
-                var treningResult = await client.Execute(treningSql, queryArgs);
+                var treningSql = "SELECT Typ, Data, GodzinaRozpoczecia, GodzinaZakonczenia, Miejsce FROM Trening WHERE TrenerID = ? AND Data >= ? ORDER BY Data, GodzinaRozpoczecia;";
+                var treningResult = await client.Execute(treningSql, trenerId, currentDate);
 
                 if (treningResult.Rows != null)
                 {
@@ -144,7 +94,6 @@ namespace SoccerLink.Services
                         var cells = row.ToArray();
                         var data = cells[1]?.ToString() ?? "";
                         var godzinaStart = cells[2]?.ToString() ?? "";
-                        var godzinaEnd = cells[3]?.ToString() ?? "";
 
                         if (DateTime.TryParseExact($"{data} {godzinaStart}", dateTimeFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dateTimeStart))
                         {
@@ -153,10 +102,10 @@ namespace SoccerLink.Services
                                 allEvents.Add(new UpcomingEvent
                                 {
                                     EventType = "Trening",
-                                    Title = cells[0]?.ToString() ?? "Brak typu",
+                                    Title = cells[0]?.ToString() ?? "Brak",
                                     DateTimeStart = dateTimeStart,
-                                    TimeEnd = godzinaEnd,
-                                    Location = cells[4]?.ToString() ?? "Brak miejsca"
+                                    TimeEnd = cells[3]?.ToString() ?? "",
+                                    Location = cells[4]?.ToString() ?? ""
                                 });
                             }
                         }
@@ -164,21 +113,16 @@ namespace SoccerLink.Services
                 }
 
                 // 3. Wydarzenia
-                var wydarzenieSql = @"
-                    SELECT Nazwa, Data, GodzinaStart, GodzinaKoniec, Miejsce, Opis 
-                    FROM Wydarzenie 
-                    WHERE TrenerID = @trenerId AND Data >= @currentDate 
-                    ORDER BY Data, GodzinaStart;";
-                var wydarzenieResult = await client.Execute(wydarzenieSql, queryArgs);
+                var wydSql = "SELECT Nazwa, Data, GodzinaStart, GodzinaKoniec, Miejsce, Opis FROM Wydarzenie WHERE TrenerID = ? AND Data >= ? ORDER BY Data, GodzinaStart;";
+                var wydResult = await client.Execute(wydSql, trenerId, currentDate);
 
-                if (wydarzenieResult.Rows != null)
+                if (wydResult.Rows != null)
                 {
-                    foreach (var row in wydarzenieResult.Rows)
+                    foreach (var row in wydResult.Rows)
                     {
                         var cells = row.ToArray();
                         var data = cells[1]?.ToString() ?? "";
                         var godzinaStart = cells[2]?.ToString() ?? "";
-                        var godzinaKoniec = cells[3]?.ToString() ?? "";
 
                         if (DateTime.TryParseExact($"{data} {godzinaStart}", dateTimeFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dateTimeStart))
                         {
@@ -187,11 +131,11 @@ namespace SoccerLink.Services
                                 allEvents.Add(new UpcomingEvent
                                 {
                                     EventType = "Wydarzenie",
-                                    Title = cells[0]?.ToString() ?? "Brak nazwy",
+                                    Title = cells[0]?.ToString() ?? "Brak",
                                     DateTimeStart = dateTimeStart,
-                                    TimeEnd = godzinaKoniec,
-                                    Location = cells[4]?.ToString() ?? "Brak miejsca",
-                                    Description = cells[5]?.ToString() ?? string.Empty
+                                    TimeEnd = cells[3]?.ToString() ?? "",
+                                    Location = cells[4]?.ToString() ?? "",
+                                    Description = cells[5]?.ToString() ?? ""
                                 });
                             }
                         }
@@ -200,7 +144,7 @@ namespace SoccerLink.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Błąd połączenia lub pobierania danych z bazy: {ex.Message}", ex);
+                throw new Exception($"Błąd pobierania: {ex.Message}", ex);
             }
 
             return allEvents.OrderBy(e => e.DateTimeStart).ToList();
@@ -211,153 +155,87 @@ namespace SoccerLink.Services
             if (SessionService.AktualnyTrener == null) throw new InvalidOperationException("Trener nie jest zalogowany.");
 
             var allEvents = new List<UpcomingEvent>();
-            var queryArgs = new { trenerId = SessionService.AktualnyTrener.Id };
+            var trenerId = SessionService.AktualnyTrener.Id;
             string[] dateTimeFormats = new[] { "yyyy-MM-dd HH:mm", "yyyy-MM-dd H:mm" };
 
             try
             {
                 using var client = await DatabaseConfig.CreateClientAsync();
 
-                // 1. Mecze
-                var meczResult = await client.Execute("SELECT MeczID, Przeciwnik, Data, Godzina, Miejsce FROM Mecz WHERE TrenerID = @trenerId ORDER BY Data, Godzina", queryArgs);
-                if (meczResult.Rows != null)
+                // Mecz
+                var meczRes = await client.Execute("SELECT MeczID, Przeciwnik, Data, Godzina, Miejsce FROM Mecz WHERE TrenerID = ? ORDER BY Data, Godzina", trenerId);
+                if (meczRes.Rows != null)
                 {
-                    foreach (var row in meczResult.Rows)
+                    foreach (var row in meczRes.Rows)
                     {
-                        var cells = row.ToArray();
-                        var data = cells[2]?.ToString() ?? "";
-                        var godzina = cells[3]?.ToString() ?? "";
-
-                        if (DateTime.TryParseExact($"{data} {godzina}", dateTimeFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dateTimeStart))
-                        {
-                            allEvents.Add(new UpcomingEvent
-                            {
-                                EventType = "Mecz",
-                                Id = int.Parse(cells[0]?.ToString() ?? "0"),
-                                Title = cells[1]?.ToString() ?? "Brak",
-                                DateTimeStart = dateTimeStart,
-                                Location = cells[4]?.ToString() ?? "",
-                                TimeEnd = string.Empty
-                            });
-                        }
+                        var c = row.ToArray();
+                        if (DateTime.TryParseExact($"{c[2]} {c[3]}", dateTimeFormats, null, DateTimeStyles.None, out var dt))
+                            allEvents.Add(new UpcomingEvent { EventType = "Mecz", Id = int.Parse(c[0].ToString()), Title = c[1].ToString(), DateTimeStart = dt, Location = c[4].ToString(), TimeEnd = "" });
                     }
                 }
 
-                // 2. Treningi
-                var treningResult = await client.Execute("SELECT TreningID, Typ, Data, GodzinaRozpoczecia, GodzinaZakonczenia, Miejsce FROM Trening WHERE TrenerID = @trenerId ORDER BY Data, GodzinaRozpoczecia", queryArgs);
-                if (treningResult.Rows != null)
+                // Trening
+                var trenRes = await client.Execute("SELECT TreningID, Typ, Data, GodzinaRozpoczecia, GodzinaZakonczenia, Miejsce FROM Trening WHERE TrenerID = ? ORDER BY Data, GodzinaRozpoczecia", trenerId);
+                if (trenRes.Rows != null)
                 {
-                    foreach (var row in treningResult.Rows)
+                    foreach (var row in trenRes.Rows)
                     {
-                        var cells = row.ToArray();
-                        var data = cells[2]?.ToString() ?? "";
-                        var godzina = cells[3]?.ToString() ?? "";
-
-                        if (DateTime.TryParseExact($"{data} {godzina}", dateTimeFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dateTimeStart))
-                        {
-                            allEvents.Add(new UpcomingEvent
-                            {
-                                EventType = "Trening",
-                                Id = int.Parse(cells[0]?.ToString() ?? "0"),
-                                Title = cells[1]?.ToString() ?? "Brak",
-                                DateTimeStart = dateTimeStart,
-                                TimeEnd = cells[4]?.ToString() ?? "",
-                                Location = cells[5]?.ToString() ?? ""
-                            });
-                        }
+                        var c = row.ToArray();
+                        if (DateTime.TryParseExact($"{c[2]} {c[3]}", dateTimeFormats, null, DateTimeStyles.None, out var dt))
+                            allEvents.Add(new UpcomingEvent { EventType = "Trening", Id = int.Parse(c[0].ToString()), Title = c[1].ToString(), DateTimeStart = dt, TimeEnd = c[4].ToString(), Location = c[5].ToString() });
                     }
                 }
 
-                // 3. Wydarzenia
-                var wydResult = await client.Execute("SELECT WydarzenieID, Nazwa, Data, GodzinaStart, GodzinaKoniec, Miejsce, Opis FROM Wydarzenie WHERE TrenerID = @trenerId ORDER BY Data, GodzinaStart", queryArgs);
-                if (wydResult.Rows != null)
+                // Wydarzenie
+                var wydRes = await client.Execute("SELECT WydarzenieID, Nazwa, Data, GodzinaStart, GodzinaKoniec, Miejsce, Opis FROM Wydarzenie WHERE TrenerID = ? ORDER BY Data, GodzinaStart", trenerId);
+                if (wydRes.Rows != null)
                 {
-                    foreach (var row in wydResult.Rows)
+                    foreach (var row in wydRes.Rows)
                     {
-                        var cells = row.ToArray();
-                        var data = cells[2]?.ToString() ?? "";
-                        var godzina = cells[3]?.ToString() ?? "";
-
-                        if (DateTime.TryParseExact($"{data} {godzina}", dateTimeFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dateTimeStart))
-                        {
-                            allEvents.Add(new UpcomingEvent
-                            {
-                                EventType = "Wydarzenie",
-                                Id = int.Parse(cells[0]?.ToString() ?? "0"),
-                                Title = cells[1]?.ToString() ?? "Brak",
-                                DateTimeStart = dateTimeStart,
-                                TimeEnd = cells[4]?.ToString() ?? "",
-                                Location = cells[5]?.ToString() ?? "",
-                                Description = cells[6]?.ToString() ?? ""
-                            });
-                        }
+                        var c = row.ToArray();
+                        if (DateTime.TryParseExact($"{c[2]} {c[3]}", dateTimeFormats, null, DateTimeStyles.None, out var dt))
+                            allEvents.Add(new UpcomingEvent { EventType = "Wydarzenie", Id = int.Parse(c[0].ToString()), Title = c[1].ToString(), DateTimeStart = dt, TimeEnd = c[4].ToString(), Location = c[5].ToString(), Description = c[6].ToString() });
                     }
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception($"Błąd pobierania wszystkich wydarzeń: {ex.Message}", ex);
+                throw new Exception($"Błąd: {ex.Message}", ex);
             }
-
             return allEvents.OrderBy(e => e.DateTimeStart).ToList();
         }
 
-        public static async Task UpdateEventAsync(UpcomingEvent eventData)
+        public static async Task UpdateEventAsync(UpcomingEvent e)
         {
-            if (SessionService.AktualnyTrener == null) throw new InvalidOperationException("Trener nie jest zalogowany.");
-            if (eventData.Id == 0) throw new ArgumentException("Brak ID wydarzenia.");
-
+            if (SessionService.AktualnyTrener == null) throw new InvalidOperationException("Log in required");
             using var client = await DatabaseConfig.CreateClientAsync();
+            var tid = SessionService.AktualnyTrener.Id;
+            var data = e.DateTimeStart.ToString("yyyy-MM-dd");
 
-            string sql;
-            // Parametryzacja jest kluczowa dla bezpiecznej aktualizacji
-            var args = new
-            {
-                title = eventData.Title,
-                data = eventData.DateTimeStart.ToString("yyyy-MM-dd"),
-                start = eventData.DisplayTimeStart,
-                location = eventData.Location,
-                end = eventData.TimeEnd,
-                desc = eventData.Description,
-                id = eventData.Id,
-                trenerId = SessionService.AktualnyTrener.Id
-            };
-
-            switch (eventData.EventType)
+            switch (e.EventType)
             {
                 case "Mecz":
-                    sql = @"UPDATE Mecz SET Przeciwnik=@title, Data=@data, Godzina=@start, Miejsce=@location WHERE MeczID=@id AND TrenerID=@trenerId";
+                    await client.Execute("UPDATE Mecz SET Przeciwnik=?, Data=?, Godzina=?, Miejsce=? WHERE MeczID=? AND TrenerID=?", e.Title, data, e.DisplayTimeStart, e.Location, e.Id, tid);
                     break;
                 case "Trening":
-                    sql = @"UPDATE Trening SET Typ=@title, Data=@data, GodzinaRozpoczecia=@start, GodzinaZakonczenia=@end, Miejsce=@location WHERE TreningID=@id AND TrenerID=@trenerId";
+                    await client.Execute("UPDATE Trening SET Typ=?, Data=?, GodzinaRozpoczecia=?, GodzinaZakonczenia=?, Miejsce=? WHERE TreningID=? AND TrenerID=?", e.Title, data, e.DisplayTimeStart, e.TimeEnd, e.Location, e.Id, tid);
                     break;
                 case "Wydarzenie":
-                    sql = @"UPDATE Wydarzenie SET Nazwa=@title, Miejsce=@location, Data=@data, GodzinaStart=@start, GodzinaKoniec=@end, Opis=@desc WHERE WydarzenieID=@id AND TrenerID=@trenerId";
+                    await client.Execute("UPDATE Wydarzenie SET Nazwa=?, Miejsce=?, Data=?, GodzinaStart=?, GodzinaKoniec=?, Opis=? WHERE WydarzenieID=? AND TrenerID=?", e.Title, e.Location, data, e.DisplayTimeStart, e.TimeEnd, e.Description, e.Id, tid);
                     break;
-                default:
-                    throw new ArgumentException("Nieznany typ wydarzenia.");
             }
-
-            await client.Execute(sql, args);
         }
 
         public static async Task DeleteEventAsync(string eventType, int eventId)
         {
-            if (SessionService.AktualnyTrener == null) throw new InvalidOperationException("Trener nie jest zalogowany.");
-
+            if (SessionService.AktualnyTrener == null) throw new InvalidOperationException("Log in required");
             using var client = await DatabaseConfig.CreateClientAsync();
-            var args = new { id = eventId, trenerId = SessionService.AktualnyTrener.Id };
-            string sql;
+            var tid = SessionService.AktualnyTrener.Id;
 
-            switch (eventType)
-            {
-                case "Mecz": sql = "DELETE FROM Mecz WHERE MeczID=@id AND TrenerID=@trenerId"; break;
-                case "Trening": sql = "DELETE FROM Trening WHERE TreningID=@id AND TrenerID=@trenerId"; break;
-                case "Wydarzenie": sql = "DELETE FROM Wydarzenie WHERE WydarzenieID=@id AND TrenerID=@trenerId"; break;
-                default: throw new ArgumentException("Nieznany typ wydarzenia.");
-            }
+            string table = eventType switch { "Mecz" => "Mecz", "Trening" => "Trening", "Wydarzenie" => "Wydarzenie", _ => throw new Exception("Unknown type") };
+            string col = eventType + "ID";
 
-            await client.Execute(sql, args);
+            await client.Execute($"DELETE FROM {table} WHERE {col}=? AND TrenerID=?", eventId, tid);
         }
     }
 }
