@@ -1,19 +1,12 @@
 ﻿using Libsql.Client;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using SoccerLink.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SoccerLink.Services
 {
     internal class RegisterService
     {
-        private const string Url = "https://soccerlinkdb-enbixd.aws-eu-west-1.turso.io";
-        private const string Token = "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJleHAiOjE3OTU2MzcwODksImdpZCI6ImNhOWI1NGU3LTMwY2QtNDA5YS04YTMzLTcyMmRmZDFiYWY0YiIsImlhdCI6MTc2NDEwMTA4OSwicmlkIjoiYTBiNTRjM2YtZmZkYy00MjIyLWI2YTEtZGRhZTcxN2I1MmY4In0.dnupQBG2k5tiShROTpDhcHjm8b36JHLd4tebvAWESVZ-PtLlz40gq0ywuhf3c9MefzIFmZLkTVCZpgm5dw20Dg";
-
         public static async Task<bool> RegisterAsync(
             string email,
             string password,
@@ -21,23 +14,22 @@ namespace SoccerLink.Services
             string lastName,
             string phoneNumber)
         {
+            using var client = await DatabaseConfig.CreateClientAsync();
 
-            using var client = await DatabaseClient.Create(o =>
-            {
-                o.Url = Url;
-                o.AuthToken = Token;
-                o.UseHttps = true;
-            });
+            string cleanEmail = email.Trim();
+            string cleanPhone = phoneNumber.Trim();
 
-            var safeEmail = email.Replace("'", "''").Trim();
-            var safePassword = password.Replace("'", "''").Trim();
-            var safeFirstName = firstName.Replace("'", "''").Trim();
-            var safeLastName = lastName.Replace("'", "''").Trim();
-            var safePhoneNumber = phoneNumber.Replace("'", "''").Trim();
+            // 1. Sprawdzenie czy użytkownik istnieje (parametryzowane)
+            // Sprawdzamy w obu tabelach
+            var checkSql = @"
+                SELECT COUNT(1) FROM (
+                    SELECT AdresEmail FROM Trener WHERE AdresEmail = @email OR NumerTelefonu = @phone
+                    UNION ALL 
+                    SELECT AdresEmail FROM Zawodnik WHERE AdresEmail = @email OR NumerTelefonu = @phone
+                );";
 
-            var checkSql = $"SELECT COUNT(1) FROM (SELECT AdresEmail, NumerTelefonu FROM Trener WHERE AdresEmail = '{safeEmail}' OR NumerTelefonu = '{safePhoneNumber}' " +
-                           $"UNION ALL SELECT AdresEmail, NumerTelefonu FROM Zawodnik WHERE AdresEmail = '{safeEmail}' OR NumerTelefonu = '{safePhoneNumber}');";
-            var checkResult = await client.Execute(checkSql);
+            var checkParams = new { email = cleanEmail, phone = cleanPhone };
+            var checkResult = await client.Execute(checkSql, checkParams);
 
             if (checkResult.Rows != null && checkResult.Rows.Any())
             {
@@ -45,17 +37,25 @@ namespace SoccerLink.Services
                 var cells = firstRow.ToArray();
                 if (cells.Length > 0 && long.TryParse(cells[0]?.ToString(), out var count) && count > 0)
                 {
-                    return false;
+                    return false; // Użytkownik już istnieje
                 }
             }
 
-            var insertSql = $@"
-                            INSERT INTO Trener
-                            (AdresEmail, Haslo, NumerTelefonu, Imie, Nazwisko, ProbyLogowania)
-                            VALUES
-                            ('{safeEmail}', '{safePassword}', '{safePhoneNumber}', '{safeFirstName}', '{safeLastName}', 0);";
+            // 2. Rejestracja (INSERT parametryzowany)
+            var insertSql = @"
+                INSERT INTO Trener (AdresEmail, Haslo, NumerTelefonu, Imie, Nazwisko, ProbyLogowania)
+                VALUES (@email, @password, @phone, @firstName, @lastName, 0);";
 
-            await client.Execute(insertSql);
+            var insertParams = new
+            {
+                email = cleanEmail,
+                password = password.Trim(), // Hasło jawnym tekstem (zgodnie z życzeniem)
+                phone = cleanPhone,
+                firstName = firstName.Trim(),
+                lastName = lastName.Trim()
+            };
+
+            await client.Execute(insertSql, insertParams);
 
             return true;
         }

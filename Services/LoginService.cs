@@ -1,48 +1,39 @@
 ﻿using Libsql.Client;
 using SoccerLink.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SoccerLink.Services
 {
     internal class LoginService
     {
-        private const string Url = "https://soccerlinkdb-enbixd.aws-eu-west-1.turso.io";
-        private const string Token = "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJleHAiOjE3OTU2MzcwODksImdpZCI6ImNhOWI1NGU3LTMwY2QtNDA5YS04YTMzLTcyMmRmZDFiYWY0YiIsImlhdCI6MTc2NDEwMTA4OSwicmlkIjoiYTBiNTRjM2YtZmZkYy00MjIyLWI2YTEtZGRhZTcxN2I1MmY4In0.dnupQBG2k5tiShROTpDhcHjm8b36JHLd4tebvAWESVZ-PtLlz40gq0ywuhf3c9MefzIFmZLkTVCZpgm5dw20Dg";
-
         public static async Task<ZalogowanyTrener?> LoginAsync(string email, string password)
         {
-            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))           
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
                 return null;
 
-            using var client = await DatabaseClient.Create(o =>
-            {
-                o.Url = Url;
-                o.AuthToken = Token;
-                o.UseHttps = true;
-            });
+            // Użycie centralnej konfiguracji
+            using var client = await DatabaseConfig.CreateClientAsync();
 
-            var safeEmail = email.Replace("'", "''").Trim();
-
-            var sql = $@"
+            // Zapytanie parametryzowane (zabezpieczenie przed SQL Injection)
+            var sql = @"
                 SELECT TrenerID, AdresEmail, Haslo, Imie, Nazwisko, NumerTelefonu
                 FROM Trener
-                WHERE AdresEmail = '{safeEmail}'
-                LIMIT 1;
-            ";
+                WHERE AdresEmail = @email
+                LIMIT 1;";
 
-            var result = await client.Execute(sql);
+            // Przekazanie parametrów
+            var parameters = new { email };
+            var result = await client.Execute(sql, parameters);
 
             if (result.Rows == null || !result.Rows.Any())
                 return null;
 
             var row = result.Rows.First().ToArray();
-
             var storedPassword = row[2]?.ToString();
 
+            // Porównanie haseł (bez hashowania - zgodnie z prośbą)
             if (storedPassword != password)
                 return null;
 
@@ -50,9 +41,9 @@ namespace SoccerLink.Services
             {
                 Id = int.Parse(row[0].ToString()),
                 AdresEmail = row[1].ToString(),
-                Imie = row[4].ToString(),
-                Nazwisko = row[5].ToString(),
-                NumerTelefonu = row[3].ToString()
+                Imie = row[3].ToString(),       // Poprawiony indeks (w SQL Imie jest 4. kolumną, czyli index 3)
+                Nazwisko = row[4].ToString(),   // Poprawiony indeks
+                NumerTelefonu = row[5].ToString() // Poprawiony indeks
             };
         }
     }
