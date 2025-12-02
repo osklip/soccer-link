@@ -6,157 +6,83 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="using:SoccerLink.Models"
-    xmlns:converters="using:SoccerLink.Helpers"
     mc:Ignorable="d">
 
-    <Page.Resources>
-        <converters:BooleanToVisibilityConverter x:Key="BoolToVis" />
-    </Page.Resources>
-
-    <Grid Background="#405861" Padding="24">
+    <Grid Background="{StaticResource AppBackgroundBrush}" Padding="24">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Spacing="12" Margin="0,0,0,20">
-            <Button x:Name="BackButton" 
-                    Content="⟵ Powrót" 
-                    Click="BackButton_Click" 
-                    HorizontalAlignment="Left"
-                    Background="Transparent"
-                    BorderThickness="0"
-                    FontSize="18"
-                    Foreground="#CDE6F8"
-                    FontWeight="SemiBold" />
+        <Grid Grid.Row="0" Margin="0,0,0,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
 
-            <Grid>
-                <TextBlock Text="Kalendarz i Wydarzenia Tygodnia" 
-                           FontSize="24" 
-                           FontWeight="Bold"
-                           Foreground="#E6F6FF"
-                           VerticalAlignment="Center"/>
+            <StackPanel Grid.Column="0">
+                <Button Content="⟵ Powrót" Click="BackButton_Click" Style="{StaticResource BackButtonStyle}"/>
+                <TextBlock Text="Kalendarz Wydarzeń" Style="{StaticResource HeaderTextStyle}" Margin="0,5,0,0"/>
+            </StackPanel>
 
-                <Button x:Name="AddEventButton"
-                        Content="+ Dodaj Wydarzenie"
-                        Click="AddEventButton_Click"
-                        Background="#86A9C8"
-                        Foreground="#2F4450"
-                        FontWeight="Bold"
-                        CornerRadius="8"
-                        Padding="16,8"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center" />
-            </Grid>
-        </StackPanel>
-
-        <Border Grid.Row="1"
-                Background="#32404A"
-                CornerRadius="10"
-                BorderBrush="#9ECBFF"
-                BorderThickness="3"
-                Padding="12">
-
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-
-                <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="15" Margin="0,0,0,15">
-                    <Button x:Name="PrevWeekButton" 
-                            Content="⟵ Poprzedni tydzień" 
-                            Click="PrevWeekButton_Click"
-                            Background="#8A9AA6"
-                            Foreground="#2F4450"
-                            FontWeight="Bold"
-                            CornerRadius="6" />
-
-                    <TextBlock Text="{x:Bind ViewModel.WeekRangeText, Mode=OneWay}"
-                               VerticalAlignment="Center"
-                               Foreground="#E6F6FF"
-                               FontWeight="SemiBold"
-                               FontSize="16" />
-
-                    <Button x:Name="NextWeekButton" 
-                            Content="Następny tydzień ⟶" 
-                            Click="NextWeekButton_Click"
-                            Background="#8A9AA6"
-                            Foreground="#2F4450"
-                            FontWeight="Bold"
-                            CornerRadius="6" />
+            <Button Grid.Column="2" Click="AddEventButton_Click" Background="{StaticResource TextAccentBrush}" Foreground="Black" CornerRadius="20" Padding="15,8">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <SymbolIcon Symbol="Add"/>
+                    <TextBlock Text="Dodaj wydarzenie" FontWeight="Bold"/>
                 </StackPanel>
+            </Button>
+        </Grid>
 
-                <ListView Grid.Row="1" 
-                          x:Name="EventsListView" 
-                          ItemsSource="{x:Bind ViewModel.EventsToShow, Mode=OneWay}"
-                          SelectionMode="None" 
-                          Background="Transparent"
-                          BorderThickness="0">
-                    <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="models:UpcomingEvent">
-                            <Grid Margin="0,6">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
+        <ListView x:Name="EventsListView" Grid.Row="1" SelectionMode="Single" 
+                  ItemsSource="{x:Bind ViewModel.EventsToShow, Mode=OneWay}">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="models:UpcomingEvent">
+                    <Border Background="{StaticResource CardBackgroundBrush}" CornerRadius="8" Margin="0,6" Padding="15" BorderBrush="{StaticResource CardBorderBrush}" BorderThickness="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
 
-                                <Border Grid.Column="0" Width="8" CornerRadius="4" 
-                                        Background="{x:Bind EventStyle, Mode=OneWay}" 
-                                        Margin="0,0,15,0"/>
-
-                                <StackPanel Grid.Column="1" Spacing="2">
-                                    <TextBlock Text="{x:Bind Title}" FontWeight="Bold" FontSize="16" TextWrapping="Wrap" Foreground="#E6F6FF"/>
-
-                                    <StackPanel Orientation="Horizontal" Spacing="10">
-                                        <TextBlock Text="{x:Bind EventType}" FontWeight="SemiBold" FontSize="13" Foreground="#86A9C8"/>
-                                        <TextBlock Text="•" Foreground="#86A9C8"/>
-                                        <TextBlock Text="{x:Bind DisplayDate}" FontSize="13" Foreground="#CDE6F8"/>
-                                        <TextBlock Text="{x:Bind DisplayTimeRange}" FontSize="13" Foreground="#CDE6F8"/>
-                                    </StackPanel>
-
-                                    <StackPanel Orientation="Horizontal" Spacing="10" Opacity="0.8">
-                                        <TextBlock Text="{x:Bind Location}" FontSize="12" FontStyle="Italic"/>
-                                    </StackPanel>
-
-                                    <TextBlock Text="{x:Bind Description}" 
-                                               Margin="0,4,0,0" 
-                                               Foreground="#BFBFBF" 
-                                               TextWrapping="Wrap"
-                                               FontSize="12"/>
+                            <Border Background="#4A5D69" CornerRadius="6" Padding="10" Width="60" Height="60" VerticalAlignment="Center" Margin="0,0,15,0">
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="{x:Bind DateTimeStart.Day}" Foreground="{StaticResource TextAccentBrush}" FontWeight="Bold" FontSize="20" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="{x:Bind DateTimeStart.Month}" Foreground="White" FontSize="12" HorizontalAlignment="Center"/>
                                 </StackPanel>
+                            </Border>
 
-                                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center" Margin="15,0,0,0">
-                                    <Button Content="Edytuj" 
-                                            Tag="{x:Bind Id}"
-                                            Click="EditEventButton_Click"
-                                            Background="#9ECBFF" 
-                                            Foreground="#2F4450" 
-                                            Padding="10,4" 
-                                            CornerRadius="4"/>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock Text="{x:Bind EventType}" FontSize="12" Foreground="{StaticResource TextMutedBrush}" CharacterSpacing="50"/>
 
-                                    <Button Content="Usuń" 
-                                            Tag="{x:Bind Id}"
-                                            Click="DeleteEventButton_Click"
-                                            Background="#C0392B" 
-                                            Foreground="White" 
-                                            Padding="10,4" 
-                                            CornerRadius="4"/>
+                                <TextBlock Text="{x:Bind Title}" FontSize="18" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}"/>
+
+                                <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,5,0,0">
+                                    <TextBlock Text="{x:Bind DisplayTimeRange}" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                    <TextBlock Text="|" Foreground="{StaticResource CardBorderBrush}"/>
+                                    <TextBlock Text="{x:Bind Location}" Foreground="{StaticResource TextSecondaryBrush}" FontStyle="Italic"/>
                                 </StackPanel>
-                            </Grid>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                            </StackPanel>
 
-                <TextBlock Grid.Row="1"
-                           Text="{x:Bind ViewModel.StatusMessage, Mode=OneWay}"
-                           Visibility="{x:Bind ViewModel.IsStatusVisible, Mode=OneWay, Converter={StaticResource BoolToVis}}"
-                           HorizontalAlignment="Center" 
-                           VerticalAlignment="Center" 
-                           Foreground="#CDE6F8" 
-                           FontSize="16"/>
-            </Grid>
-        </Border>
+                            <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="5">
+                                <Button Click="EditEventButton_Click" Tag="{x:Bind Id}" Background="Transparent" ToolTipService.ToolTip="Edytuj">
+                                    <FontIcon Glyph="&#xE70F;" FontFamily="Segoe MDL2 Assets" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                </Button>
+                                <Button Click="DeleteEventButton_Click" Tag="{x:Bind Id}" Background="Transparent" ToolTipService.ToolTip="Usuń">
+                                    <FontIcon Glyph="&#xE74D;" FontFamily="Segoe MDL2 Assets" Foreground="#E74C3C"/>
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <TextBlock x:Name="EmptyStateText" Grid.Row="1" 
+                   Text="{x:Bind ViewModel.StatusMessage, Mode=OneWay}"
+                   Visibility="{x:Bind ViewModel.IsStatusVisible, Mode=OneWay, Converter={StaticResource BoolToVis}}"
+                   HorizontalAlignment="Center" VerticalAlignment="Center" 
+                   Foreground="{StaticResource TextMutedBrush}"/>
     </Grid>
 </Page>

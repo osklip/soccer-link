@@ -12,40 +12,36 @@
         <Style TargetType="Button" x:Key="StatCardStyle">
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
             <Setter Property="VerticalAlignment" Value="Stretch"/>
-            <Setter Property="Background" Value="#32404A"/>
-            <Setter Property="BorderBrush" Value="#6FA2C6"/>
-            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Background" Value="{StaticResource CardBackgroundBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource CardBorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="CornerRadius" Value="12"/>
             <Setter Property="Padding" Value="0"/>
         </Style>
-
         <Style TargetType="Border" x:Key="CardLabelBorderStyle">
-            <Setter Property="Background" Value="White"/>
+            <Setter Property="Background" Value="{StaticResource CardBorderBrush}"/>
             <Setter Property="VerticalAlignment" Value="Top"/>
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
             <Setter Property="Margin" Value="10,5,10,0"/>
             <Setter Property="Padding" Value="5"/>
             <Setter Property="CornerRadius" Value="4"/>
         </Style>
-
         <Style TargetType="TextBlock" x:Key="CardLabelTextStyle">
-            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontSize" Value="12"/>
             <Setter Property="TextAlignment" Value="Center"/>
-            <Setter Property="TextWrapping" Value="Wrap"/>
         </Style>
-
         <Style TargetType="TextBlock" x:Key="CardValueTextStyle">
-            <Setter Property="Foreground" Value="#E6F6FF"/>
+            <Setter Property="Foreground" Value="{StaticResource TextAccentBrush}"/>
             <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="FontSize" Value="48"/>
+            <Setter Property="FontSize" Value="40"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
     </Page.Resources>
 
-    <Grid Background="#405861" Padding="24">
+    <Grid Background="{StaticResource AppBackgroundBrush}" Padding="24">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -58,115 +54,104 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="16" VerticalAlignment="Center">
-                <Button x:Name="BackButton" Click="BackButton_Click" Background="Transparent" BorderThickness="0" Padding="0">
-                    <StackPanel Orientation="Horizontal" Spacing="8">
-                        <TextBlock Text="⟵" FontSize="20" Foreground="#CDE6F8" FontWeight="SemiBold"/>
-                        <TextBlock Text="Powrót" FontSize="20" Foreground="#CDE6F8" FontWeight="SemiBold"/>
-                    </StackPanel>
-                </Button>
+            <Button Grid.Column="0" Click="BackButton_Click" Style="{StaticResource BackButtonStyle}">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <TextBlock Text="⟵" FontSize="20"/>
+                    <TextBlock Text="Powrót" FontSize="20" FontWeight="SemiBold"/>
+                </StackPanel>
+            </Button>
+
+            <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                <TextBlock Text="{x:Bind ViewModel.PlayerName, Mode=OneWay}" Style="{StaticResource HeaderTextStyle}" HorizontalAlignment="Center"/>
+                <TextBlock Text="{x:Bind ViewModel.Position, Mode=OneWay}" Style="{StaticResource SubHeaderTextStyle}" HorizontalAlignment="Center"/>
             </StackPanel>
 
-            <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="2">
-                <TextBlock Text="Player Stats (Suma)" FontSize="24" FontWeight="Bold" Foreground="#1D2E38" HorizontalAlignment="Center" FontStyle="Italic"/>
-
-                <TextBlock Text="{x:Bind ViewModel.PlayerName, Mode=OneWay}" 
-                           FontSize="20" FontWeight="SemiBold" Foreground="#E6F6FF" HorizontalAlignment="Center"/>
-
-                <TextBlock Text="{x:Bind ViewModel.Position, Mode=OneWay}" 
-                           FontSize="14" Foreground="#86A9C8" HorizontalAlignment="Center" FontStyle="Italic"/>
-            </StackPanel>
-
-            <StackPanel Grid.Column="2" VerticalAlignment="Center">
-                <Border Background="#5A707A" CornerRadius="6" Padding="12,6">
-                    <TextBlock x:Name="DateTextBlock" Text="--.--.----" Foreground="Black" FontWeight="SemiBold" FontSize="14"/>
-                </Border>
-            </StackPanel>
+            <Border Grid.Column="2" Background="{StaticResource CardBorderBrush}" CornerRadius="6" Padding="12,6" VerticalAlignment="Center">
+                <TextBlock x:Name="DateTextBlock" Text="--:--" Foreground="White" FontWeight="SemiBold"/>
+            </Border>
         </Grid>
 
-        <Grid Grid.Row="1" ColumnSpacing="20" RowSpacing="20" Margin="0,10,0,0">
+        <Grid Grid.Row="1" ColumnSpacing="20" RowSpacing="20">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Row="0" Grid.Column="0" Style="{StaticResource StatCardStyle}">
+            <Button Style="{StaticResource StatCardStyle}" Grid.Row="0" Grid.Column="0">
                 <Grid>
                     <Border Style="{StaticResource CardLabelBorderStyle}">
-                        <TextBlock Text="Gole (Suma)" Style="{StaticResource CardLabelTextStyle}"/>
+                        <TextBlock Text="Gole" Style="{StaticResource CardLabelTextStyle}"/>
                     </Border>
-                    <TextBlock Text="{x:Bind ViewModel.Goals, Mode=OneWay}" Style="{StaticResource CardValueTextStyle}" Margin="0,55,0,0"/>
+                    <TextBlock Text="{x:Bind ViewModel.Goals, Mode=OneWay}" Style="{StaticResource CardValueTextStyle}" Margin="0,30,0,0"/>
                 </Grid>
             </Button>
 
-            <Button Grid.Row="0" Grid.Column="1" Style="{StaticResource StatCardStyle}">
+            <Button Style="{StaticResource StatCardStyle}" Grid.Row="0" Grid.Column="1">
                 <Grid>
                     <Border Style="{StaticResource CardLabelBorderStyle}">
-                        <TextBlock Text="Oddane strzały" Style="{StaticResource CardLabelTextStyle}"/>
+                        <TextBlock Text="Strzały (Ogółem)" Style="{StaticResource CardLabelTextStyle}"/>
                     </Border>
-                    <TextBlock Text="{x:Bind ViewModel.Shots, Mode=OneWay}" Style="{StaticResource CardValueTextStyle}" Margin="0,55,0,0"/>
+                    <TextBlock Text="{x:Bind ViewModel.Shots, Mode=OneWay}" Style="{StaticResource CardValueTextStyle}" Margin="0,30,0,0"/>
                 </Grid>
             </Button>
 
-            <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource StatCardStyle}">
+            <Button Style="{StaticResource StatCardStyle}" Grid.Row="0" Grid.Column="2">
                 <Grid>
                     <Border Style="{StaticResource CardLabelBorderStyle}">
-                        <TextBlock Text="Strzały celne" Style="{StaticResource CardLabelTextStyle}"/>
+                        <TextBlock Text="Strzały Celne" Style="{StaticResource CardLabelTextStyle}"/>
                     </Border>
-                    <TextBlock Text="{x:Bind ViewModel.ShotsOn, Mode=OneWay}" Style="{StaticResource CardValueTextStyle}" Margin="0,55,0,0"/>
+                    <TextBlock Text="{x:Bind ViewModel.ShotsOn, Mode=OneWay}" Style="{StaticResource CardValueTextStyle}" Margin="0,30,0,0"/>
                 </Grid>
             </Button>
 
-            <Button Grid.Row="0" Grid.Column="3" Style="{StaticResource StatCardStyle}">
+            <Button Style="{StaticResource StatCardStyle}" Grid.Row="0" Grid.Column="3">
                 <Grid>
                     <Border Style="{StaticResource CardLabelBorderStyle}">
-                        <TextBlock Text="Strzały niecelne" Style="{StaticResource CardLabelTextStyle}"/>
+                        <TextBlock Text="Strzały Niecelne" Style="{StaticResource CardLabelTextStyle}"/>
                     </Border>
-                    <TextBlock Text="{x:Bind ViewModel.ShotsOff, Mode=OneWay}" Style="{StaticResource CardValueTextStyle}" Margin="0,55,0,0"/>
+                    <TextBlock Text="{x:Bind ViewModel.ShotsOff, Mode=OneWay}" Style="{StaticResource CardValueTextStyle}" Margin="0,30,0,0"/>
                 </Grid>
             </Button>
 
-            <Button Grid.Row="1" Grid.Column="0" Style="{StaticResource StatCardStyle}">
+            <Button Style="{StaticResource StatCardStyle}" Grid.Row="1" Grid.Column="0">
                 <Grid>
                     <Border Style="{StaticResource CardLabelBorderStyle}">
-                        <TextBlock Text="Celne podania" Style="{StaticResource CardLabelTextStyle}"/>
+                        <TextBlock Text="Podania Celne" Style="{StaticResource CardLabelTextStyle}"/>
                     </Border>
-                    <TextBlock Text="{x:Bind ViewModel.Passes, Mode=OneWay}" Style="{StaticResource CardValueTextStyle}" Margin="0,55,0,0"/>
+                    <TextBlock Text="{x:Bind ViewModel.Passes, Mode=OneWay}" Style="{StaticResource CardValueTextStyle}" Margin="0,30,0,0"/>
                 </Grid>
             </Button>
 
-            <Button Grid.Row="1" Grid.Column="1" Style="{StaticResource StatCardStyle}">
+            <Button Style="{StaticResource StatCardStyle}" Grid.Row="1" Grid.Column="1">
                 <Grid>
                     <Border Style="{StaticResource CardLabelBorderStyle}">
-                        <TextBlock Text="Czyste konta" Style="{StaticResource CardLabelTextStyle}"/>
+                        <TextBlock Text="Czyste Konta" Style="{StaticResource CardLabelTextStyle}"/>
                     </Border>
-                    <TextBlock Text="{x:Bind ViewModel.CleanSheets, Mode=OneWay}" Style="{StaticResource CardValueTextStyle}" Margin="0,55,0,0"/>
+                    <TextBlock Text="{x:Bind ViewModel.CleanSheets, Mode=OneWay}" Style="{StaticResource CardValueTextStyle}" Margin="0,30,0,0"/>
                 </Grid>
             </Button>
 
-            <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource StatCardStyle}">
+            <Button Style="{StaticResource StatCardStyle}" Grid.Row="1" Grid.Column="2">
                 <Grid>
                     <Border Style="{StaticResource CardLabelBorderStyle}">
                         <TextBlock Text="Faule" Style="{StaticResource CardLabelTextStyle}"/>
                     </Border>
-                    <TextBlock Text="{x:Bind ViewModel.Fouls, Mode=OneWay}" Style="{StaticResource CardValueTextStyle}" Margin="0,55,0,0"/>
+                    <TextBlock Text="{x:Bind ViewModel.Fouls, Mode=OneWay}" Style="{StaticResource CardValueTextStyle}" Margin="0,30,0,0"/>
                 </Grid>
             </Button>
 
-            <Button Grid.Row="1" Grid.Column="3" Style="{StaticResource StatCardStyle}">
+            <Button Style="{StaticResource StatCardStyle}" Grid.Row="1" Grid.Column="3">
                 <Grid>
                     <Border Style="{StaticResource CardLabelBorderStyle}">
-                        <StackPanel>
-                            <TextBlock Text="Kartki (Żółte/Czerwone)" Style="{StaticResource CardLabelTextStyle}" FontSize="11"/>
-                        </StackPanel>
+                        <TextBlock Text="Kartki (Żółte / Czerwone)" Style="{StaticResource CardLabelTextStyle}"/>
                     </Border>
-                    <TextBlock Text="{x:Bind ViewModel.Cards, Mode=OneWay}" Style="{StaticResource CardValueTextStyle}" Margin="0,55,0,0" FontSize="36"/>
+                    <TextBlock Text="{x:Bind ViewModel.Cards, Mode=OneWay}" Style="{StaticResource CardValueTextStyle}" FontSize="32" Margin="0,30,0,0"/>
                 </Grid>
             </Button>
         </Grid>

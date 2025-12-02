@@ -8,7 +8,7 @@
     xmlns:viewmodels="using:SoccerLink.ViewModels"
     mc:Ignorable="d">
 
-    <Grid Background="#405861" Padding="24">
+    <Grid Background="{StaticResource AppBackgroundBrush}" Padding="24">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -16,24 +16,9 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Margin="0,0,0,20">
-            <Button Content="⟵ Anuluj" 
-                    Command="{x:Bind ViewModel.CancelCommand}"
-                    Background="Transparent" 
-                    BorderThickness="0" 
-                    Foreground="#CDE6F8" 
-                    FontWeight="SemiBold"/>
-
-            <TextBlock Text="Wprowadź dane drużynowe" 
-                       FontSize="24" 
-                       FontWeight="Bold" 
-                       Foreground="#E6F6FF" 
-                       Margin="0,5,0,0"/>
-
-            <TextBlock x:Name="MatchTitleText" 
-                       Text="Mecz: ---" 
-                       Foreground="#FFD700" 
-                       FontSize="14" 
-                       Margin="0,2,0,0"/>
+            <Button Content="⟵ Anuluj" Command="{x:Bind ViewModel.CancelCommand}" Style="{StaticResource BackButtonStyle}"/>
+            <TextBlock Text="Wprowadź dane drużynowe" Style="{StaticResource HeaderTextStyle}" Margin="0,5,0,0"/>
+            <TextBlock x:Name="MatchTitleText" Text="Mecz: ---" Foreground="{StaticResource TextAccentBrush}" FontSize="14" Margin="0,2,0,0"/>
         </StackPanel>
 
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
@@ -51,9 +36,10 @@
 
                 <Grid.Resources>
                     <Style TargetType="TextBox">
-                        <Setter Property="Background" Value="#32404A"/>
-                        <Setter Property="Foreground" Value="White"/>
-                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Background" Value="{StaticResource CardBackgroundBrush}"/>
+                        <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
+                        <Setter Property="BorderThickness" Value="1"/>
+                        <Setter Property="BorderBrush" Value="{StaticResource CardBorderBrush}"/>
                         <Setter Property="CornerRadius" Value="6"/>
                         <Setter Property="TextAlignment" Value="Center"/>
                         <Setter Property="FontSize" Value="20"/>
@@ -61,7 +47,7 @@
                         <Setter Property="Padding" Value="10"/>
                     </Style>
                     <Style TargetType="TextBlock">
-                        <Setter Property="Foreground" Value="#CDE6F8"/>
+                        <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
                         <Setter Property="HorizontalAlignment" Value="Center"/>
                         <Setter Property="Margin" Value="0,0,0,5"/>
                     </Style>
@@ -69,66 +55,47 @@
 
                 <StackPanel Grid.Row="0" Grid.Column="0">
                     <TextBlock Text="Gole strzelone"/>
-                    <TextBox Text="{x:Bind ViewModel.Goals, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                             PlaceholderText="0" InputScope="Number"/>
+                    <TextBox Text="{x:Bind ViewModel.Goals, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="0" InputScope="Number"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="0" Grid.Column="1">
                     <TextBlock Text="Posiadanie piłki (%)"/>
-                    <TextBox Text="{x:Bind ViewModel.Possession, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                             PlaceholderText="50" InputScope="Number"/>
+                    <TextBox Text="{x:Bind ViewModel.Possession, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="50" InputScope="Number"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Grid.Column="0">
                     <TextBlock Text="Strzały (Ogółem)"/>
-                    <TextBox Text="{x:Bind ViewModel.Shots, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                             PlaceholderText="0" InputScope="Number"/>
+                    <TextBox Text="{x:Bind ViewModel.Shots, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="0" InputScope="Number"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Grid.Column="1">
                     <TextBlock Text="Strzały Celne"/>
-                    <TextBox Text="{x:Bind ViewModel.ShotsOnTarget, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                             PlaceholderText="0" InputScope="Number"/>
+                    <TextBox Text="{x:Bind ViewModel.ShotsOnTarget, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="0" InputScope="Number"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="2" Grid.Column="0">
                     <TextBlock Text="Strzały Niecelne"/>
-                    <TextBox Text="{x:Bind ViewModel.ShotsOffTarget, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                             PlaceholderText="0" InputScope="Number"/>
+                    <TextBox Text="{x:Bind ViewModel.ShotsOffTarget, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="0" InputScope="Number"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="2" Grid.Column="1">
                     <TextBlock Text="Rzuty Rożne"/>
-                    <TextBox Text="{x:Bind ViewModel.Corners, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                             PlaceholderText="0" InputScope="Number"/>
+                    <TextBox Text="{x:Bind ViewModel.Corners, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="0" InputScope="Number"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="3" Grid.Column="0">
                     <TextBlock Text="Faule"/>
-                    <TextBox Text="{x:Bind ViewModel.Fouls, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                             PlaceholderText="0" InputScope="Number"/>
+                    <TextBox Text="{x:Bind ViewModel.Fouls, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="0" InputScope="Number"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
                     <TextBlock Text="Czyste Konto?" Margin="0,0,0,10"/>
-                    <ToggleSwitch IsOn="{x:Bind ViewModel.CleanSheet, Mode=TwoWay}" 
-                                  OnContent="Tak" OffContent="Nie" 
-                                  Foreground="#E6F6FF"/>
+                    <ToggleSwitch IsOn="{x:Bind ViewModel.CleanSheet, Mode=TwoWay}" OnContent="Tak" OffContent="Nie" Foreground="{StaticResource TextPrimaryBrush}"/>
                 </StackPanel>
-
             </Grid>
         </ScrollViewer>
 
-        <Button Grid.Row="2" 
-                Content="Zapisz Statystyki" 
-                Command="{x:Bind ViewModel.SaveCommand}"
-                HorizontalAlignment="Center"
-                Background="#FFD700" 
-                Foreground="#2F4450" 
-                FontWeight="Bold" 
-                FontSize="16"
-                CornerRadius="8"
-                Padding="40,12"
-                Margin="0,20,0,0"/>
+        <Button Grid.Row="2" Content="Zapisz Statystyki" Command="{x:Bind ViewModel.SaveCommand}"
+                HorizontalAlignment="Center" Background="{StaticResource TextAccentBrush}" Foreground="Black" FontWeight="Bold" FontSize="16" CornerRadius="8" Padding="40,12" Margin="0,20,0,0"/>
     </Grid>
 </Page>

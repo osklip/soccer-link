@@ -8,42 +8,23 @@
     xmlns:models="using:SoccerLink.Models"
     mc:Ignorable="d">
 
-    <Grid Background="#405861" Padding="24">
+    <Grid Background="{StaticResource AppBackgroundBrush}" Padding="24">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Spacing="12" Margin="0,0,0,20">
-            <Button x:Name="BackButton" 
-                    Content="⟵ Powrót" 
-                    Click="BackButton_Click" 
-                    HorizontalAlignment="Left"
-                    Background="Transparent"
-                    BorderThickness="0"
-                    FontSize="18"
-                    Foreground="#CDE6F8"
-                    FontWeight="SemiBold" />
-
-            <TextBlock Text="Utwórz nową wiadomość" 
-                       FontSize="24" 
-                       FontWeight="Bold"
-                       Foreground="#E6F6FF" />
+            <Button x:Name="BackButton" Content="⟵ Powrót" Click="BackButton_Click" Style="{StaticResource BackButtonStyle}"/>
+            <TextBlock Text="Utwórz nową wiadomość" Style="{StaticResource HeaderTextStyle}"/>
         </StackPanel>
 
-        <Border Grid.Row="1"
-            Background="#32404A"
-            CornerRadius="10"
-            BorderBrush="#9ECBFF"
-            BorderThickness="3"
-            Padding="25"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch">
-
+        <Border Grid.Row="1" Background="{StaticResource CardBackgroundBrush}" CornerRadius="10" BorderBrush="{StaticResource CardBorderBrush}" BorderThickness="1" Padding="25">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <StackPanel Spacing="18">
 
-                    <TextBlock Text="Wybór adresatów (Zawodnicy)" Foreground="#CDE6F8" FontWeight="Bold" FontSize="16"/>
+                    <TextBlock Text="Wybór adresatów (Zawodnicy)" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold" FontSize="16"/>
+
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -51,71 +32,36 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
-                        <Button x:Name="SendAllButton"
-                                Grid.Row="0"
-                                Content="ZAZNACZ WSZYSTKICH ZAWODNIKÓW"
-                                Click="SendAllButton_Click"
-                                HorizontalAlignment="Stretch"
-                                Background="#86A9C8"
-                                Foreground="#2F4450"
-                                FontWeight="Bold"
-                                CornerRadius="8"
-                                Padding="16,8"/>
+                        <Button x:Name="SendAllButton" Grid.Row="0" Content="ZAZNACZ WSZYSTKICH" Click="SendAllButton_Click"
+                                HorizontalAlignment="Stretch" Background="{StaticResource TextMutedBrush}" Foreground="Black" FontWeight="Bold" CornerRadius="6" Margin="0,0,0,10"/>
 
-                        <ListView x:Name="RecipientListView" 
-                                  Grid.Row="1"
-                                  SelectionMode="Multiple"
-                                  Background="#BFBFBF" 
-                                  CornerRadius="8"
-                                  Margin="0,8,0,0"
-                                  BorderThickness="0">
+                        <ListView x:Name="RecipientListView" Grid.Row="1" SelectionMode="Multiple"
+                                  Background="#2F4450" CornerRadius="8" BorderThickness="1" BorderBrush="{StaticResource CardBorderBrush}">
                             <ListView.ItemTemplate>
                                 <DataTemplate x:DataType="models:Zawodnik">
-                                    <TextBlock Text="{x:Bind Nazwisko}" Foreground="#2A5670" FontWeight="SemiBold"/>
+                                    <TextBlock Text="{x:Bind Nazwisko}" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold" Padding="10"/>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
 
-                        <TextBlock x:Name="SelectedRecipientsTextBlock"
-                                   Grid.Row="2"
-                                   Text="Wybrani: 0 zawodników"
-                                   Foreground="#CDE6F8"
-                                   Margin="0,8,0,0"
-                                   TextWrapping="Wrap"/>
+                        <TextBlock x:Name="SelectedRecipientsTextBlock" Grid.Row="2" Text="Wybrani: 0 zawodników" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,8,0,0"/>
                     </Grid>
 
-                    <TextBlock Text="Temat wiadomości" Foreground="#CDE6F8" FontWeight="Bold" FontSize="16"/>
-                    <TextBox x:Name="SubjectTextBox" 
-                             PlaceholderText="Wpisz temat..."
-                             Background="#BFBFBF" 
-                             CornerRadius="8" 
-                             Padding="10,6"/>
+                    <StackPanel Spacing="5">
+                        <TextBlock Text="Temat" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold"/>
+                        <TextBox x:Name="SubjectTextBox" PlaceholderText="Wpisz temat..."/>
+                    </StackPanel>
 
-                    <TextBlock Text="Treść wiadomości" Foreground="#CDE6F8" FontWeight="Bold" FontSize="16"/>
-                    <TextBox x:Name="BodyTextBox" 
-                             Height="150"
-                             TextWrapping="Wrap"
-                             AcceptsReturn="True"
-                             VerticalAlignment="Stretch"
-                             Background="#BFBFBF" 
-                             CornerRadius="8" 
-                             Padding="10,6"/>
+                    <StackPanel Spacing="5">
+                        <TextBlock Text="Treść" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold"/>
+                        <TextBox x:Name="BodyTextBox" Height="150" TextWrapping="Wrap" AcceptsReturn="True" VerticalAlignment="Stretch"/>
+                    </StackPanel>
 
-                    <Button x:Name="SendButton"
-                            Content="Wyślij wiadomość" 
-                            Click="SendButton_Click"
-                            HorizontalAlignment="Center"
-                            Background="#2A5670" 
-                            Foreground="#E6F6FF" 
-                            FontWeight="Bold"
-                            CornerRadius="8"
-                            Padding="25,12"
-                            Margin="0,10,0,0"/>
+                    <Button x:Name="SendButton" Content="Wyślij wiadomość" Click="SendButton_Click"
+                            HorizontalAlignment="Center" Background="{StaticResource TextAccentBrush}" Foreground="Black" FontWeight="Bold" 
+                            CornerRadius="8" Padding="30,10" Margin="0,10,0,0"/>
 
-                    <TextBlock x:Name="StatusTextBlock" 
-                               Foreground="#C0392B" 
-                               HorizontalAlignment="Center" 
-                               Margin="0,8,0,0"/>
+                    <TextBlock x:Name="StatusTextBlock" Foreground="{StaticResource TextSecondaryBrush}" HorizontalAlignment="Center" Margin="0,8,0,0"/>
 
                 </StackPanel>
             </ScrollViewer>

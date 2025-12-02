@@ -8,12 +8,12 @@
     mc:Ignorable="d">
 
     <Grid Background="{StaticResource AppBackgroundBrush}">
-        <Border Width="600" CornerRadius="16" Background="#98C9FF"
+        <Border Width="600" CornerRadius="16" Background="{StaticResource CardBackgroundBrush}" 
+                BorderBrush="{StaticResource CardBorderBrush}" BorderThickness="1"
                 HorizontalAlignment="Center" VerticalAlignment="Center" Padding="28">
             <StackPanel HorizontalAlignment="Stretch" Spacing="18">
 
-                <TextBlock Text="Rejestracja" FontSize="24" FontWeight="Bold"
-                           Foreground="#2A5670" HorizontalAlignment="Center" TextAlignment="Center" />
+                <TextBlock Text="Rejestracja" Style="{StaticResource HeaderTextStyle}" HorizontalAlignment="Center" TextAlignment="Center" />
 
                 <Grid Margin="0,8,0,0" ColumnSpacing="20" RowSpacing="10">
                     <Grid.RowDefinitions>
@@ -26,82 +26,45 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <StackPanel Grid.Row="0" Grid.Column="0" Spacing="6">
-                        <TextBlock Text="Adres email" Foreground="#2A5670" FontWeight="Bold" FontSize="13" />
-                        <Grid Height="44">
-                            <Border Background="#8A9AA6" CornerRadius="10" />
-                            <TextBox Text="{x:Bind ViewModel.Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                     Background="#BFBFBF" BorderThickness="0" CornerRadius="10"
-                                     Foreground="Black" Padding="12,8" PlaceholderText="email@przyklad.com" FontWeight="Bold" />
-                        </Grid>
+                    <StackPanel Grid.Row="0" Grid.Column="0" Spacing="5">
+                        <TextBlock Text="Adres email" Foreground="{StaticResource TextSecondaryBrush}"/>
+                        <TextBox Text="{x:Bind ViewModel.Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="email@przyklad.com"/>
                     </StackPanel>
 
-                    <StackPanel Grid.Row="1" Grid.Column="0" Spacing="6">
-                        <TextBlock Text="Hasło" Foreground="#2A5670" FontWeight="Bold" FontSize="13" />
-                        <Grid Height="44">
-                            <Border Background="#8A9AA6" CornerRadius="10" />
-                            <PasswordBox x:Name="PasswordBox" PasswordChanged="PasswordBox_PasswordChanged"
-                                         Background="#BFBFBF" BorderThickness="0" CornerRadius="10"
-                                         Foreground="Black" Padding="12,8" FontWeight="Bold" PlaceholderText="Hasło" />
-                        </Grid>
+                    <StackPanel Grid.Row="1" Grid.Column="0" Spacing="5">
+                        <TextBlock Text="Hasło" Foreground="{StaticResource TextSecondaryBrush}"/>
+                        <PasswordBox x:Name="PasswordBox" PasswordChanged="PasswordBox_PasswordChanged" PlaceholderText="Hasło" />
                     </StackPanel>
 
-                    <StackPanel Grid.Row="2" Grid.Column="0" Spacing="6">
-                        <TextBlock Text="Powtórz Hasło" Foreground="#2A5670" FontWeight="Bold" FontSize="13" />
-                        <Grid Height="44">
-                            <Border Background="#8A9AA6" CornerRadius="10" />
-                            <PasswordBox x:Name="ConfirmPasswordBox" PasswordChanged="ConfirmPasswordBox_PasswordChanged"
-                                         Background="#BFBFBF" BorderThickness="0" CornerRadius="10"
-                                         Foreground="Black" Padding="12,8" FontWeight="Bold" PlaceholderText="Powtórz Hasło" />
-                        </Grid>
+                    <StackPanel Grid.Row="2" Grid.Column="0" Spacing="5">
+                        <TextBlock Text="Powtórz Hasło" Foreground="{StaticResource TextSecondaryBrush}"/>
+                        <PasswordBox x:Name="ConfirmPasswordBox" PasswordChanged="ConfirmPasswordBox_PasswordChanged" PlaceholderText="Powtórz Hasło" />
                     </StackPanel>
 
-                    <StackPanel Grid.Row="0" Grid.Column="1" Spacing="6">
-                        <TextBlock Text="Imię" Foreground="#2A5670" FontWeight="Bold" FontSize="13" />
-                        <Grid Height="44">
-                            <Border Background="#8A9AA6" CornerRadius="10" />
-                            <TextBox Text="{x:Bind ViewModel.FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                     Background="#BFBFBF" BorderThickness="0" CornerRadius="10"
-                                     Foreground="Black" Padding="12,8" PlaceholderText="Imię" FontWeight="Bold" />
-                        </Grid>
+                    <StackPanel Grid.Row="0" Grid.Column="1" Spacing="5">
+                        <TextBlock Text="Imię" Foreground="{StaticResource TextSecondaryBrush}"/>
+                        <TextBox Text="{x:Bind ViewModel.FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Imię"/>
                     </StackPanel>
 
-                    <StackPanel Grid.Row="1" Grid.Column="1" Spacing="6">
-                        <TextBlock Text="Nazwisko" Foreground="#2A5670" FontWeight="Bold" FontSize="13" />
-                        <Grid Height="44">
-                            <Border Background="#8A9AA6" CornerRadius="10" />
-                            <TextBox Text="{x:Bind ViewModel.LastName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                     Background="#BFBFBF" BorderThickness="0" CornerRadius="10"
-                                     Foreground="Black" Padding="12,8" PlaceholderText="Nazwisko" FontWeight="Bold" />
-                        </Grid>
+                    <StackPanel Grid.Row="1" Grid.Column="1" Spacing="5">
+                        <TextBlock Text="Nazwisko" Foreground="{StaticResource TextSecondaryBrush}"/>
+                        <TextBox Text="{x:Bind ViewModel.LastName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Nazwisko"/>
                     </StackPanel>
 
-                    <StackPanel Grid.Row="2" Grid.Column="1" Spacing="6">
-                        <TextBlock Text="Numer telefonu" Foreground="#2A5670" FontWeight="Bold" FontSize="13" />
-                        <Grid Height="44">
-                            <Border Background="#8A9AA6" CornerRadius="10" />
-                            <TextBox Text="{x:Bind ViewModel.PhoneNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                     Background="#BFBFBF" BorderThickness="0" CornerRadius="10"
-                                     Foreground="Black" Padding="12,8" PlaceholderText="123 456 789" FontWeight="Bold" />
-                        </Grid>
+                    <StackPanel Grid.Row="2" Grid.Column="1" Spacing="5">
+                        <TextBlock Text="Numer telefonu" Foreground="{StaticResource TextSecondaryBrush}"/>
+                        <TextBox Text="{x:Bind ViewModel.PhoneNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="123 456 789"/>
                     </StackPanel>
                 </Grid>
 
                 <StackPanel HorizontalAlignment="Center" Margin="0,24,0,0">
-                    <Grid Width="200" Height="44">
-                        <Border Background="#8A9AA6" CornerRadius="10" />
-                        <Button Command="{x:Bind ViewModel.RegisterCommand}"
-                                Background="#BFBFBF" BorderThickness="0" CornerRadius="10" HorizontalAlignment="Stretch">
-                            <TextBlock Text="Zarejestruj się" Foreground="#2A5670" HorizontalAlignment="Center" FontWeight="Bold" />
-                        </Button>
-                    </Grid>
+                    <Button Command="{x:Bind ViewModel.RegisterCommand}" Content="Zarejestruj się"
+                            HorizontalAlignment="Stretch" Width="200" Background="{StaticResource TextAccentBrush}" Foreground="Black" FontWeight="Bold"/>
 
-                    <Button Command="{x:Bind ViewModel.GoToLoginCommand}"
-                            Content="Masz już konto? Zaloguj się" Background="Transparent" BorderThickness="0" 
-                            Foreground="#2A5670" FontSize="12" HorizontalAlignment="Center" Margin="0,10,0,0"/>
+                    <Button Command="{x:Bind ViewModel.GoToLoginCommand}" Content="Masz już konto? Zaloguj się"
+                            Background="Transparent" BorderThickness="0" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" HorizontalAlignment="Center" Margin="0,10,0,0"/>
 
-                    <TextBlock Text="{x:Bind ViewModel.StatusMessage, Mode=OneWay}"
-                               Foreground="{x:Bind ViewModel.StatusColor, Mode=OneWay}"
+                    <TextBlock Text="{x:Bind ViewModel.StatusMessage, Mode=OneWay}" Foreground="{x:Bind ViewModel.StatusColor, Mode=OneWay}"
                                FontSize="12" HorizontalAlignment="Center" Margin="0,8,0,0" TextAlignment="Center" TextWrapping="Wrap" />
                 </StackPanel>
 

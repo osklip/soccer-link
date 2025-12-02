@@ -9,98 +9,56 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="#405861" Padding="24">
+    <Grid Background="{StaticResource AppBackgroundBrush}" Padding="24">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Margin="0,0,0,24">
-
-            <Button x:Name="BackButton"
-                Content="⟵ Powrót"
-                Click="BackButton_Click"
-                HorizontalAlignment="Left"
-                Background="Transparent"
-                BorderThickness="0"
-            
-                FontSize="18"
-                Foreground="#CDE6F8"
-                FontWeight="SemiBold"
-                Margin="0,0,0,12" />
-
-            <TextBlock Text="Kadra - Lista Zawodników"
-                       Foreground="#E6F6FF"
-        
-                       FontWeight="Bold"
-                       FontSize="24"
-                       HorizontalAlignment="Left" />
+            <Button x:Name="BackButton" Content="⟵ Powrót" Click="BackButton_Click" Style="{StaticResource BackButtonStyle}" Margin="0,0,0,12" />
+            <TextBlock Text="Kadra - Lista Zawodników" Style="{StaticResource HeaderTextStyle}"/>
         </StackPanel>
 
-        <Border Grid.Row="1"
-            Background="#32404A"
-         
-            CornerRadius="10"
-            BorderBrush="#9ECBFF"
-            BorderThickness="3"
-            Padding="12">
-
-            <ListView x:Name="PlayersListView"
-                      Background="Transparent"
-                      BorderThickness="0">
-
-
+        <Border Grid.Row="1" Background="{StaticResource CardBackgroundBrush}" CornerRadius="10" BorderBrush="{StaticResource CardBorderBrush}" BorderThickness="1" Padding="12">
+            <ListView x:Name="PlayersListView" Background="Transparent" BorderThickness="0">
                 <ListView.HeaderTemplate>
                     <DataTemplate>
-                        <Grid Padding="12" Background="#2F4450">
+                        <Grid Padding="12" Background="#2F4450" CornerRadius="6,6,0,0">
                             <Grid.ColumnDefinitions>
-
                                 <ColumnDefinition Width="2*"/>
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="2*"/>
-
                                 <ColumnDefinition Width="2*"/>
                                 <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
-
-
-                            <TextBlock Grid.Column="0" Text="Imię i Nazwisko" Foreground="#CDE6F8" FontWeight="Bold" />
-                            <TextBlock Grid.Column="1" Text="Nr Koszulki" Foreground="#CDE6F8" FontWeight="Bold" />
-                            <TextBlock Grid.Column="2" Text="Pozycja" Foreground="#CDE6F8" FontWeight="Bold" />
-
-                            <TextBlock Grid.Column="3" Text="Telefon" Foreground="#CDE6F8" FontWeight="Bold" />
-                            <TextBlock Grid.Column="4" Text="Dyspozycyjność" Foreground="#CDE6F8" FontWeight="Bold" />
+                            <TextBlock Grid.Column="0" Text="Imię i Nazwisko" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold" />
+                            <TextBlock Grid.Column="1" Text="Nr" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold" />
+                            <TextBlock Grid.Column="2" Text="Pozycja" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold" />
+                            <TextBlock Grid.Column="3" Text="Telefon" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold" />
+                            <TextBlock Grid.Column="4" Text="Dyspozycyjność" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold" />
                         </Grid>
                     </DataTemplate>
-
                 </ListView.HeaderTemplate>
 
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="models:Zawodnik">
                         <Grid Padding="12" Margin="0,4,0,4">
                             <Grid.ColumnDefinitions>
-
                                 <ColumnDefinition Width="2*"/>
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="2*"/>
-
                                 <ColumnDefinition Width="2*"/>
                                 <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
 
-
-                            <TextBlock Grid.Column="0" Foreground="White">
-                                <Run Text="{x:Bind Imie}"/>
-                                <Run Text=" "/>
-           
-                                <Run Text="{x:Bind Nazwisko}"/>
+                            <TextBlock Grid.Column="0" Foreground="{StaticResource TextPrimaryBrush}">
+                                <Run Text="{x:Bind Imie}"/> <Run Text="{x:Bind Nazwisko}"/>
                             </TextBlock>
-                            <TextBlock Grid.Column="1" Text="{x:Bind NumerKoszulki}" Foreground="White" />
-
-                            <TextBlock Grid.Column="2" Text="{x:Bind Pozycja}" Foreground="White" />
-                            <TextBlock Grid.Column="3" Text="{x:Bind NumerTelefonu}" Foreground="White" />
-                            <TextBlock Grid.Column="4" Text="{x:Bind CzyDyspozycyjny}" Foreground="White" />
-
+                            <TextBlock Grid.Column="1" Text="{x:Bind NumerKoszulki}" Foreground="{StaticResource TextPrimaryBrush}" />
+                            <TextBlock Grid.Column="2" Text="{x:Bind Pozycja}" Foreground="{StaticResource TextPrimaryBrush}" />
+                            <TextBlock Grid.Column="3" Text="{x:Bind NumerTelefonu}" Foreground="{StaticResource TextPrimaryBrush}" />
+                            <TextBlock Grid.Column="4" Text="{x:Bind CzyDyspozycyjny}" Foreground="{StaticResource TextPrimaryBrush}" />
                         </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>

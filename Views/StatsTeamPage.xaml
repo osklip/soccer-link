@@ -12,15 +12,15 @@
         <Style TargetType="Button" x:Key="StatCardStyle">
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
             <Setter Property="VerticalAlignment" Value="Stretch"/>
-            <Setter Property="Background" Value="#32404A"/>
-            <Setter Property="BorderBrush" Value="#6FA2C6"/>
-            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Background" Value="{StaticResource CardBackgroundBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource CardBorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="CornerRadius" Value="12"/>
             <Setter Property="Padding" Value="0"/>
         </Style>
 
         <Style TargetType="Border" x:Key="CardLabelBorderStyle">
-            <Setter Property="Background" Value="White"/>
+            <Setter Property="Background" Value="{StaticResource CardBorderBrush}"/>
             <Setter Property="VerticalAlignment" Value="Top"/>
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
             <Setter Property="Margin" Value="10,5,10,0"/>
@@ -29,23 +29,23 @@
         </Style>
 
         <Style TargetType="TextBlock" x:Key="CardLabelTextStyle">
-            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontSize" Value="12"/>
             <Setter Property="TextAlignment" Value="Center"/>
             <Setter Property="TextWrapping" Value="Wrap"/>
         </Style>
 
         <Style TargetType="TextBlock" x:Key="CardValueTextStyle">
-            <Setter Property="Foreground" Value="#E6F6FF"/>
+            <Setter Property="Foreground" Value="{StaticResource TextAccentBrush}"/>
             <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="FontSize" Value="48"/>
+            <Setter Property="FontSize" Value="40"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
     </Page.Resources>
 
-    <Grid Background="#405861" Padding="24">
+    <Grid Background="{StaticResource AppBackgroundBrush}" Padding="24">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -59,55 +59,30 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="16" VerticalAlignment="Center">
-                <Button x:Name="BackButton" 
-                        Click="BackButton_Click" 
-                        Background="Transparent" 
-                        BorderThickness="0" 
-                        Padding="0"
-                        VerticalAlignment="Center">
+                <Button x:Name="BackButton" Click="BackButton_Click" Style="{StaticResource BackButtonStyle}">
                     <StackPanel Orientation="Horizontal" Spacing="8">
-                        <TextBlock Text="⟵" FontSize="20" Foreground="#CDE6F8" FontWeight="SemiBold"/>
-                        <TextBlock Text="Powrót" FontSize="20" Foreground="#CDE6F8" FontWeight="SemiBold"/>
+                        <TextBlock Text="⟵" FontSize="20" FontWeight="SemiBold"/>
+                        <TextBlock Text="Powrót" FontSize="20" FontWeight="SemiBold"/>
                     </StackPanel>
                 </Button>
-
-                <Button x:Name="HomeButton"
-                        Click="HomeButton_Click"
-                        Background="Transparent"
-                        BorderThickness="0"
-                        Padding="4"
-                        VerticalAlignment="Center">
-                    <FontIcon Glyph="&#xE80F;" FontFamily="Segoe MDL2 Assets" FontSize="24" Foreground="#CDE6F8"/>
+                <Button x:Name="HomeButton" Click="HomeButton_Click" Background="Transparent" BorderThickness="0" Padding="4">
+                    <FontIcon Glyph="&#xE80F;" FontFamily="Segoe MDL2 Assets" FontSize="24" Foreground="{StaticResource TextSecondaryBrush}"/>
                 </Button>
             </StackPanel>
 
-            <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="4">
-                <TextBlock Text="Team Stats (Średnie)" 
-                           FontSize="28" 
-                           FontWeight="Bold" 
-                           Foreground="#1D2E38" 
-                           HorizontalAlignment="Center"
-                           FontStyle="Italic"/>
-
-                <TextBlock Text="Podsumowanie sezonu" 
-                           Foreground="#1D2E38" 
-                           FontSize="16" 
-                           FontWeight="SemiBold" 
-                           HorizontalAlignment="Center"/>
+            <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="Statystyki Drużyny" Style="{StaticResource HeaderTextStyle}" HorizontalAlignment="Center"/>
+                <TextBlock Text="Średnie wartości na mecz" Style="{StaticResource SubHeaderTextStyle}" HorizontalAlignment="Center"/>
             </StackPanel>
 
             <StackPanel Grid.Column="2" VerticalAlignment="Center">
-                <Border Background="#5A707A" CornerRadius="6" Padding="12,6">
-                    <TextBlock x:Name="DateTextBlock" 
-                               Text="--.--.---- --:--" 
-                               Foreground="Black" 
-                               FontWeight="SemiBold" 
-                               FontSize="14"/>
+                <Border Background="{StaticResource CardBorderBrush}" CornerRadius="6" Padding="12,6">
+                    <TextBlock x:Name="DateTextBlock" Text="--:--" Foreground="White" FontWeight="SemiBold" FontSize="14"/>
                 </Border>
             </StackPanel>
         </Grid>
 
-        <Grid Grid.Row="1" ColumnSpacing="20" RowSpacing="20" Margin="0,10,0,0">
+        <Grid Grid.Row="1" ColumnSpacing="20" RowSpacing="20">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
@@ -122,54 +97,54 @@
             <Button Grid.Row="0" Grid.Column="0" Style="{StaticResource StatCardStyle}">
                 <Grid>
                     <Border Style="{StaticResource CardLabelBorderStyle}">
-                        <TextBlock Text="Bramek na mecz" Style="{StaticResource CardLabelTextStyle}"/>
+                        <TextBlock Text="Gole / mecz" Style="{StaticResource CardLabelTextStyle}"/>
                     </Border>
-                    <TextBlock Text="{x:Bind ViewModel.AvgGoals, Mode=OneWay}" Style="{StaticResource CardValueTextStyle}" Margin="0,55,0,0"/>
+                    <TextBlock Text="{x:Bind ViewModel.AvgGoals, Mode=OneWay}" Style="{StaticResource CardValueTextStyle}" Margin="0,30,0,0"/>
                 </Grid>
             </Button>
 
             <Button Grid.Row="0" Grid.Column="1" Style="{StaticResource StatCardStyle}">
                 <Grid>
                     <Border Style="{StaticResource CardLabelBorderStyle}">
-                        <TextBlock Text="Strzały na mecz" Style="{StaticResource CardLabelTextStyle}"/>
+                        <TextBlock Text="Strzały / mecz" Style="{StaticResource CardLabelTextStyle}"/>
                     </Border>
-                    <TextBlock Text="{x:Bind ViewModel.AvgShots, Mode=OneWay}" Style="{StaticResource CardValueTextStyle}" Margin="0,55,0,0"/>
+                    <TextBlock Text="{x:Bind ViewModel.AvgShots, Mode=OneWay}" Style="{StaticResource CardValueTextStyle}" Margin="0,30,0,0"/>
                 </Grid>
             </Button>
 
             <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource StatCardStyle}">
                 <Grid>
                     <Border Style="{StaticResource CardLabelBorderStyle}">
-                        <TextBlock Text="Strzały celne" Style="{StaticResource CardLabelTextStyle}"/>
+                        <TextBlock Text="Celne / mecz" Style="{StaticResource CardLabelTextStyle}"/>
                     </Border>
-                    <TextBlock Text="{x:Bind ViewModel.AvgShotsOn, Mode=OneWay}" Style="{StaticResource CardValueTextStyle}" Margin="0,55,0,0"/>
+                    <TextBlock Text="{x:Bind ViewModel.AvgShotsOn, Mode=OneWay}" Style="{StaticResource CardValueTextStyle}" Margin="0,30,0,0"/>
                 </Grid>
             </Button>
 
             <Button Grid.Row="0" Grid.Column="3" Style="{StaticResource StatCardStyle}">
                 <Grid>
                     <Border Style="{StaticResource CardLabelBorderStyle}">
-                        <TextBlock Text="Strzały niecelne" Style="{StaticResource CardLabelTextStyle}"/>
+                        <TextBlock Text="Niecelne / mecz" Style="{StaticResource CardLabelTextStyle}"/>
                     </Border>
-                    <TextBlock Text="{x:Bind ViewModel.AvgShotsOff, Mode=OneWay}" Style="{StaticResource CardValueTextStyle}" Margin="0,55,0,0"/>
+                    <TextBlock Text="{x:Bind ViewModel.AvgShotsOff, Mode=OneWay}" Style="{StaticResource CardValueTextStyle}" Margin="0,30,0,0"/>
                 </Grid>
             </Button>
 
             <Button Grid.Row="1" Grid.Column="0" Style="{StaticResource StatCardStyle}">
                 <Grid>
                     <Border Style="{StaticResource CardLabelBorderStyle}">
-                        <TextBlock Text="Posiadanie piłki" Style="{StaticResource CardLabelTextStyle}"/>
+                        <TextBlock Text="Posiadanie" Style="{StaticResource CardLabelTextStyle}"/>
                     </Border>
-                    <TextBlock Text="{x:Bind ViewModel.AvgPossession, Mode=OneWay}" Style="{StaticResource CardValueTextStyle}" Margin="0,55,0,0"/>
+                    <TextBlock Text="{x:Bind ViewModel.AvgPossession, Mode=OneWay}" Style="{StaticResource CardValueTextStyle}" Margin="0,30,0,0"/>
                 </Grid>
             </Button>
 
             <Button Grid.Row="1" Grid.Column="1" Style="{StaticResource StatCardStyle}">
                 <Grid>
                     <Border Style="{StaticResource CardLabelBorderStyle}">
-                        <TextBlock Text="Rożne na mecz" Style="{StaticResource CardLabelTextStyle}"/>
+                        <TextBlock Text="Rzuty rożne" Style="{StaticResource CardLabelTextStyle}"/>
                     </Border>
-                    <TextBlock Text="{x:Bind ViewModel.AvgCorners, Mode=OneWay}" Style="{StaticResource CardValueTextStyle}" Margin="0,55,0,0"/>
+                    <TextBlock Text="{x:Bind ViewModel.AvgCorners, Mode=OneWay}" Style="{StaticResource CardValueTextStyle}" Margin="0,30,0,0"/>
                 </Grid>
             </Button>
 
@@ -178,19 +153,18 @@
                     <Border Style="{StaticResource CardLabelBorderStyle}">
                         <TextBlock Text="Czyste konta" Style="{StaticResource CardLabelTextStyle}"/>
                     </Border>
-                    <TextBlock Text="{x:Bind ViewModel.TotalCleanSheets, Mode=OneWay}" Style="{StaticResource CardValueTextStyle}" Margin="0,55,0,0"/>
+                    <TextBlock Text="{x:Bind ViewModel.TotalCleanSheets, Mode=OneWay}" Style="{StaticResource CardValueTextStyle}" Margin="0,30,0,0"/>
                 </Grid>
             </Button>
 
             <Button Grid.Row="1" Grid.Column="3" Style="{StaticResource StatCardStyle}">
                 <Grid>
                     <Border Style="{StaticResource CardLabelBorderStyle}">
-                        <TextBlock Text="Faule na mecz" Style="{StaticResource CardLabelTextStyle}"/>
+                        <TextBlock Text="Faule / mecz" Style="{StaticResource CardLabelTextStyle}"/>
                     </Border>
-                    <TextBlock Text="{x:Bind ViewModel.AvgFouls, Mode=OneWay}" Style="{StaticResource CardValueTextStyle}" Margin="0,55,0,0"/>
+                    <TextBlock Text="{x:Bind ViewModel.AvgFouls, Mode=OneWay}" Style="{StaticResource CardValueTextStyle}" Margin="0,30,0,0"/>
                 </Grid>
             </Button>
-
         </Grid>
     </Grid>
 </Page>

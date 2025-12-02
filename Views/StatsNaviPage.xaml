@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <Page
     x:Class="SoccerLink.Views.StatsNaviPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -6,87 +7,60 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Page.Resources>
-        <Style TargetType="Button" x:Key="NaviButtonStyle">
-            <Setter Property="Width" Value="280"/>
-            <Setter Property="Height" Value="250"/>
-            <Setter Property="Background" Value="#32404A"/>
-            <Setter Property="BorderBrush" Value="#9ECBFF"/>
-            <Setter Property="BorderThickness" Value="2"/>
-            <Setter Property="CornerRadius" Value="12"/>
-            <Setter Property="Padding" Value="0"/>
-            <Setter Property="Margin" Value="0"/>
-        </Style>
-    </Page.Resources>
-
-    <Grid Background="#405861" Padding="24">
+    <Grid Background="{StaticResource AppBackgroundBrush}" Padding="24">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="12">
-            <Button x:Name="BackButton" 
-                    Content="⟵ Powrót" 
-                    Click="BackButton_Click" 
-                    Background="Transparent"
-                    BorderThickness="0"
-                    FontSize="18"
-                    Foreground="#CDE6F8"
-                    FontWeight="SemiBold" />
+        <StackPanel Grid.Row="0" Margin="0,0,0,30">
+            <Button Content="⟵ Powrót do menu" Click="BackButton_Click" Style="{StaticResource BackButtonStyle}"/>
+            <TextBlock Text="Centrum Statystyk" Style="{StaticResource HeaderTextStyle}" Margin="0,10,0,0"/>
+            <TextBlock Text="Wybierz moduł, którym chcesz zarządzać" Style="{StaticResource SubHeaderTextStyle}"/>
         </StackPanel>
 
-        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
-            <StackPanel Orientation="Horizontal" 
-                        Spacing="30" 
-                        HorizontalAlignment="Center" 
-                        VerticalAlignment="Center"
-                        Padding="20">
-
-                <Button x:Name="SoloStatsButton"
-                        Click="SoloStatsButton_Click"
-                        Style="{StaticResource NaviButtonStyle}">
-                    <StackPanel VerticalAlignment="Center" Spacing="20">
-                        <TextBlock Text="Solo Stats" 
-                                   Foreground="#E6F6FF"
-                                   FontWeight="Bold" 
-                                   FontStyle="Italic"
-                                   FontSize="24"
-                                   HorizontalAlignment="Center"/>
-                        <FontIcon Glyph="&#xE77B;" FontFamily="Segoe MDL2 Assets" FontSize="80" Foreground="#CDE6F8"/>
+        <GridView Grid.Row="1">
+            <Button Click="AddStatsButton_Click" Style="{StaticResource MenuCardButtonStyle}" Width="220" Height="160" Margin="0,0,20,20">
+                <Grid Padding="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <FontIcon Glyph="&#xE710;" FontFamily="Segoe MDL2 Assets" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <StackPanel Grid.Row="1">
+                        <TextBlock Text="Dodaj Statystyki" FontWeight="Bold" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Wprowadź dane pomeczowe" FontSize="10" Foreground="{StaticResource TextMutedBrush}" HorizontalAlignment="Center"/>
                     </StackPanel>
-                </Button>
+                </Grid>
+            </Button>
 
-                <Button x:Name="TeamStatsButton"
-                        Click="TeamStatsButton_Click"
-                        Style="{StaticResource NaviButtonStyle}">
-                    <StackPanel VerticalAlignment="Center" Spacing="20">
-                        <TextBlock Text="Team Stats" 
-                                   Foreground="#E6F6FF" 
-                                   FontWeight="Bold" 
-                                   FontStyle="Italic"
-                                   FontSize="24"
-                                   HorizontalAlignment="Center"/>
-                        <FontIcon Glyph="&#xE716;" FontFamily="Segoe MDL2 Assets" FontSize="80" Foreground="#CDE6F8"/>
+            <Button Click="ViewTeamStatsButton_Click" Style="{StaticResource MenuCardButtonStyle}" Width="220" Height="160" Margin="0,0,20,20">
+                <Grid Padding="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <FontIcon Glyph="&#xE9D2;" FontFamily="Segoe MDL2 Assets" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <StackPanel Grid.Row="1">
+                        <TextBlock Text="Statystyki Drużyny" FontWeight="Bold" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Analiza całego zespołu" FontSize="10" Foreground="{StaticResource TextMutedBrush}" HorizontalAlignment="Center"/>
                     </StackPanel>
-                </Button>
+                </Grid>
+            </Button>
 
-                <Button x:Name="AddStatsButton"
-                        Click="AddStatsButton_Click"
-                        Style="{StaticResource NaviButtonStyle}"
-                        BorderBrush="#FFD700">
-                    <StackPanel VerticalAlignment="Center" Spacing="20">
-                        <TextBlock Text="Dodaj Statystyki" 
-                                   Foreground="#FFD700" 
-                                   FontWeight="Bold" 
-                                   FontStyle="Italic"
-                                   FontSize="24"
-                                   HorizontalAlignment="Center"/>
-                        <FontIcon Glyph="&#xE710;" FontFamily="Segoe MDL2 Assets" FontSize="80" Foreground="#FFD700"/>
+            <Button Click="ViewPlayerStatsButton_Click" Style="{StaticResource MenuCardButtonStyle}" Width="220" Height="160" Margin="0,0,20,20">
+                <Grid Padding="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <FontIcon Glyph="&#xE77B;" FontFamily="Segoe MDL2 Assets" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <StackPanel Grid.Row="1">
+                        <TextBlock Text="Statystyki Zawodników" FontWeight="Bold" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Rankingi indywidualne" FontSize="10" Foreground="{StaticResource TextMutedBrush}" HorizontalAlignment="Center"/>
                     </StackPanel>
-                </Button>
-
-            </StackPanel>
-        </ScrollViewer>
+                </Grid>
+            </Button>
+        </GridView>
     </Grid>
 </Page>
