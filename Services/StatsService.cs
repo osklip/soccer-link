@@ -131,5 +131,52 @@ namespace SoccerLink.Services
                 CzysteKonto = ToInt(row[8]) > 0
             };
         }
+
+        public static async Task<List<Mecz>> GetMatchesWithoutStatsAsync()
+        {
+            if (SessionService.AktualnyTrener == null) return new List<Mecz>();
+            var trenerId = SessionService.AktualnyTrener.Id;
+
+            using var client = await DatabaseConfig.CreateClientAsync();
+
+            // Pobieramy mecze, które NIE MAJĄ jeszcze wpisu w tabeli StatystykiDruzyny
+            var sql = @"
+        SELECT m.MeczID, m.Przeciwnik, m.Data, m.Godzina, m.Miejsce 
+        FROM Mecz m
+        LEFT JOIN StatystykiDruzyny s ON m.MeczID = s.MeczID
+        WHERE m.TrenerID = ? AND s.StatDruzynyID IS NULL
+        ORDER BY m.Data DESC, m.Godzina DESC";
+
+            var result = await client.Execute(sql, trenerId);
+            var list = new List<Mecz>();
+
+            if (result.Rows != null)
+            {
+                foreach (var row in result.Rows)
+                {
+                    var c = row.ToArray();
+
+                    // Parsowanie daty i godziny (SQLite trzyma je jako TEXT)
+                    string dataStr = c[2]?.ToString();
+                    string godzinaStr = c[3]?.ToString();
+                    DateTime dt = DateTime.Now;
+
+                    if (DateTime.TryParse($"{dataStr} {godzinaStr}", out var parsedDate))
+                    {
+                        dt = parsedDate;
+                    }
+
+                    list.Add(new Mecz
+                    {
+                        MeczID = int.Parse(c[0].ToString()),
+                        Przeciwnik = c[1]?.ToString(),
+                        DataRozpoczecia = dt,
+                        Miejsce = c[4]?.ToString(),
+                        TrenerID = trenerId
+                    });
+                }
+            }
+            return list;
+        }
     }
 }

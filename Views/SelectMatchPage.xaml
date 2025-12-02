@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <Page
     x:Class="SoccerLink.Views.SelectMatchPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -14,8 +15,14 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Spacing="12" Margin="0,0,0,20">
-            <Button x:Name="BackButton" Content="⟵ Powrót" Click="BackButton_Click" 
-                    Background="Transparent" BorderThickness="0" FontSize="18" Foreground="#CDE6F8" FontWeight="SemiBold" />
+            <Button x:Name="BackButton" 
+                    Content="⟵ Powrót" 
+                    Click="BackButton_Click" 
+                    Background="Transparent" 
+                    BorderThickness="0" 
+                    FontSize="18" 
+                    Foreground="#CDE6F8" 
+                    FontWeight="SemiBold" />
 
             <TextBlock Text="Wybierz mecz do uzupełnienia" FontSize="24" FontWeight="Bold" Foreground="#E6F6FF"/>
             <TextBlock Text="Poniższe mecze nie mają jeszcze kompletnych statystyk." FontSize="14" Foreground="#CDE6F8" Opacity="0.8"/>
@@ -32,11 +39,15 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Text="{x:Bind Data}" Foreground="#86A9C8" VerticalAlignment="Center" Margin="0,0,20,0" FontWeight="Bold"/>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,20,0">
+                                <TextBlock Text="{x:Bind DataDisplay}" Foreground="#86A9C8" FontWeight="Bold" FontSize="16"/>
+                                <TextBlock Text="{x:Bind GodzinaDisplay}" Foreground="#86A9C8" FontSize="12" Opacity="0.8"/>
+                            </StackPanel>
 
                             <StackPanel Grid.Column="1" VerticalAlignment="Center">
                                 <TextBlock Text="Mecz przeciwko:" FontSize="12" Foreground="#CDE6F8" Opacity="0.6"/>
                                 <TextBlock Text="{x:Bind Przeciwnik}" FontSize="18" Foreground="#E6F6FF" FontWeight="Bold"/>
+                                <TextBlock Text="{x:Bind Miejsce}" FontSize="12" Foreground="#CDE6F8" FontStyle="Italic" Opacity="0.7"/>
                             </StackPanel>
 
                             <FontIcon Grid.Column="2" Glyph="&#xE70F;" FontFamily="Segoe MDL2 Assets" Foreground="#FFD700" FontSize="20"/>
