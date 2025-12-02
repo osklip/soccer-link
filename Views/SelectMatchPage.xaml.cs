@@ -1,6 +1,9 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Navigation;
 using SoccerLink.Models;
+using SoccerLink.Services; // Dodaj ten namespace
+using System;
 using System.Collections.Generic;
 
 namespace SoccerLink.Views
@@ -9,28 +12,36 @@ namespace SoccerLink.Views
     {
         public SelectMatchPage()
         {
-            InitializeComponent();
-            LoadMatches();
+            this.InitializeComponent();
+            this.Loaded += SelectMatchPage_Loaded;
         }
 
-        private void LoadMatches()
+        private async void SelectMatchPage_Loaded(object sender, RoutedEventArgs e)
         {
-            // SYMULACJA DANYCH: Mecze bez statystyk
-            var matches = new List<Mecz>
+            try
             {
-                new Mecz { Przeciwnik = "FC Barcelona", DataRozpoczecia = new System.DateTime(2025, 12, 20), Miejsce = "Camp Nou" },
-                new Mecz { Przeciwnik = "Real Madryt", DataRozpoczecia = new System.DateTime(2025, 12, 20), Miejsce = "Santiago Bernabéu" },
-                new Mecz { Przeciwnik = "Bayern Monachium", DataRozpoczecia = new System.DateTime(2025, 12, 20), Miejsce = "Allianz Arena" }
-            };
+                // Pobieramy prawdziwe mecze z bazy (te bez statystyk)
+                var matches = await StatsService.GetMatchesWithoutStatsAsync();
 
-            MatchesListView.ItemsSource = matches;
+                if (matches.Count == 0)
+                {
+                    // Opcjonalnie: Poka¿ komunikat, jeœli brak meczów
+                    // np. TextBlockEmpty.Visibility = Visibility.Visible;
+                }
+
+                MatchesListView.ItemsSource = matches;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"B³¹d pobierania meczów: {ex.Message}");
+            }
         }
 
         private void MatchesListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (MatchesListView.SelectedItem is Mecz selectedMatch)
             {
-                // Przechodzimy do HUB-a, przekazuj¹c wybrany mecz
+                // Przechodzimy do HUB-a, przekazuj¹c wybrany (prawdziwy) mecz z ID
                 this.Frame.Navigate(typeof(AddStatsHubPage), selectedMatch);
             }
         }
