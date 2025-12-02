@@ -6,7 +6,12 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="using:SoccerLink.Models"
+    xmlns:converters="using:SoccerLink.Helpers"
     mc:Ignorable="d">
+
+    <Page.Resources>
+        <converters:BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </Page.Resources>
 
     <Grid Background="#405861">
         <Border
@@ -26,25 +31,41 @@
                                Foreground="#2A5670" 
                                HorizontalAlignment="Center"/>
 
-                    <TextBlock x:Name="EventInfoTextBlock" 
+                    <TextBlock Text="{x:Bind ViewModel.EventInfoText, Mode=OneWay}" 
                                HorizontalAlignment="Center"
                                FontSize="16"
                                Foreground="#2A5670"/>
 
                     <StackPanel Spacing="10">
                         <TextBlock Text="Typ Wydarzenia (nieedytowalny)" Foreground="#2A5670" FontWeight="Bold"/>
-                        <TextBox x:Name="EventTypeTextBox" IsReadOnly="True" Background="#BFBFBF" CornerRadius="8" Padding="10,6" Opacity="0.8"/>
+                        <TextBox Text="{x:Bind ViewModel.EventType, Mode=OneWay}" 
+                                 IsReadOnly="True" 
+                                 Background="#BFBFBF" 
+                                 CornerRadius="8" 
+                                 Padding="10,6" 
+                                 Opacity="0.8"/>
                     </StackPanel>
 
                     <StackPanel Spacing="10">
-                        <TextBlock x:Name="TitleLabel" Text="Nazwa/Przeciwnik/Typ" Foreground="#2A5670" FontWeight="Bold"/>
-                        <TextBox x:Name="TitleTextBox" PlaceholderText="Wpisz tytuł/nazwę/przeciwnika" Background="#BFBFBF" CornerRadius="8" Padding="10,6" />
+                        <TextBlock Text="{x:Bind ViewModel.TitleLabel, Mode=OneWay}" Foreground="#2A5670" FontWeight="Bold"/>
+                        <TextBox Text="{x:Bind ViewModel.Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                 PlaceholderText="Wpisz tytuł/nazwę/przeciwnika" 
+                                 Background="#BFBFBF" 
+                                 CornerRadius="8" 
+                                 Padding="10,6" />
 
                         <TextBlock Text="Data" Foreground="#2A5670" FontWeight="Bold"/>
-                        <CalendarDatePicker x:Name="DateDatePicker" PlaceholderText="Wybierz datę" Background="#BFBFBF" CornerRadius="8" />
+                        <CalendarDatePicker Date="{x:Bind ViewModel.Date, Mode=TwoWay}" 
+                                            PlaceholderText="Wybierz datę" 
+                                            Background="#BFBFBF" 
+                                            CornerRadius="8" />
 
                         <TextBlock Text="Miejsce" Foreground="#2A5670" FontWeight="Bold"/>
-                        <TextBox x:Name="MiejsceTextBox" PlaceholderText="Miejsce wydarzenia" Background="#BFBFBF" CornerRadius="8" Padding="10,6" />
+                        <TextBox Text="{x:Bind ViewModel.Location, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                 PlaceholderText="Miejsce wydarzenia" 
+                                 Background="#BFBFBF" 
+                                 CornerRadius="8" 
+                                 Padding="10,6" />
                     </StackPanel>
 
                     <Grid>
@@ -56,32 +77,47 @@
 
                         <StackPanel Grid.Column="0" Spacing="4">
                             <TextBlock Text="Godzina rozpoczęcia" Foreground="#2A5670" FontWeight="Bold"/>
-                            <TextBox x:Name="TimeStartTextBox" PlaceholderText="HH:MM (np. 18:30)" Background="#BFBFBF" CornerRadius="8" Padding="10,6" />
+                            <TextBox Text="{x:Bind ViewModel.TimeStart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                     PlaceholderText="HH:MM (np. 18:30)" 
+                                     Background="#BFBFBF" 
+                                     CornerRadius="8" 
+                                     Padding="10,6" />
                         </StackPanel>
 
-                        <StackPanel Grid.Column="2" Spacing="4" x:Name="TimeEndPanel">
+                        <StackPanel Grid.Column="2" Spacing="4" 
+                                    Visibility="{x:Bind ViewModel.IsTimeEndVisible, Mode=OneWay, Converter={StaticResource BoolToVis}}">
                             <TextBlock Text="Godzina zakończenia (opcjonalnie)" Foreground="#2A5670" FontWeight="Bold"/>
-                            <TextBox x:Name="TimeEndTextBox" PlaceholderText="HH:MM" Background="#BFBFBF" CornerRadius="8" Padding="10,6" />
+                            <TextBox Text="{x:Bind ViewModel.TimeEnd, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                     PlaceholderText="HH:MM" 
+                                     Background="#BFBFBF" 
+                                     CornerRadius="8" 
+                                     Padding="10,6" />
                         </StackPanel>
                     </Grid>
 
-                    <StackPanel x:Name="OpisPanel" Spacing="10" Visibility="Collapsed">
+                    <StackPanel Spacing="10" 
+                                Visibility="{x:Bind ViewModel.IsDescriptionVisible, Mode=OneWay, Converter={StaticResource BoolToVis}}">
                         <TextBlock Text="Opis" Foreground="#2A5670" FontWeight="Bold"/>
-                        <TextBox x:Name="OpisTextBox" Height="80" TextWrapping="Wrap" AcceptsReturn="True" Background="#BFBFBF" CornerRadius="8" Padding="10,6" />
+                        <TextBox Text="{x:Bind ViewModel.Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                 Height="80" 
+                                 TextWrapping="Wrap" 
+                                 AcceptsReturn="True" 
+                                 Background="#BFBFBF" 
+                                 CornerRadius="8" 
+                                 Padding="10,6" />
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="20" Margin="0,10,0,0">
                         <Button Content="Anuluj" 
-                                Click="CancelButton_Click" 
+                                Command="{x:Bind ViewModel.CancelCommand}" 
                                 Background="#BFBFBF" 
                                 Foreground="#2A5670" 
                                 FontWeight="Bold"
                                 Width="120" 
                                 CornerRadius="8" />
 
-                        <Button x:Name="SaveButton"
-                                Content="Zapisz zmiany" 
-                                Click="SaveButton_Click" 
+                        <Button Content="Zapisz zmiany" 
+                                Command="{x:Bind ViewModel.SaveCommand}" 
                                 Background="#2A5670" 
                                 Foreground="#E6F6FF" 
                                 FontWeight="Bold"
@@ -89,8 +125,8 @@
                                 CornerRadius="8" />
                     </StackPanel>
 
-                    <TextBlock x:Name="StatusTextBlock" 
-                               Foreground="Red" 
+                    <TextBlock Text="{x:Bind ViewModel.StatusMessage, Mode=OneWay}" 
+                               Foreground="{x:Bind ViewModel.StatusColor, Mode=OneWay}"
                                HorizontalAlignment="Center" 
                                Margin="0,8,0,0"/>
 

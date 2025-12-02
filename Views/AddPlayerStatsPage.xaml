@@ -51,6 +51,7 @@
                     Background="Transparent" 
                     BorderThickness="0" 
                     Foreground="#CDE6F8" 
+                    FontSize="18"
                     FontWeight="SemiBold"/>
 
             <TextBlock Text="Uzupełnij Statystyki Indywidualne" 

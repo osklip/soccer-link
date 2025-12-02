@@ -64,7 +64,7 @@ namespace SoccerLink.Services
                 StrzalyNiecelne = ToInt(row[4]),
                 RzutyRozne = ToInt(row[5]),
                 Faule = ToInt(row[6]),
-                CzysteKonto = ToInt(row[7]) > 0 // Tutaj SUM zwraca liczbę czystych kont, w modelu bool służy do checkboxa, ale w Viewmodelu obsłużymy to jako int
+                CzysteKonto = ToInt(row[7]) > 0
             };
         }
 
@@ -127,7 +127,7 @@ namespace SoccerLink.Services
                 PodaniaCelne = ToInt(row[4]),
                 Faule = ToInt(row[5]),
                 ZolteKartki = ToInt(row[6]),
-                CzerwonaKartka = ToInt(row[7]) > 0, // Tutaj uproszczenie: true jeśli dostał chociaż jedną w sezonie
+                CzerwonaKartka = ToInt(row[7]) > 0,
                 CzysteKonto = ToInt(row[8]) > 0
             };
         }
@@ -161,9 +161,17 @@ namespace SoccerLink.Services
                     string godzinaStr = c[3]?.ToString();
                     DateTime dt = DateTime.Now;
 
+                    // Próba parsowania
                     if (DateTime.TryParse($"{dataStr} {godzinaStr}", out var parsedDate))
                     {
                         dt = parsedDate;
+                    }
+
+                    // --- LOGIKA BLOKADY PRZYSZŁYCH MECZÓW ---
+                    // Jeśli mecz jest w przyszłości, pomijamy go (nie dodajemy do listy wyboru)
+                    if (dt > DateTime.Now)
+                    {
+                        continue;
                     }
 
                     list.Add(new Mecz

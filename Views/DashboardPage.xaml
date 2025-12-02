@@ -21,11 +21,14 @@
             <ColumnDefinition Width="1.0*" />
         </Grid.ColumnDefinitions>
 
-        <TextBlock x:Name="HeaderText" Grid.Row="0" Grid.ColumnSpan="3" Foreground="#E6F6FF" FontWeight="Bold" FontSize="20" Margin="8,6" HorizontalAlignment="Left" />
+        <TextBlock Text="{x:Bind ViewModel.CurrentDateTime, Mode=OneWay}" 
+                   Grid.Row="0" Grid.ColumnSpan="3" 
+                   Foreground="#E6F6FF" FontWeight="Bold" FontSize="20" 
+                   Margin="8,6" HorizontalAlignment="Left" />
 
         <Border Grid.Row="1" Grid.Column="0" Margin="8" Background="#32404A" CornerRadius="10" BorderBrush="#9ECBFF" BorderThickness="3">
-            <Button x:Name="MessageButton" Click="MessageButton_Click" Background="Transparent" 
-                BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Button Command="{x:Bind ViewModel.GoToMessagesCommand}" 
+                    Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <StackPanel Margin="12" VerticalAlignment="Center" Spacing="6">
                     <TextBlock Text="Wiadomości" Foreground="#CDE6F8" FontWeight="Bold" FontSize="20" TextAlignment="Center" />
                     <Image Source="/Assets/messages_icon.png" Width="96" Height="96" />
@@ -34,7 +37,8 @@
         </Border>
 
         <Border Grid.Row="1" Grid.Column="1" Margin="8" Background="#32404A" CornerRadius="10" BorderBrush="#9ECBFF" BorderThickness="3">
-            <Button x:Name="CalendarButton" Click="CalendarButton_Click" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Button Command="{x:Bind ViewModel.GoToCalendarCommand}" 
+                    Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="8">
                     <TextBlock Text="Kalendarz" Foreground="#CDE6F8" FontWeight="Bold" FontSize="20" TextAlignment="Center" />
                     <Image Source="/Assets/calendar_icon.png" Width="96" Height="96" />
@@ -43,7 +47,8 @@
         </Border>
 
         <Border Grid.Row="1" Grid.Column="2" Margin="8" Background="#32404A" CornerRadius="10" BorderBrush="#9ECBFF" BorderThickness="3">
-            <Button x:Name="StatsButton" Click="StatsButton_Click" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Button Command="{x:Bind ViewModel.GoToStatsCommand}" 
+                    Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="8">
                     <TextBlock Text="Statystyki" Foreground="#CDE6F8" FontWeight="Bold" FontSize="20" TextAlignment="Center" />
                     <Image Source="/Assets/teamstats_icon.png" Width="96" Height="96" />
@@ -51,16 +56,7 @@
             </Button>
         </Border>
 
-        <Border Grid.Row="2"
-        Grid.Column="0"
-        Grid.ColumnSpan="2"
-        Margin="8"
-        Background="#32404A"
-        CornerRadius="10"
-        BorderBrush="#9ECBFF"
-        BorderThickness="3"
-        Padding="18">
-
+        <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="8" Background="#32404A" CornerRadius="10" BorderBrush="#9ECBFF" BorderThickness="3" Padding="18">
             <Grid ColumnSpacing="20">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -68,139 +64,62 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Grid.Column="0">
-
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Spacing="8">
-                        <TextBlock Text="Najbliższe Wydarzenie"
-                               Foreground="#CDE6F8"
-                               FontWeight="Bold"
-                               FontSize="18"
-                               TextAlignment="Center" />
+                        <TextBlock Text="Najbliższe Wydarzenie" Foreground="#CDE6F8" FontWeight="Bold" FontSize="18" TextAlignment="Center" />
 
-                        <TextBlock x:Name="OtherEventTitleTextBlock"
-                               Text="Ładowanie..."
-                               Foreground="#E6F6FF"
-                               FontWeight="Bold"
-                               FontSize="16"
-                               TextAlignment="Center" />
-
-                        <TextBlock x:Name="OtherEventDateTextBlock"
-                               Text="Data: ---"
-                               Foreground="#CDE6F8"
-                               FontWeight="SemiBold"
-                               FontSize="14"
-                               TextAlignment="Center" />
-
-                        <TextBlock x:Name="OtherEventLocationTextBlock"
-                               Text="Miejsce: ---"
-                               Foreground="#CDE6F8"
-                               FontWeight="SemiBold"
-                               FontSize="14"
-                               TextAlignment="Center" />
+                        <TextBlock Text="{x:Bind ViewModel.NextOtherEventTitle, Mode=OneWay}"
+                                   Foreground="#E6F6FF" FontWeight="Bold" FontSize="16" TextAlignment="Center" TextWrapping="Wrap" />
+                        <TextBlock Text="{x:Bind ViewModel.NextOtherEventDate, Mode=OneWay}"
+                                   Foreground="#CDE6F8" FontWeight="SemiBold" FontSize="14" TextAlignment="Center" />
+                        <TextBlock Text="{x:Bind ViewModel.NextOtherEventLocation, Mode=OneWay}"
+                                   Foreground="#CDE6F8" FontWeight="SemiBold" FontSize="14" TextAlignment="Center" />
                     </StackPanel>
 
                     <Border BorderThickness="0,0,0,1" BorderBrush="#9ECBFF" Margin="0,15,0,15"/>
 
-
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Bottom" Spacing="8">
-                        <TextBlock Text="Kolejne Wydarzenie"
-                               Foreground="#CDE6F8"
-                               FontWeight="Bold"
-                               FontSize="18"
-                               TextAlignment="Center" />
+                        <TextBlock Text="Kolejne Wydarzenie" Foreground="#CDE6F8" FontWeight="Bold" FontSize="18" TextAlignment="Center" />
 
-                        <TextBlock x:Name="NextOtherEventTitleTextBlock"
-                               Text="Ładowanie..."
-                               Foreground="#E6F6FF"
-                               FontWeight="Bold"
-                               FontSize="16"
-                               TextAlignment="Center" />
-
-                        <TextBlock x:Name="NextOtherEventDateTextBlock"
-                               Text="Data: ---"
-                               Foreground="#CDE6F8"
-                               FontWeight="SemiBold"
-                               FontSize="14"
-                               TextAlignment="Center" />
-
-                        <TextBlock x:Name="NextOtherEventLocationTextBlock"
-                               Text="Miejsce: ---"
-                               Foreground="#CDE6F8"
-                               FontWeight="SemiBold"
-                               FontSize="14"
-                               TextAlignment="Center" />
+                        <TextBlock Text="{x:Bind ViewModel.SubOtherEventTitle, Mode=OneWay}"
+                                   Foreground="#E6F6FF" FontWeight="Bold" FontSize="16" TextAlignment="Center" TextWrapping="Wrap"/>
+                        <TextBlock Text="{x:Bind ViewModel.SubOtherEventDate, Mode=OneWay}"
+                                   Foreground="#CDE6F8" FontWeight="SemiBold" FontSize="14" TextAlignment="Center" />
+                        <TextBlock Text="{x:Bind ViewModel.SubOtherEventLocation, Mode=OneWay}"
+                                   Foreground="#CDE6F8" FontWeight="SemiBold" FontSize="14" TextAlignment="Center" />
                     </StackPanel>
                 </StackPanel>
-
 
                 <StackPanel Grid.Column="1">
-
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Spacing="8">
-                        <TextBlock Text="Najbliższy Mecz"
-                               Foreground="#CDE6F8"
-                               FontWeight="Bold"
-                               FontSize="18"
-                               TextAlignment="Center" />
+                        <TextBlock Text="Najbliższy Mecz" Foreground="#CDE6F8" FontWeight="Bold" FontSize="18" TextAlignment="Center" />
 
-                        <TextBlock x:Name="MatchTitleTextBlock"
-                               Text="Ładowanie..."
-                               Foreground="#E6F6FF"
-                               FontWeight="Bold"
-                               FontSize="16"
-                               TextAlignment="Center" />
-
-                        <TextBlock x:Name="MatchDateTextBlock"
-                               Text="Data: ---"
-                               Foreground="#CDE6F8"
-                               FontWeight="SemiBold"
-                               FontSize="14"
-                               TextAlignment="Center" />
-
-                        <TextBlock x:Name="MatchLocationTextBlock"
-                               Text="Miejsce: ---"
-                               Foreground="#CDE6F8"
-                               FontWeight="SemiBold"
-                               FontSize="14"
-                               TextAlignment="Center" />
+                        <TextBlock Text="{x:Bind ViewModel.NextMatchTitle, Mode=OneWay}"
+                                   Foreground="#E6F6FF" FontWeight="Bold" FontSize="16" TextAlignment="Center" TextWrapping="Wrap"/>
+                        <TextBlock Text="{x:Bind ViewModel.NextMatchDate, Mode=OneWay}"
+                                   Foreground="#CDE6F8" FontWeight="SemiBold" FontSize="14" TextAlignment="Center" />
+                        <TextBlock Text="{x:Bind ViewModel.NextMatchLocation, Mode=OneWay}"
+                                   Foreground="#CDE6F8" FontWeight="SemiBold" FontSize="14" TextAlignment="Center" />
                     </StackPanel>
 
                     <Border BorderThickness="0,0,0,1" BorderBrush="#9ECBFF" Margin="0,15,0,15"/>
 
-
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Bottom" Spacing="8">
-                        <TextBlock Text="Kolejny Mecz"
-                               Foreground="#CDE6F8"
-                               FontWeight="Bold"
-                               FontSize="18"
-                               TextAlignment="Center" />
+                        <TextBlock Text="Kolejny Mecz" Foreground="#CDE6F8" FontWeight="Bold" FontSize="18" TextAlignment="Center" />
 
-                        <TextBlock x:Name="NextMatchTitleTextBlock"
-                               Text="Ładowanie..."
-                               Foreground="#E6F6FF"
-                               FontWeight="Bold"
-                               FontSize="16"
-                               TextAlignment="Center" />
-
-                        <TextBlock x:Name="NextMatchDateTextBlock"
-                               Text="Data: ---"
-                               Foreground="#CDE6F8"
-                               FontWeight="SemiBold"
-                               FontSize="14"
-                               TextAlignment="Center" />
-
-                        <TextBlock x:Name="NextMatchLocationTextBlock"
-                               Text="Miejsce: ---"
-                               Foreground="#CDE6F8"
-                               FontWeight="SemiBold"
-                               FontSize="14"
-                               TextAlignment="Center" />
+                        <TextBlock Text="{x:Bind ViewModel.SubMatchTitle, Mode=OneWay}"
+                                   Foreground="#E6F6FF" FontWeight="Bold" FontSize="16" TextAlignment="Center" TextWrapping="Wrap"/>
+                        <TextBlock Text="{x:Bind ViewModel.SubMatchDate, Mode=OneWay}"
+                                   Foreground="#CDE6F8" FontWeight="SemiBold" FontSize="14" TextAlignment="Center" />
+                        <TextBlock Text="{x:Bind ViewModel.SubMatchLocation, Mode=OneWay}"
+                                   Foreground="#CDE6F8" FontWeight="SemiBold" FontSize="14" TextAlignment="Center" />
                     </StackPanel>
                 </StackPanel>
-
             </Grid>
         </Border>
 
         <Border Grid.Row="2" Grid.Column="2" Margin="8" Background="#32404A" CornerRadius="10" BorderBrush="#9ECBFF" BorderThickness="3" Padding="12">
-            <Button x:Name="TeamManagementButton" Click="TeamManagementButton_Click" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Button Command="{x:Bind ViewModel.GoToTeamManagementCommand}" 
+                    Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="8">
                     <TextBlock Text="Zarządzaj zespołem" Foreground="#CDE6F8" FontWeight="Bold" FontSize="20" TextAlignment="Center" />
                     <Image Source="/Assets/teammanagementimage.png" Width="96" Height="96" />

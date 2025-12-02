@@ -25,7 +25,7 @@ namespace SoccerLink.ViewModels
         private bool _red; public bool HasRedCard { get => _red; set => SetProperty(ref _red, value); }
         private bool _clean; public bool CleanSheet { get => _clean; set => SetProperty(ref _clean, value); }
 
-        // Komendy dla przycisków +/- (bezparametrowe, bo kontekst to ten obiekt)
+        // Komendy dla przycisków +/-
         public ICommand IncGoalCommand { get; }
         public ICommand DecGoalCommand { get; }
         public ICommand IncShotCommand { get; }
@@ -44,9 +44,34 @@ namespace SoccerLink.ViewModels
         public PlayerStatsItemViewModel(Zawodnik player)
         {
             Player = player;
+
+            // Gole
             IncGoalCommand = new RelayCommand(() => Goals++);
             DecGoalCommand = new RelayCommand(() => { if (Goals > 0) Goals--; });
-            // W prawdziwym kodzie warto dodać komendy dla reszty statystyk
+
+            // Strzały (Ogółem)
+            IncShotCommand = new RelayCommand(() => Shots++);
+            DecShotCommand = new RelayCommand(() => { if (Shots > 0) Shots--; });
+
+            // Strzały Celne
+            IncShotOnCommand = new RelayCommand(() => ShotsOnTarget++);
+            DecShotOnCommand = new RelayCommand(() => { if (ShotsOnTarget > 0) ShotsOnTarget--; });
+
+            // Strzały Niecelne
+            IncShotOffCommand = new RelayCommand(() => ShotsOffTarget++);
+            DecShotOffCommand = new RelayCommand(() => { if (ShotsOffTarget > 0) ShotsOffTarget--; });
+
+            // Podania
+            IncPassCommand = new RelayCommand(() => Passes++);
+            DecPassCommand = new RelayCommand(() => { if (Passes > 0) Passes--; });
+
+            // Faule
+            IncFoulCommand = new RelayCommand(() => Fouls++);
+            DecFoulCommand = new RelayCommand(() => { if (Fouls > 0) Fouls--; });
+
+            // Żółte kartki
+            IncYellowCommand = new RelayCommand(() => YellowCards++);
+            DecYellowCommand = new RelayCommand(() => { if (YellowCards > 0) YellowCards--; });
         }
 
         // Helper do łatwej zmiany statystyk z poziomu głównego VM (np. globalne czyste konto)

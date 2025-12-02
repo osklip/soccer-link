@@ -1,25 +1,10 @@
+// osklip/soccer-link/soccer-link-e0c06893844287e5a5f4d82194d873fa5c12266b/Views/LoginPage.xaml.cs
+
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
-using SoccerLink.Models;
-using SoccerLink.ModelViews;
-using SoccerLink.Services;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.System;
-
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
+using SoccerLink.ModelViews; // U¿ywasz ModelViews zamiast ViewModels
+// ... reszta usingów ...
 
 namespace SoccerLink.Views
 {
@@ -45,7 +30,8 @@ namespace SoccerLink.Views
         {
             if (ViewModel != null)
             {
-                ViewModel.Password = PasswordBox.Password;
+                // To jest kluczowy wiersz, który ustawia has³o w ViewModelu
+                ViewModel.Password = PasswordBox.Password; // PasswordBox to x:Name z XAML
             }
         }
     }

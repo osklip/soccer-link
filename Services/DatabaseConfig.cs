@@ -13,7 +13,16 @@ namespace SoccerLink.Services
         public static async Task<IDatabaseClient> CreateClientAsync()
         {
             return await DatabaseClient.Create(o => {
-                o.Url = Secrets.Url;
+                // Pobieramy URL z sekretów
+                var url = Secrets.Url;
+
+                // Biblioteka wymaga schematu https://, więc jeśli podano libsql://, zamieniamy go
+                if (!string.IsNullOrEmpty(url) && url.StartsWith("libsql://"))
+                {
+                    url = "https://" + url.Substring("libsql://".Length);
+                }
+
+                o.Url = url;
                 o.AuthToken = Secrets.Token;
                 o.UseHttps = true;
             });

@@ -6,7 +6,12 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="using:SoccerLink.Models"
+    xmlns:converters="using:SoccerLink.Helpers"
     mc:Ignorable="d">
+
+    <Page.Resources>
+        <converters:BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </Page.Resources>
 
     <Grid Background="{StaticResource AppBackgroundBrush}" Padding="24">
         <Grid.RowDefinitions>
@@ -15,38 +20,51 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Spacing="5" Margin="0,0,0,20">
-            <Button x:Name="BackButton" Content="⟵ Powrót" Click="BackButton_Click" Style="{StaticResource BackButtonStyle}" />
+            <Button Content="⟵ Powrót" 
+                    Command="{x:Bind ViewModel.NavigateBackCommand}" 
+                    Style="{StaticResource BackButtonStyle}" 
+                    FontSize="18"/>
             <TextBlock Text="Wybierz mecz do uzupełnienia" Style="{StaticResource HeaderTextStyle}"/>
             <TextBlock Text="Poniższe mecze nie mają jeszcze kompletnych statystyk." Style="{StaticResource SubHeaderTextStyle}"/>
         </StackPanel>
 
-        <ListView x:Name="MatchesListView" Grid.Row="1" SelectionChanged="MatchesListView_SelectionChanged">
-            <ListView.ItemTemplate>
-                <DataTemplate x:DataType="models:Mecz">
-                    <Border Background="{StaticResource CardBackgroundBrush}" CornerRadius="8" Margin="0,4" Padding="16" BorderBrush="{StaticResource CardBorderBrush}" BorderThickness="1">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
+        <Grid Grid.Row="1">
+            <ListView x:Name="MatchesListView" 
+                      ItemsSource="{x:Bind ViewModel.Matches, Mode=OneWay}"
+                      SelectionChanged="MatchesListView_SelectionChanged"
+                      SelectionMode="Single">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Mecz">
+                        <Border Background="{StaticResource CardBackgroundBrush}" CornerRadius="8" Margin="0,4" Padding="16" BorderBrush="{StaticResource CardBorderBrush}" BorderThickness="1">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
 
-                            <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,20,0">
-                                <TextBlock Text="{x:Bind DataDisplay}" Foreground="{StaticResource TextAccentBrush}" FontWeight="Bold" FontSize="16"/>
-                                <TextBlock Text="{x:Bind GodzinaDisplay}" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" Opacity="0.8"/>
-                            </StackPanel>
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,20,0">
+                                    <TextBlock Text="{x:Bind DataDisplay}" Foreground="{StaticResource TextAccentBrush}" FontWeight="Bold" FontSize="16"/>
+                                    <TextBlock Text="{x:Bind GodzinaDisplay}" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" Opacity="0.8"/>
+                                </StackPanel>
 
-                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                <TextBlock Text="Mecz przeciwko:" FontSize="12" Foreground="{StaticResource TextMutedBrush}"/>
-                                <TextBlock Text="{x:Bind Przeciwnik}" FontSize="18" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold"/>
-                                <TextBlock Text="{x:Bind Miejsce}" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" FontStyle="Italic" Opacity="0.7"/>
-                            </StackPanel>
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock Text="Mecz przeciwko:" FontSize="12" Foreground="{StaticResource TextMutedBrush}"/>
+                                    <TextBlock Text="{x:Bind Przeciwnik}" FontSize="18" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold"/>
+                                    <TextBlock Text="{x:Bind Miejsce}" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" FontStyle="Italic" Opacity="0.7"/>
+                                </StackPanel>
 
-                            <FontIcon Grid.Column="2" Glyph="&#xE70F;" FontFamily="Segoe MDL2 Assets" Foreground="{StaticResource TextMutedBrush}" FontSize="20"/>
-                        </Grid>
-                    </Border>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+                                <FontIcon Grid.Column="2" Glyph="&#xE70F;" FontFamily="Segoe MDL2 Assets" Foreground="{StaticResource TextMutedBrush}" FontSize="20"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <TextBlock Text="{x:Bind ViewModel.StatusMessage, Mode=OneWay}"
+                       Visibility="{x:Bind ViewModel.IsStatusVisible, Mode=OneWay, Converter={StaticResource BoolToVis}}"
+                       HorizontalAlignment="Center" VerticalAlignment="Center"
+                       Foreground="#CDE6F8" FontSize="16" FontStyle="Italic"/>
+        </Grid>
     </Grid>
 </Page>

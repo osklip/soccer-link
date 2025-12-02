@@ -1,52 +1,39 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using SoccerLink.Models;
-using SoccerLink.Services; // Pamiêtaj o imporcie serwisów
+using SoccerLink.ViewModels;
 using System;
-using System.Linq;
 
 namespace SoccerLink.Views
 {
     public sealed partial class StatsPlayerPage : Page
     {
+        public StatsPlayerViewModel ViewModel { get; }
+
         public StatsPlayerPage()
         {
-            InitializeComponent();
+            ViewModel = new StatsPlayerViewModel();
+            this.InitializeComponent();
+
+            ViewModel.RequestNavigateBack += (s, e) => this.Frame.Navigate(typeof(StatsNaviPage));
+            ViewModel.RequestNavigateHome += (s, e) => this.Frame.Navigate(typeof(DashboardPage));
+            ViewModel.RequestNavigateToDetails += (s, player) => this.Frame.Navigate(typeof(PlayerStatsDetailsPage), player);
+
             this.Loaded += StatsPlayerPage_Loaded;
         }
 
         private async void StatsPlayerPage_Loaded(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                // Pobieramy prawdziwych zawodników z bazy
-                var players = await ZawodnikService.PobierzZawodnikowDlaAktualnegoTreneraAsync();
-                PlayersListView.ItemsSource = players;
-            }
-            catch (Exception ex)
-            {
-                // Opcjonalnie: obs³uga b³êdu
-                System.Diagnostics.Debug.WriteLine($"B³¹d ³adowania graczy: {ex.Message}");
-            }
+            await ViewModel.LoadPlayersAsync();
         }
 
         private void PlayersListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (PlayersListView.SelectedItem is Zawodnik selectedPlayer)
             {
-                // Przekazujemy prawdziwy obiekt Zawodnika, który ma ID z bazy
-                this.Frame.Navigate(typeof(PlayerStatsDetailsPage), selectedPlayer);
+                ViewModel.SelectPlayer(selectedPlayer);
+                PlayersListView.SelectedItem = null; // Reset wyboru
             }
-        }
-
-        private void BackButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(StatsNaviPage));
-        }
-
-        private void HomeButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(DashboardPage));
         }
     }
 }

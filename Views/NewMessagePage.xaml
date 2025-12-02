@@ -5,7 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:models="using:SoccerLink.Models"
+    xmlns:viewmodels="using:SoccerLink.ViewModels"
     mc:Ignorable="d">
 
     <Grid Background="#405861" Padding="24">
@@ -17,7 +17,7 @@
         <StackPanel Grid.Row="0" Spacing="12" Margin="0,0,0,20">
             <Button x:Name="BackButton" 
                     Content="⟵ Powrót" 
-                    Click="BackButton_Click" 
+                    Command="{x:Bind ViewModel.CancelCommand}" 
                     HorizontalAlignment="Left"
                     Background="Transparent"
                     BorderThickness="0"
@@ -54,7 +54,7 @@
                         <Button x:Name="SendAllButton"
                                 Grid.Row="0"
                                 Content="ZAZNACZ WSZYSTKICH ZAWODNIKÓW"
-                                Click="SendAllButton_Click"
+                                Command="{x:Bind ViewModel.SendAllCommand}"
                                 HorizontalAlignment="Stretch"
                                 Background="#86A9C8"
                                 Foreground="#2F4450"
@@ -64,21 +64,26 @@
 
                         <ListView x:Name="RecipientListView" 
                                   Grid.Row="1"
-                                  SelectionMode="Multiple"
+                                  ItemsSource="{x:Bind ViewModel.Recipients, Mode=OneWay}"
+                                  SelectionMode="None"
                                   Background="#BFBFBF" 
                                   CornerRadius="8"
                                   Margin="0,8,0,0"
                                   BorderThickness="0">
                             <ListView.ItemTemplate>
-                                <DataTemplate x:DataType="models:Zawodnik">
-                                    <TextBlock Text="{x:Bind Nazwisko}" Foreground="#2A5670" FontWeight="SemiBold"/>
+                                <DataTemplate x:DataType="viewmodels:RecipientItemViewModel">
+                                    <CheckBox IsChecked="{x:Bind IsSelected, Mode=TwoWay}" 
+                                              Content="{x:Bind DisplayName}"
+                                              Foreground="#2A5670" 
+                                              FontWeight="SemiBold"
+                                              Margin="0,2"/>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
 
                         <TextBlock x:Name="SelectedRecipientsTextBlock"
                                    Grid.Row="2"
-                                   Text="Wybrani: 0 zawodników"
+                                   Text="{x:Bind ViewModel.RecipientsCountText, Mode=OneWay}"
                                    Foreground="#CDE6F8"
                                    Margin="0,8,0,0"
                                    TextWrapping="Wrap"/>
@@ -86,6 +91,7 @@
 
                     <TextBlock Text="Temat wiadomości" Foreground="#CDE6F8" FontWeight="Bold" FontSize="16"/>
                     <TextBox x:Name="SubjectTextBox" 
+                             Text="{x:Bind ViewModel.Subject, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              PlaceholderText="Wpisz temat..."
                              Background="#BFBFBF" 
                              CornerRadius="8" 
@@ -93,6 +99,7 @@
 
                     <TextBlock Text="Treść wiadomości" Foreground="#CDE6F8" FontWeight="Bold" FontSize="16"/>
                     <TextBox x:Name="BodyTextBox" 
+                             Text="{x:Bind ViewModel.Body, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              Height="150"
                              TextWrapping="Wrap"
                              AcceptsReturn="True"
@@ -103,7 +110,7 @@
 
                     <Button x:Name="SendButton"
                             Content="Wyślij wiadomość" 
-                            Click="SendButton_Click"
+                            Command="{x:Bind ViewModel.SendCommand}"
                             HorizontalAlignment="Center"
                             Background="#2A5670" 
                             Foreground="#E6F6FF" 
@@ -113,7 +120,8 @@
                             Margin="0,10,0,0"/>
 
                     <TextBlock x:Name="StatusTextBlock" 
-                               Foreground="#C0392B" 
+                               Text="{x:Bind ViewModel.StatusMessage, Mode=OneWay}"
+                               Foreground="{x:Bind ViewModel.StatusColor, Mode=OneWay}"
                                HorizontalAlignment="Center" 
                                Margin="0,8,0,0"/>
 
