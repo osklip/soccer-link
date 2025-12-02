@@ -9,6 +9,25 @@
             <ResourceDictionary.MergedDictionaries>
                 <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
             </ResourceDictionary.MergedDictionaries>
+
+            <SolidColorBrush x:Key="AppBackgroundBrush" Color="#405861"/>
+
+            <SolidColorBrush x:Key="CardBackgroundBrush" Color="#32404A"/>
+
+            <SolidColorBrush x:Key="InputBackgroundBrush" Color="#BFBFBF"/>
+
+            <SolidColorBrush x:Key="PrimaryTextBrush" Color="#E6F6FF"/>
+
+            <SolidColorBrush x:Key="SecondaryTextBrush" Color="#CDE6F8"/>
+
+            <SolidColorBrush x:Key="DarkTextBrush" Color="#2A5670"/>
+
+            <SolidColorBrush x:Key="AccentGoldBrush" Color="#FFD700"/>
+            <SolidColorBrush x:Key="AccentBlueBrush" Color="#86A9C8"/>
+            <SolidColorBrush x:Key="BorderLightBrush" Color="#9ECBFF"/>
+
+            <SolidColorBrush x:Key="ErrorBrush" Color="#C0392B"/>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

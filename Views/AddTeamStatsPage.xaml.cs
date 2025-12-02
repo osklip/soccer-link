@@ -21,7 +21,7 @@ namespace SoccerLink.Views
             if (e.Parameter is Mecz match)
             {
                 _selectedMatch = match;
-                MatchTitleText.Text = $"{_selectedMatch.Data} vs {_selectedMatch.Przeciwnik}";
+                MatchTitleText.Text = $"{_selectedMatch.DataDisplay} vs {_selectedMatch.Przeciwnik}";
             }
         }
 

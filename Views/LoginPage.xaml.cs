@@ -6,6 +6,7 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using SoccerLink.Models;
+using SoccerLink.ModelViews;
 using SoccerLink.Services;
 using System;
 using System.Collections.Generic;
@@ -27,26 +28,25 @@ namespace SoccerLink.Views
     /// </summary>
     public sealed partial class LoginPage : Page
     {
+        public LoginViewModel ViewModel { get; }
+
         public LoginPage()
         {
-            InitializeComponent();
+            ViewModel = new LoginViewModel();
+            this.InitializeComponent();
+
+            // Subskrypcja zdarzeñ nawigacji z ViewModelu
+            ViewModel.RequestNavigateToDashboard += (s, e) => this.Frame.Navigate(typeof(DashboardPage));
+            ViewModel.RequestNavigateToRegister += (s, e) => this.Frame.Navigate(typeof(RegisterPage));
         }
 
-        private async void LoginButton_Click(object sender, RoutedEventArgs e)
+        // Rêczne przekazanie has³a do ViewModelu (PasswordBox nie wspiera Bindingu)
+        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            string email = EmailTextBox.Text;
-            string password = PasswordBox.Password;
-            var trener = await LoginService.LoginAsync(email, password);
-            if (trener != null)
+            if (ViewModel != null)
             {
-                SessionService.SetUser(trener);
-                this.Frame.Navigate(typeof(DashboardPage));
+                ViewModel.Password = PasswordBox.Password;
             }
-        }
-
-        private void RegisterButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(RegisterPage));
         }
     }
 }

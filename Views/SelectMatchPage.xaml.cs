@@ -18,9 +18,9 @@ namespace SoccerLink.Views
             // SYMULACJA DANYCH: Mecze bez statystyk
             var matches = new List<Mecz>
             {
-                new Mecz { Przeciwnik = "FC Barcelona", Data = "2025-11-20", Miejsce = "Camp Nou" },
-                new Mecz { Przeciwnik = "Real Madryt", Data = "2025-11-15", Miejsce = "Santiago Bernabéu" },
-                new Mecz { Przeciwnik = "Bayern Monachium", Data = "2025-11-10", Miejsce = "Allianz Arena" }
+                new Mecz { Przeciwnik = "FC Barcelona", DataRozpoczecia = new System.DateTime(2025, 12, 20), Miejsce = "Camp Nou" },
+                new Mecz { Przeciwnik = "Real Madryt", DataRozpoczecia = new System.DateTime(2025, 12, 20), Miejsce = "Santiago Bernabéu" },
+                new Mecz { Przeciwnik = "Bayern Monachium", DataRozpoczecia = new System.DateTime(2025, 12, 20), Miejsce = "Allianz Arena" }
             };
 
             MatchesListView.ItemsSource = matches;

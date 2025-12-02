@@ -12,8 +12,10 @@ namespace SoccerLink.Models
         public string Nazwa { get; set; } // Nazwa TEXT NOT NULL
         public string Miejsce { get; set; } // Miejsce TEXT NOT NULL
         public string Data { get; set; } // Data TEXT NOT NULL
-        public string GodzinaStart { get; set; } // GodzinaStart TEXT NOT NULL
-        public string GodzinaKoniec { get; set; } // GodzinaKoniec TEXT
+        public DateTime DataRozpoczecia { get; set; }
+        public DateTime DataZakonczenia { get; set; }
+        public string DataDisplay => DataRozpoczecia.ToString("dd.MM.yyyy");
+        public string GodzinaRangeDisplay => $"{DataRozpoczecia:HH:mm} - {DataZakonczenia:HH:mm}";
         public string Opis { get; set; } // Opis TEXT
         public int TrenerID { get; set; } // TrenerID INTEGER NOT NULL
     }

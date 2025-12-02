@@ -20,15 +20,14 @@ namespace SoccerLink.Views
             StartClock();
         }
 
-        // 2. NOWY KONSTRUKTOR przyjmuj¹cy zawodnika
-        internal PlayerStatsDetailsPage(Zawodnik player) : this()
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            _selectedPlayer = player;
-            if (_selectedPlayer != null)
+            base.OnNavigatedTo(e);
+            if (e.Parameter is Zawodnik player)
             {
+                _selectedPlayer = player;
                 PlayerNameTextBlock.Text = $"{_selectedPlayer.Imie} {_selectedPlayer.Nazwisko}";
-                // Tutaj mo¿na za³adowaæ dane dla konkretnego ID, np:
-                // LoadStatsForPlayer("Season 24/25");
+                // Tutaj mo¿na dodaæ logikê ³adowania statystyk dla tego ID
             }
         }
 
@@ -91,8 +90,14 @@ namespace SoccerLink.Views
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            // Powrót do listy (przez podmianê Content)
-            this.Frame.Navigate(typeof(StatsPlayerPage));
+            if (this.Frame.CanGoBack)
+            {
+                this.Frame.GoBack();
+            }
+            else
+            {
+                this.Frame.Navigate(typeof(StatsPlayerPage));
+            }
         }
 
         private void HomeButton_Click(object sender, RoutedEventArgs e)

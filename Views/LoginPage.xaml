@@ -3,125 +3,66 @@
     x:Class="SoccerLink.Views.LoginPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:SoccerLink.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:helpers="using:SoccerLink.Helpers"
     mc:Ignorable="d">
 
-    <Grid Background="#2F4450">
-        <Border
-            Width="320"
-            CornerRadius="16"
-            Background="#98C9FF"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Padding="28">
+    <Page.Resources>
+        <helpers:BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </Page.Resources>
 
+    <Grid Background="{StaticResource AppBackgroundBrush}">
+        <Border Width="320" CornerRadius="16" Background="#98C9FF"
+                HorizontalAlignment="Center" VerticalAlignment="Center" Padding="28">
             <StackPanel HorizontalAlignment="Stretch" Spacing="18">
 
-                <TextBlock
-                    Text="Logowanie"
-                    FontSize="24"
-                    FontWeight="Bold"
-                    Foreground="#2A5670"
-                    HorizontalAlignment="Center"
-                    TextAlignment="Center"/>
+                <TextBlock Text="Logowanie" FontSize="24" FontWeight="Bold"
+                           Foreground="#2A5670" HorizontalAlignment="Center" TextAlignment="Center"/>
 
                 <StackPanel Spacing="6" HorizontalAlignment="Center">
-                    <TextBlock
-                        Text="Adres email"
-                        Foreground="#2A5670"
-                        FontWeight="Bold"
-                        FontSize="13" />
-
+                    <TextBlock Text="Adres email" Foreground="#2A5670" FontWeight="Bold" FontSize="13" />
                     <Grid Width="220" Height="44">
-                        <Border Background="#8A9AA6" CornerRadius="10" Margin="0,0,0,0" />
-                        <TextBox
-                            x:Name="EmailTextBox"
-                            Background="#BFBFBF"
-                            BorderThickness="0"
-                            CornerRadius="10"
-                            Foreground="Black"
-                            Padding="12,8"
-                            PlaceholderText="email@przyklad.com"
-                            FontWeight="Bold" />
+                        <Border Background="#8A9AA6" CornerRadius="10" />
+                        <TextBox Text="{x:Bind ViewModel.Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 Background="#BFBFBF" BorderThickness="0" CornerRadius="10"
+                                 Foreground="Black" Padding="12,8" PlaceholderText="email@przyklad.com" FontWeight="Bold" />
                     </Grid>
                 </StackPanel>
 
                 <StackPanel Spacing="6" HorizontalAlignment="Center">
-                    <TextBlock
-                        Text="Hasło"
-                        Foreground="#2A5670"
-                        FontWeight="Bold"
-                        FontSize="13" />
-
+                    <TextBlock Text="Hasło" Foreground="#2A5670" FontWeight="Bold" FontSize="13" />
                     <Grid Width="220" Height="44">
-                        <Border Background="#8A9AA6" CornerRadius="10" Margin="0,0,0,0" />
-                        <PasswordBox
-                            x:Name="PasswordBox"
-                            Background="#BFBFBF"
-                            BorderThickness="0"
-                            CornerRadius="10"
-                            Foreground="Black"
-                            Padding="12,8"
-                            FontWeight="Bold"
-                            PlaceholderText="Hasło" />
+                        <Border Background="#8A9AA6" CornerRadius="10" />
+                        <PasswordBox x:Name="PasswordBox"
+                                     PasswordChanged="PasswordBox_PasswordChanged"
+                                     Background="#BFBFBF" BorderThickness="0" CornerRadius="10"
+                                     Foreground="Black" Padding="12,8" FontWeight="Bold" PlaceholderText="Hasło" />
                     </Grid>
 
-                    <TextBlock
-                        Text="Nie pamiętam hasła"
-                        Foreground="#2A5670"
-                        FontSize="12"
-                        HorizontalAlignment="Left"
-                        Margin="4,8,0,0" />
+                    <TextBlock Text="{x:Bind ViewModel.ErrorMessage, Mode=OneWay}"
+                               Visibility="{x:Bind ViewModel.IsErrorVisible, Mode=OneWay, Converter={StaticResource BoolToVis}}"
+                               Foreground="Red" FontSize="12" HorizontalAlignment="Center" Margin="0,5,0,0" TextWrapping="Wrap" TextAlignment="Center"/>
                 </StackPanel>
 
                 <StackPanel HorizontalAlignment="Center">
                     <Grid Width="180" Height="44">
-                        <Border Background="#8A9AA6" CornerRadius="10" Margin="0,0,0,0" />
-                        <Button
-                            x:Name="LoginButton"
-                            Background="#BFBFBF"
-                            BorderThickness="0"
-                            CornerRadius="10"
-                            HorizontalAlignment="Stretch"
-                            Click="LoginButton_Click">
-
-                            <TextBlock
-                                Text="Zaloguj się"
-                                Foreground="#2A5670"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                FontWeight="Bold" />
-
+                        <Border Background="#8A9AA6" CornerRadius="10" />
+                        <Button Command="{x:Bind ViewModel.LoginCommand}"
+                                Background="#BFBFBF" BorderThickness="0" CornerRadius="10"
+                                HorizontalAlignment="Stretch">
+                            <TextBlock Text="Zaloguj się" Foreground="#2A5670" HorizontalAlignment="Center" FontWeight="Bold" />
                         </Button>
                     </Grid>
                 </StackPanel>
 
                 <StackPanel Spacing="6" HorizontalAlignment="Center" Margin="0,6,0,0">
-                    <TextBlock
-                        Text="Nie masz konta?"
-                        Foreground="#2A5670"
-                        FontSize="13"
-                        HorizontalAlignment="Center" />
-
+                    <TextBlock Text="Nie masz konta?" Foreground="#2A5670" FontSize="13" HorizontalAlignment="Center" />
                     <Grid Width="160" Height="36">
-                        <Border Background="#8A9AA6" CornerRadius="8" Margin="0,0,0,0" />
-                        <Button
-                            x:Name="RegisterButton"
-                            Click="RegisterButton_Click"
-                            Background="#BFBFBF"
-                            BorderThickness="0"
-                            CornerRadius="8"
-                            HorizontalAlignment="Stretch">
-
-                            <TextBlock
-                                Text="Zarejestruj się"
-                                Foreground="#2A5670"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                FontWeight="Bold" />
-
+                        <Border Background="#8A9AA6" CornerRadius="8" />
+                        <Button Command="{x:Bind ViewModel.GoToRegisterCommand}"
+                                Background="#BFBFBF" BorderThickness="0" CornerRadius="8" HorizontalAlignment="Stretch">
+                            <TextBlock Text="Zarejestruj się" Foreground="#2A5670" HorizontalAlignment="Center" FontWeight="Bold" />
                         </Button>
                     </Grid>
                 </StackPanel>

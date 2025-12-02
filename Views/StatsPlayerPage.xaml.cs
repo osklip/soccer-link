@@ -31,7 +31,7 @@ namespace SoccerLink.Views
         {
             if (PlayersListView.SelectedItem is Zawodnik selectedPlayer)
             {
-                this.Content = new PlayerStatsDetailsPage(selectedPlayer);
+                this.Frame.Navigate(typeof(PlayerStatsDetailsPage), selectedPlayer);
             }
         }
 

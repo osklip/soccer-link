@@ -1,27 +1,49 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Navigation;
 using SoccerLink.Services;
 using System;
 using System.Threading.Tasks;
 
 namespace SoccerLink.Views
 {
+    public class ConfirmDeleteEventArgs
+    {
+        public string EventType { get; set; }
+        public int EventId { get; set; }
+    }
+
     public sealed partial class ConfirmDeleteEventPage : Page
     {
-        private readonly string _eventType;
-        private readonly int _eventId;
+        private string _eventType;
+        private int _eventId;
 
         public ConfirmDeleteEventPage(string eventType, int eventId)
         {
             this.InitializeComponent();
-            _eventType = eventType;
-            _eventId = eventId;
-            ConfirmationTextBlock.Text = $"Czy na pewno usun规 wydarzenie typu '{_eventType}' o ID: {_eventId}? Tej operacji nie mo縩a cofn规.";
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            if (e.Parameter is ConfirmDeleteEventArgs args)
+            {
+                _eventType = args.EventType;
+                _eventId = args.EventId;
+                ConfirmationTextBlock.Text = $"Czy na pewno usun规 wydarzenie typu '{_eventType}' o ID: {_eventId}? Tej operacji nie mo縩a cofn规.";
+            }
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(CalendarPage));
+            if (this.Frame.CanGoBack)
+            {
+                this.Frame.GoBack();
+            }
+            else
+            {
+                this.Frame.Navigate(typeof(CalendarPage));
+            }
         }
 
         private async void DeleteButton_Click(object sender, RoutedEventArgs e)
@@ -35,7 +57,7 @@ namespace SoccerLink.Views
 
                 await Task.Delay(1000);
 
-                this.Content = new CalendarPage();
+                this.Frame.Navigate(typeof(CalendarPage));
             }
             catch (Exception ex)
             {

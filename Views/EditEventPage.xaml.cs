@@ -1,5 +1,6 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Navigation;
 using SoccerLink.Models;
 using SoccerLink.Services;
 using System;
@@ -8,18 +9,21 @@ using System.Threading.Tasks;
 
 namespace SoccerLink.Views
 {
+    public class EditEventArgs
+    {
+        public string EventType { get; set; }
+        public int EventId { get; set; }
+    }
+       
     public sealed partial class EditEventPage : Page
     {
-        private readonly string _eventType;
-        private readonly int _eventId;
+        private string _eventType;
+        private int _eventId;
         private UpcomingEvent? _eventToEdit;
 
         public EditEventPage(string eventType, int eventId)
         {
             this.InitializeComponent();
-            _eventType = eventType;
-            _eventId = eventId;
-
             this.Loaded += EditEventPage_Loaded;
         }
 
@@ -28,6 +32,16 @@ namespace SoccerLink.Views
             StatusTextBlock.Text = "£adowanie danych...";
             await LoadEventDetails();
             SetupFormVisibility();
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            if (e.Parameter is EditEventArgs args)
+            {
+                _eventType = args.EventType;
+                _eventId = args.EventId;
+            }
         }
 
         private async Task LoadEventDetails()

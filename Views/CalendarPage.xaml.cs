@@ -57,19 +57,11 @@ namespace SoccerLink.Views
                 var evt = ViewModel.GetEventById(eventId);
                 if (evt != null)
                 {
-                    // Przekazujemy parametry do strony edycji (typ i ID)
-                    // Uwaga: Konstruktor EditEventPage przyjmuje (string, int)
-                    // W WinUI 3 nawigacja z parametrami zazwyczaj odbywa siê przez Frame.Navigate(Type, parameter)
-                    // ale tutaj zachowujemy Twoj¹ strukturê tworzenia stron, 
-                    // lub dostosowujemy j¹ do Frame.Navigate jeœli zmienisz EditEventPage.
-
-                    // Dla spójnoœci z poprzednimi krokami (gdzie wprowadziliœmy Frame.Navigate), 
-                    // najlepiej by³oby przekazaæ obiekt/parametr w Navigate, ale EditEventPage wci¹¿ ma "stary" konstruktor.
-                    // Aby to zadzia³a³o teraz, utworzymy instancjê rêcznie (jak by³o wczeœniej) LUB 
-                    // (Lepsza opcja) Zostawiamy jak jest, bo EditEventPage nie by³ jeszcze refaktoryzowany pod k¹tem OnNavigatedTo.
-
-                    // Tymczasowo:
-                    this.Content = new EditEventPage(evt.EventType, eventId);
+                    this.Frame.Navigate(typeof(EditEventPage), new EditEventArgs
+                    {
+                        EventType = evt.EventType,
+                        EventId = eventId
+                    });
                 }
             }
         }
@@ -81,7 +73,11 @@ namespace SoccerLink.Views
                 var evt = ViewModel.GetEventById(eventId);
                 if (evt != null)
                 {
-                    this.Content = new ConfirmDeleteEventPage(evt.EventType, eventId);
+                    this.Frame.Navigate(typeof(ConfirmDeleteEventPage), new ConfirmDeleteEventArgs
+                    {
+                        EventType = evt.EventType,
+                        EventId = eventId
+                    });
                 }
             }
         }
