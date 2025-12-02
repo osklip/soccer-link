@@ -24,8 +24,13 @@
                 </Grid.RowDefinitions>
 
                 <Grid Grid.Row="0" Margin="8,8,8,4">
-                    <Button x:Name="BackButton" Content="⟵ Powrót" Click="BackButton_Click" HorizontalAlignment="Left" Padding="8,4" Background="#2F4450" Foreground="#CDE6F8" FontWeight="SemiBold" BorderThickness="0" />
-                    <Button x:Name="NewMessageButton" Content="+ Nowa" Click="NewMessageButton_Click" HorizontalAlignment="Right" Padding="8,4" Background="#2F4450" Foreground="#CDE6F8" FontWeight="SemiBold" BorderThickness="0" />
+                    <Button Content="⟵ Powrót" 
+                            Command="{x:Bind ViewModel.GoBackCommand}" 
+                            HorizontalAlignment="Left" Padding="8,4" Background="#2F4450" Foreground="#CDE6F8" FontWeight="SemiBold" BorderThickness="0" />
+
+                    <Button Content="+ Nowa" 
+                            Command="{x:Bind ViewModel.CreateNewMessageCommand}" 
+                            HorizontalAlignment="Right" Padding="8,4" Background="#2F4450" Foreground="#CDE6F8" FontWeight="SemiBold" BorderThickness="0" />
                 </Grid>
 
                 <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="8,0,8,4" VerticalAlignment="Center" Spacing="8">

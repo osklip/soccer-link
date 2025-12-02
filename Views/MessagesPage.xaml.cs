@@ -14,6 +14,10 @@ namespace SoccerLink.Views
         {
             ViewModel = new MessagesViewModel();
             this.InitializeComponent();
+
+            ViewModel.RequestNavigateBack += (s, e) => this.Frame.Navigate(typeof(DashboardPage));
+            ViewModel.RequestNavigateToNewMessage += (s, e) => this.Frame.Navigate(typeof(NewMessagePage));
+
             this.Loaded += MessagesPage_Loaded;
         }
 
@@ -24,30 +28,13 @@ namespace SoccerLink.Views
 
         private void MessagesFilterComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (ViewModel == null) return;
             var selectedTag = (MessagesFilterComboBox.SelectedItem as ComboBoxItem)?.Tag?.ToString();
-            if (selectedTag != null)
-            {
-                ViewModel.ApplyFilter(selectedTag);
-            }
+            if (selectedTag != null) ViewModel.ApplyFilter(selectedTag);
         }
 
         private void MessagesList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (MessagesList.SelectedItem is Wiadomosc msg)
-            {
-                ViewModel.SelectedMessage = msg;
-            }
-        }
-
-        private void BackButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(DashboardPage));
-        }
-
-        private void NewMessageButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(NewMessagePage));
+            if (MessagesList.SelectedItem is Wiadomosc msg) ViewModel.SelectedMessage = msg;
         }
     }
 }

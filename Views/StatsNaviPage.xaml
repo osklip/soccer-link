@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodels="using:SoccerLink.ViewModels"
     mc:Ignorable="d">
 
     <Page.Resources>
@@ -29,7 +30,7 @@
         <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="12">
             <Button x:Name="BackButton" 
                     Content="⟵ Powrót" 
-                    Click="BackButton_Click" 
+                    Command="{x:Bind ViewModel.GoBackCommand}" 
                     Background="Transparent"
                     BorderThickness="0"
                     FontSize="18"
@@ -45,7 +46,7 @@
                         Padding="20">
 
                 <Button x:Name="SoloStatsButton"
-                        Click="SoloStatsButton_Click"
+                        Command="{x:Bind ViewModel.GoToSoloStatsCommand}"
                         Style="{StaticResource NaviButtonStyle}">
                     <StackPanel VerticalAlignment="Center" Spacing="20">
                         <TextBlock Text="Statystyki Indywidualne" 
@@ -60,7 +61,7 @@
                 </Button>
 
                 <Button x:Name="TeamStatsButton"
-                        Click="TeamStatsButton_Click"
+                        Command="{x:Bind ViewModel.GoToTeamStatsCommand}"
                         Style="{StaticResource NaviButtonStyle}">
                     <StackPanel VerticalAlignment="Center" Spacing="20">
                         <TextBlock Text="Statystyki Drużynowe" 
@@ -75,7 +76,7 @@
                 </Button>
 
                 <Button x:Name="AddStatsButton"
-                        Click="AddStatsButton_Click"
+                        Command="{x:Bind ViewModel.GoToAddStatsCommand}"
                         Style="{StaticResource NaviButtonStyle}"
                         BorderBrush="#FFD700">
                     <StackPanel VerticalAlignment="Center" Spacing="20">

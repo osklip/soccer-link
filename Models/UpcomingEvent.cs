@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.UI.Xaml; // WAŻNE: Potrzebne do obsługi typu Visibility
 
 namespace SoccerLink.Models
 {
@@ -23,6 +24,13 @@ namespace SoccerLink.Models
                                            : $"{DisplayTimeStart} - {TimeEnd}";
 
         public string EventStyle => GetEventStyle(EventType);
+
+        // --- NOWE WŁAŚCIWOŚCI (To naprawi błąd) ---
+        public bool IsTraining => EventType == "Trening";
+
+        // Właściwość sterująca widocznością przycisku "Obecność"
+        public Visibility TrainingVisibility => IsTraining ? Visibility.Visible : Visibility.Collapsed;
+        // -------------------------------------------
 
         private static string GetEventStyle(string type)
         {

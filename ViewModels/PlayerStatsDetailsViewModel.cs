@@ -1,10 +1,9 @@
-﻿using SoccerLink.Models;
+﻿using SoccerLink.Helpers;
+using SoccerLink.Models;
 using SoccerLink.Services;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace SoccerLink.ViewModels
 {
@@ -12,23 +11,25 @@ namespace SoccerLink.ViewModels
     {
         private string _playerName = "Ładowanie...";
         private string _position = "-";
-
-        // Statystyki
         private string _goals = "-";
         private string _shots = "-";
         private string _shotsOn = "-";
         private string _shotsOff = "-";
         private string _passes = "-";
         private string _fouls = "-";
-        private string _cards = "- / -"; // Żółte / Czerwone
+        private string _cards = "- / -";
         private string _cleanSheets = "-";
 
-        public PlayerStatsDetailsViewModel() { }
+        public event EventHandler RequestNavigateBack;
+        public ICommand GoBackCommand { get; }
 
-        // Właściwości
+        public PlayerStatsDetailsViewModel()
+        {
+            GoBackCommand = new RelayCommand(() => RequestNavigateBack?.Invoke(this, EventArgs.Empty));
+        }
+
         public string PlayerName { get => _playerName; set => SetProperty(ref _playerName, value); }
         public string Position { get => _position; set => SetProperty(ref _position, value); }
-
         public string Goals { get => _goals; set => SetProperty(ref _goals, value); }
         public string Shots { get => _shots; set => SetProperty(ref _shots, value); }
         public string ShotsOn { get => _shotsOn; set => SetProperty(ref _shotsOn, value); }
@@ -45,7 +46,6 @@ namespace SoccerLink.ViewModels
             PlayerName = $"{player.Imie} {player.Nazwisko}";
             Position = player.Pozycja;
 
-            // Pobranie danych z serwisu (suma z wszystkich meczów)
             var stats = await StatsService.GetPlayerStatsSummaryAsync(player.ZawodnikId);
 
             Goals = stats.Gole.ToString();
@@ -54,12 +54,9 @@ namespace SoccerLink.ViewModels
             ShotsOff = stats.StrzalyNiecelne.ToString();
             Passes = stats.PodaniaCelne.ToString();
             Fouls = stats.Faule.ToString();
-
-            // Formatowanie kartek: Żółte / Czerwone (0 lub 1)
             int redCardCount = stats.CzerwonaKartka ? 1 : 0;
             Cards = $"{stats.ZolteKartki} / {redCardCount}";
-
-            CleanSheets = stats.CzysteKonto ? "Tak" : "Nie"; // lub liczba, zależnie jak zaimplementowałeś serwis
+            CleanSheets = stats.CzysteKonto ? "Tak" : "Nie";
         }
     }
 }

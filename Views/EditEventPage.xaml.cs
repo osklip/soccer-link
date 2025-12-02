@@ -6,7 +6,7 @@ using System;
 
 namespace SoccerLink.Views
 {
-    // Klasa argumentów (pozostawiamy j¹ tutaj lub w osobnym pliku, jeœli u¿ywana w innych miejscach)
+    // PRZYWRÓCONA KLASA: Potrzebna do nawigacji z CalendarPage
     public class EditEventArgs
     {
         public string EventType { get; set; }
@@ -22,7 +22,6 @@ namespace SoccerLink.Views
             ViewModel = new EditEventViewModel();
             this.InitializeComponent();
 
-            // Nawigacja powrotna po anulowaniu lub zapisie
             ViewModel.RequestNavigateBack += (s, e) =>
             {
                 if (this.Frame.CanGoBack) this.Frame.GoBack();
@@ -34,7 +33,6 @@ namespace SoccerLink.Views
         {
             base.OnNavigatedTo(e);
 
-            // Pobieranie parametrów przekazanych z CalendarPage
             if (e.Parameter is EditEventArgs args)
             {
                 await ViewModel.LoadEventAsync(args.EventId, args.EventType);

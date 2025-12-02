@@ -1,45 +1,25 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
+using SoccerLink.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
 
 namespace SoccerLink.Views
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class TeamManagementPage : Page
     {
+        public TeamManagementViewModel ViewModel { get; }
+
         public TeamManagementPage()
         {
-            InitializeComponent();
-        }
-        private void BackButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(DashboardPage));
-        }
+            ViewModel = new TeamManagementViewModel();
+            this.InitializeComponent();
 
-        private void ManagePlayersButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(PlayerListPage));
-        }
+            // Obs³uga nawigacji
+            ViewModel.RequestNavigateBack += (s, e) => this.Frame.Navigate(typeof(DashboardPage));
+            ViewModel.RequestNavigateToPlayerList += (s, e) => this.Frame.Navigate(typeof(PlayerListPage));
 
-        private void ManageSquadButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(DashboardPage));
+            // Tymczasowo przekierowuje do Dashboardu, poniewa¿ ekranu Sk³adu jeszcze nie ma (zgodnie z obecnym stanem projektu)
+            ViewModel.RequestNavigateToSquad += (s, e) => this.Frame.Navigate(typeof(DashboardPage));
         }
     }
 }

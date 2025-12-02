@@ -1,11 +1,12 @@
-﻿using SoccerLink.Models;
+﻿using SoccerLink.Helpers;
+using SoccerLink.Models;
 using SoccerLink.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace SoccerLink.ViewModels
 {
@@ -14,61 +15,38 @@ namespace SoccerLink.ViewModels
         private List<Wiadomosc> _allMessages = new();
         private ObservableCollection<Wiadomosc> _filteredMessages = new();
         private Wiadomosc? _selectedMessage;
-        private string _filterType = "received"; // "received" lub "sent"
+        private string _filterType = "received";
+
+        public event EventHandler RequestNavigateBack;
+        public event EventHandler RequestNavigateToNewMessage;
+
+        public ICommand GoBackCommand { get; }
+        public ICommand CreateNewMessageCommand { get; }
 
         public MessagesViewModel()
         {
-            // Konstruktor - inicjalizacja
+            GoBackCommand = new RelayCommand(() => RequestNavigateBack?.Invoke(this, EventArgs.Empty));
+            CreateNewMessageCommand = new RelayCommand(() => RequestNavigateToNewMessage?.Invoke(this, EventArgs.Empty));
         }
 
-        // Kolekcja, do której bindować będzie widok (ListView)
-        public ObservableCollection<Wiadomosc> FilteredMessages
-        {
-            get => _filteredMessages;
-            set => SetProperty(ref _filteredMessages, value);
-        }
+        public ObservableCollection<Wiadomosc> FilteredMessages { get => _filteredMessages; set => SetProperty(ref _filteredMessages, value); }
+        public Wiadomosc? SelectedMessage { get => _selectedMessage; set => SetProperty(ref _selectedMessage, value); }
 
-        // Aktualnie wybrana wiadomość (szczegóły)
-        public Wiadomosc? SelectedMessage
-        {
-            get => _selectedMessage;
-            set => SetProperty(ref _selectedMessage, value);
-        }
-
-        // Metoda ładowania danych
         public async Task LoadMessagesAsync()
         {
-            // Używamy serwisu (który zaktualizowaliśmy w kroku 1 o DatabaseConfig)
             _allMessages = await WiadomoscService.PobierzWiadomosciDlaAktualnegoTreneraAsync();
             ApplyFilter(_filterType);
         }
 
-        // Logika filtrowania
         public void ApplyFilter(string filterTag)
         {
             _filterType = filterTag;
             if (SessionService.AktualnyTrener == null) return;
-
             int trenerId = SessionService.AktualnyTrener.Id;
-            List<Wiadomosc> result;
-
-            if (_filterType == "sent")
-            {
-                result = _allMessages
-                    .Where(m => m.TypNadawcy == "Trener" && m.NadawcaID == trenerId)
-                    .ToList();
-            }
-            else // "received"
-            {
-                result = _allMessages
-                    .Where(m => m.TypOdbiorcy == "Trener" && m.OdbiorcaID == trenerId)
-                    .ToList();
-            }
-
-            // Aktualizacja kolekcji widoku
+            var result = (_filterType == "sent")
+                ? _allMessages.Where(m => m.TypNadawcy == "Trener" && m.NadawcaID == trenerId).ToList()
+                : _allMessages.Where(m => m.TypOdbiorcy == "Trener" && m.OdbiorcaID == trenerId).ToList();
             FilteredMessages = new ObservableCollection<Wiadomosc>(result);
-
-            // Reset wyboru
             SelectedMessage = null;
         }
     }

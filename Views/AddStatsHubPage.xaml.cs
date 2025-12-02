@@ -2,39 +2,32 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 using SoccerLink.Models;
+using SoccerLink.ViewModels;
+using System;
 
 namespace SoccerLink.Views
 {
     public sealed partial class AddStatsHubPage : Page
     {
-        private Mecz _selectedMatch;
+        public AddStatsHubViewModel ViewModel { get; }
 
-        public AddStatsHubPage() { InitializeComponent(); }
+        public AddStatsHubPage()
+        {
+            ViewModel = new AddStatsHubViewModel();
+            this.InitializeComponent();
+
+            ViewModel.RequestNavigateBack += (s, e) => this.Frame.Navigate(typeof(SelectMatchPage));
+            ViewModel.RequestNavigateToTeamStats += (s, match) => this.Frame.Navigate(typeof(AddTeamStatsPage), match);
+            ViewModel.RequestNavigateToPlayerStats += (s, match) => this.Frame.Navigate(typeof(AddPlayerStatsPage), match);
+        }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-
             if (e.Parameter is Mecz match)
             {
-                _selectedMatch = match;
-                MatchInfoTextBlock.Text = $"{_selectedMatch.DataDisplay} vs {_selectedMatch.Przeciwnik}";
-            }  
-        }
-
-        private void BackButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(SelectMatchPage));
-        }
-
-        private void TeamStatsButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(AddTeamStatsPage), _selectedMatch);
-        }
-
-        private void PlayerStatsButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(AddPlayerStatsPage), _selectedMatch);
+                ViewModel.Initialize(match);
+            }
         }
     }
 }

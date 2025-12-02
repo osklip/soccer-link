@@ -17,6 +17,13 @@ namespace SoccerLink.Views
         {
             ViewModel = new PlayerStatsDetailsViewModel();
             this.InitializeComponent();
+
+            ViewModel.RequestNavigateBack += (s, e) =>
+            {
+                if (this.Frame.CanGoBack) this.Frame.GoBack();
+                else this.Frame.Navigate(typeof(StatsPlayerPage));
+            };
+
             StartClock();
         }
 
@@ -42,12 +49,6 @@ namespace SoccerLink.Views
         {
             var polishCulture = new CultureInfo("pl-PL");
             DateTextBlock.Text = DateTime.Now.ToString("dd MMM yyyy   HH:mm", polishCulture);
-        }
-
-        private void BackButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Mo¿esz tu nawigowaæ bezpoœrednio do StatsPlayerPage
-            this.Frame.Navigate(typeof(StatsPlayerPage));
         }
     }
 }
