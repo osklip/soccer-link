@@ -17,7 +17,6 @@ namespace SoccerLink.Views
         {
             InitializeComponent();
             this.Loaded += NewMessagePage_Loaded;
-            // Dodajemy obs³ugê zdarzenia SelectionChanged, aby aktualizowaæ licznik
             RecipientListView.SelectionChanged += RecipientListView_SelectionChanged;
         }
 

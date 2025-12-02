@@ -31,13 +31,13 @@ namespace SoccerLink.Views
             if (MatchesListView.SelectedItem is Mecz selectedMatch)
             {
                 // Przechodzimy do HUB-a, przekazuj¹c wybrany mecz
-                this.Content = new AddStatsHubPage(selectedMatch);
+                this.Frame.Navigate(typeof(AddStatsHubPage), selectedMatch);
             }
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Content = new StatsNaviPage();
+            this.Frame.Navigate(typeof(StatsNaviPage));
         }
     }
 }

@@ -1,5 +1,6 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Navigation;
 using SoccerLink.Models;
 using System;
 using System.Collections.ObjectModel;
@@ -38,11 +39,20 @@ namespace SoccerLink.Views
 
         public AddPlayerStatsPage() { InitializeComponent(); }
 
-        internal AddPlayerStatsPage(Mecz match) : this()
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            _selectedMatch = match;
-            if (_selectedMatch != null) MatchTitleText.Text = $"{_selectedMatch.Data} vs {_selectedMatch.Przeciwnik}";
-            LoadMockPlayers();
+            base.OnNavigatedTo(e);
+            if (e.Parameter is Mecz match)
+            {
+                _selectedMatch = match;
+                MatchTitleText.Text = $"{_selectedMatch.Data} vs {_selectedMatch.Przeciwnik}";
+
+                // £adujemy graczy tylko raz
+                if (PlayersList.Count == 0)
+                {
+                    LoadMockPlayers();
+                }
+            }
         }
 
         private void LoadMockPlayers()
@@ -134,12 +144,12 @@ namespace SoccerLink.Views
             };
             await dialog.ShowAsync();
 
-            this.Content = new AddStatsHubPage(_selectedMatch);
+            this.Frame.Navigate(typeof(AddStatsHubPage), _selectedMatch);
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Content = new AddStatsHubPage(_selectedMatch);
+            this.Frame.Navigate(typeof(AddStatsHubPage), _selectedMatch);
         }
     }
 }

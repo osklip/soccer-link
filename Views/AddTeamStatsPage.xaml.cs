@@ -1,5 +1,6 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Navigation;
 using SoccerLink.Models;
 using System;
 
@@ -14,12 +15,12 @@ namespace SoccerLink.Views
             InitializeComponent();
         }
 
-        // Konstruktor przyjmuj¹cy mecz
-        internal AddTeamStatsPage(Mecz match) : this()
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            _selectedMatch = match;
-            if (_selectedMatch != null)
+            base.OnNavigatedTo(e);
+            if (e.Parameter is Mecz match)
             {
+                _selectedMatch = match;
                 MatchTitleText.Text = $"{_selectedMatch.Data} vs {_selectedMatch.Przeciwnik}";
             }
         }
@@ -54,14 +55,12 @@ namespace SoccerLink.Views
 
             await dialog.ShowAsync();
 
-            // Powrót do Huba
-            this.Content = new AddStatsHubPage(_selectedMatch);
+            this.Frame.Navigate(typeof(AddStatsHubPage), _selectedMatch);
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            // Powrót do Huba bez zapisu
-            this.Content = new AddStatsHubPage(_selectedMatch);
+            this.Frame.Navigate(typeof(AddStatsHubPage), _selectedMatch);
         }
     }
 }

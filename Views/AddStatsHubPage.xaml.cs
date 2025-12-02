@@ -1,5 +1,6 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Navigation;
 using SoccerLink.Models;
 
 namespace SoccerLink.Views
@@ -10,30 +11,30 @@ namespace SoccerLink.Views
 
         public AddStatsHubPage() { InitializeComponent(); }
 
-        internal AddStatsHubPage(Mecz match) : this()
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            _selectedMatch = match;
-            if (_selectedMatch != null)
+            base.OnNavigatedTo(e);
+
+            if (e.Parameter is Mecz match)
             {
+                _selectedMatch = match;
                 MatchInfoTextBlock.Text = $"{_selectedMatch.Data} vs {_selectedMatch.Przeciwnik}";
-            }
+            }  
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Content = new SelectMatchPage();
+            this.Frame.Navigate(typeof(SelectMatchPage));
         }
 
         private void TeamStatsButton_Click(object sender, RoutedEventArgs e)
         {
-            // Przechodzimy do formularza, który w³aœnie stworzyliœmy
-            this.Content = new AddTeamStatsPage(_selectedMatch);
+            this.Frame.Navigate(typeof(AddTeamStatsPage), _selectedMatch);
         }
 
         private void PlayerStatsButton_Click(object sender, RoutedEventArgs e)
         {
-            // Przejœcie do listy zawodników z licznikami
-            this.Content = new AddPlayerStatsPage(_selectedMatch);
+            this.Frame.Navigate(typeof(AddPlayerStatsPage), _selectedMatch);
         }
     }
 }
