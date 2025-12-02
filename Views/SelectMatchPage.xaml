@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <Page
     x:Class="SoccerLink.Views.SelectMatchPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -7,24 +8,22 @@
     xmlns:models="using:SoccerLink.Models"
     mc:Ignorable="d">
 
-    <Grid Background="#405861" Padding="24">
+    <Grid Background="{StaticResource AppBackgroundBrush}" Padding="24">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Spacing="12" Margin="0,0,0,20">
-            <Button x:Name="BackButton" Content="⟵ Powrót" Click="BackButton_Click" 
-                    Background="Transparent" BorderThickness="0" FontSize="18" Foreground="#CDE6F8" FontWeight="SemiBold" />
-
-            <TextBlock Text="Wybierz mecz do uzupełnienia" FontSize="24" FontWeight="Bold" Foreground="#E6F6FF"/>
-            <TextBlock Text="Poniższe mecze nie mają jeszcze kompletnych statystyk." FontSize="14" Foreground="#CDE6F8" Opacity="0.8"/>
+        <StackPanel Grid.Row="0" Spacing="5" Margin="0,0,0,20">
+            <Button x:Name="BackButton" Content="⟵ Powrót" Click="BackButton_Click" Style="{StaticResource BackButtonStyle}" />
+            <TextBlock Text="Wybierz mecz do uzupełnienia" Style="{StaticResource HeaderTextStyle}"/>
+            <TextBlock Text="Poniższe mecze nie mają jeszcze kompletnych statystyk." Style="{StaticResource SubHeaderTextStyle}"/>
         </StackPanel>
 
         <ListView x:Name="MatchesListView" Grid.Row="1" SelectionChanged="MatchesListView_SelectionChanged">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="models:Mecz">
-                    <Border Background="#32404A" CornerRadius="8" Margin="0,4" Padding="16">
+                    <Border Background="{StaticResource CardBackgroundBrush}" CornerRadius="8" Margin="0,4" Padding="16" BorderBrush="{StaticResource CardBorderBrush}" BorderThickness="1">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
@@ -32,14 +31,18 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Text="{x:Bind DataRozpoczecia}" Foreground="#86A9C8" VerticalAlignment="Center" Margin="0,0,20,0" FontWeight="Bold"/>
-
-                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                <TextBlock Text="Mecz przeciwko:" FontSize="12" Foreground="#CDE6F8" Opacity="0.6"/>
-                                <TextBlock Text="{x:Bind Przeciwnik}" FontSize="18" Foreground="#E6F6FF" FontWeight="Bold"/>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,20,0">
+                                <TextBlock Text="{x:Bind DataDisplay}" Foreground="{StaticResource TextAccentBrush}" FontWeight="Bold" FontSize="16"/>
+                                <TextBlock Text="{x:Bind GodzinaDisplay}" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" Opacity="0.8"/>
                             </StackPanel>
 
-                            <FontIcon Grid.Column="2" Glyph="&#xE70F;" FontFamily="Segoe MDL2 Assets" Foreground="#FFD700" FontSize="20"/>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock Text="Mecz przeciwko:" FontSize="12" Foreground="{StaticResource TextMutedBrush}"/>
+                                <TextBlock Text="{x:Bind Przeciwnik}" FontSize="18" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold"/>
+                                <TextBlock Text="{x:Bind Miejsce}" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" FontStyle="Italic" Opacity="0.7"/>
+                            </StackPanel>
+
+                            <FontIcon Grid.Column="2" Glyph="&#xE70F;" FontFamily="Segoe MDL2 Assets" Foreground="{StaticResource TextMutedBrush}" FontSize="20"/>
                         </Grid>
                     </Border>
                 </DataTemplate>
