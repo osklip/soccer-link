@@ -185,13 +185,24 @@ namespace SoccerLink.Services
 
         public static async Task DeleteEventAsync(string eventType, int eventId)
         {
-            if (SessionService.AktualnyTrener == null) throw new InvalidOperationException("Log in required");
+            if (SessionService.AktualnyTrener == null) throw new InvalidOperationException("Wymagane logowanie.");
+
             using var client = await DatabaseConfig.CreateClientAsync();
             var tid = SessionService.AktualnyTrener.Id;
 
-            string table = eventType switch { "Mecz" => "Mecz", "Trening" => "Trening", "Wydarzenie" => "Wydarzenie", _ => throw new Exception("Unknown type") };
+            // Ustalanie nazwy tabeli i kolumny ID
+            string table = eventType switch
+            {
+                "Mecz" => "Mecz",
+                "Trening" => "Trening",
+                "Wydarzenie" => "Wydarzenie",
+                _ => throw new Exception("Nieznany typ wydarzenia")
+            };
+
+            // Ważne: Kolumny w bazie nazywają się MeczID, TreningID, WydarzenieID
             string col = eventType + "ID";
 
+            // Wykonanie zapytania SQL
             await client.Execute($"DELETE FROM {table} WHERE {col}=? AND TrenerID=?", eventId, tid);
         }
     }

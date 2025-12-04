@@ -1,9 +1,7 @@
 ﻿using SoccerLink.Helpers;
 using SoccerLink.Services;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Text.RegularExpressions; // Dodano do obsługi Regex
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -18,7 +16,7 @@ namespace SoccerLink.ViewModels
         private string _lastName;
         private string _phoneNumber;
         private string _statusMessage;
-        private string _statusColor = "Red"; // Domyślnie czerwony (błąd)
+        private string _statusColor = "Red";
 
         public event EventHandler RequestNavigateToLogin;
 
@@ -46,6 +44,7 @@ namespace SoccerLink.ViewModels
 
         private bool CanRegister()
         {
+            // Podstawowe sprawdzenie czy pola nie są puste, żeby w ogóle aktywować przycisk
             return !string.IsNullOrWhiteSpace(Email) &&
                    !string.IsNullOrWhiteSpace(Password) &&
                    !string.IsNullOrWhiteSpace(PasswordRepeat) &&
@@ -59,26 +58,70 @@ namespace SoccerLink.ViewModels
             StatusMessage = "";
             StatusColor = "Red";
 
+            // --- WALIDACJA DANYCH ---
+
+            // 1. Walidacja adresu Email (format)
+            // Regex sprawdza: ciągznaków @ ciągznaków . domena (2-4 znaki)
+            if (!Regex.IsMatch(Email.Trim(), @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            {
+                StatusMessage = "Niepoprawny format adresu email.";
+                return;
+            }
+
+            // 2. Walidacja Hasła
+            // Wymagania: 1 duża, 1 mała, 1 cyfra, 1 znak specjalny, min. 8 znaków
+            // (?=.*[a-z]) - co najmniej jedna mała litera
+            // (?=.*[A-Z]) - co najmniej jedna duża litera
+            // (?=.*\d)    - co najmniej jedna cyfra
+            // (?=.*[\W_]) - co najmniej jeden znak specjalny (nie-alfanumeryczny lub podkreślnik)
+            // .{8,}       - minimum 8 znaków
+            var passwordRegex = new Regex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$");
+            if (!passwordRegex.IsMatch(Password))
+            {
+                StatusMessage = "Hasło musi mieć min. 8 znaków, zawierać dużą i małą literę, cyfrę oraz znak specjalny.";
+                return;
+            }
+
             if (Password != PasswordRepeat)
             {
                 StatusMessage = "Hasła nie są takie same.";
                 return;
             }
 
+            // 3. Walidacja Imienia i Nazwiska (brak cyfr)
+            // Sprawdzamy, czy string zawiera jakąkolwiek cyfrę (\d)
+            if (Regex.IsMatch(FirstName, @"\d") || Regex.IsMatch(LastName, @"\d"))
+            {
+                StatusMessage = "Imię i Nazwisko nie mogą zawierać cyfr.";
+                return;
+            }
+
+            // 4. Walidacja Numeru Telefonu (równo 9 cyfr, same cyfry)
+            // ^\d{9}$ - początek, dokładnie 9 cyfr, koniec
+            if (!Regex.IsMatch(PhoneNumber.Trim(), @"^\d{9}$"))
+            {
+                StatusMessage = "Numer telefonu musi składać się z dokładnie 9 cyfr.";
+                return;
+            }
+
+            // --- KONIEC WALIDACJI FORMATU ---
+
             try
             {
+                // Unikalność w bazie jest sprawdzana wewnątrz RegisterService
                 bool result = await RegisterService.RegisterAsync(Email, Password, FirstName, LastName, PhoneNumber);
 
                 if (result)
                 {
                     StatusColor = "Green";
                     StatusMessage = "Konto utworzone! Przekierowanie...";
-                    await System.Threading.Tasks.Task.Delay(1500);
+                    await Task.Delay(1500);
                     GoToLogin();
                 }
                 else
                 {
-                    StatusMessage = "Użytkownik z takim email lub telefonem już istnieje.";
+                    // Jeśli RegisterService zwróci false, oznacza to, że email lub telefon już istnieje w bazie
+                    StatusMessage = "Użytkownik z takim adresem email lub numerem telefonu już istnieje.";
                 }
             }
             catch (Exception ex)

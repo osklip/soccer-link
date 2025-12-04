@@ -20,7 +20,10 @@ namespace SoccerLink.ViewModels
 
         public ConfirmDeleteViewModel()
         {
+            // Komenda usuwania - blokuje przycisk, jeśli trwa usuwanie (_isDeleting)
             DeleteCommand = new RelayCommand(DeleteAsync, () => !_isDeleting);
+
+            // Komenda anulowania - po prostu wraca
             CancelCommand = new RelayCommand(() => RequestNavigateBack?.Invoke(this, EventArgs.Empty));
         }
 
@@ -30,6 +33,7 @@ namespace SoccerLink.ViewModels
             set => SetProperty(ref _confirmationText, value);
         }
 
+        // Ta metoda jest kluczowa - musi zostać wywołana z widoku (CodeBehind)
         public void Initialize(string eventType, int eventId)
         {
             _eventType = eventType;
@@ -39,19 +43,30 @@ namespace SoccerLink.ViewModels
 
         private async void DeleteAsync()
         {
+            if (_eventId <= 0)
+            {
+                ConfirmationText = "Błąd: Nieprawidłowe ID wydarzenia.";
+                return;
+            }
+
             _isDeleting = true;
             (DeleteCommand as RelayCommand)?.RaiseCanExecuteChanged();
+            ConfirmationText = "Usuwanie w toku...";
 
             try
             {
+                // Wywołanie serwisu
                 await CalendarService.DeleteEventAsync(_eventType, _eventId);
+
                 ConfirmationText = "Usunięto pomyślnie! Powrót...";
-                await Task.Delay(1000);
+                await Task.Delay(1000); // Krótkie opóźnienie, żeby użytkownik przeczytał komunikat
+
+                // Powrót do kalendarza
                 RequestNavigateBack?.Invoke(this, EventArgs.Empty);
             }
             catch (Exception ex)
             {
-                ConfirmationText = $"Błąd: {ex.Message}";
+                ConfirmationText = $"Błąd podczas usuwania: {ex.Message}";
                 _isDeleting = false;
                 (DeleteCommand as RelayCommand)?.RaiseCanExecuteChanged();
             }
