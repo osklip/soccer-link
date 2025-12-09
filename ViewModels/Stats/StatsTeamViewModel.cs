@@ -1,13 +1,14 @@
 ﻿using SoccerLink.Models;
 using SoccerLink.Services;
-using System.Collections.ObjectModel;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SoccerLink.ViewModels.Stats
 {
     public class StatsTeamViewModel : BaseViewModel
     {
-        // Pola wyświetlane w widoku (są to stringi, bo mogą zawierać np. "%")
+        // Pola wyświetlane w widoku
         private string _avgGoals = "-";
         private string _avgPossession = "-";
         private string _avgShots = "-";
@@ -17,9 +18,25 @@ namespace SoccerLink.ViewModels.Stats
         private string _avgFouls = "-";
         private string _totalCleanSheets = "-";
 
+        // Filtry
+        private int _selectedMonthIndex = 0;
+        private int _selectedYearIndex = 0;
+
+        public List<string> Months { get; } = new List<string>
+        {
+            "Wszystkie", "Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec",
+            "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"
+        };
+
+        public List<string> Years { get; private set; } = new List<string> { "Wszystkie" };
+
         public StatsTeamViewModel()
         {
-            // Można załadować domyślnie, ale lepiej wywołać to z Page_Loaded
+            var currentYear = DateTime.Now.Year;
+            for (int i = 0; i < 5; i++)
+            {
+                Years.Add((currentYear - i).ToString());
+            }
         }
 
         public string AvgGoals { get => _avgGoals; set => SetProperty(ref _avgGoals, value); }
@@ -31,10 +48,42 @@ namespace SoccerLink.ViewModels.Stats
         public string AvgFouls { get => _avgFouls; set => SetProperty(ref _avgFouls, value); }
         public string TotalCleanSheets { get => _totalCleanSheets; set => SetProperty(ref _totalCleanSheets, value); }
 
+        public int SelectedMonthIndex
+        {
+            get => _selectedMonthIndex;
+            set
+            {
+                if (SetProperty(ref _selectedMonthIndex, value))
+                {
+                    _ = LoadStatsAsync();
+                }
+            }
+        }
+
+        public int SelectedYearIndex
+        {
+            get => _selectedYearIndex;
+            set
+            {
+                if (SetProperty(ref _selectedYearIndex, value))
+                {
+                    _ = LoadStatsAsync();
+                }
+            }
+        }
+
         public async Task LoadStatsAsync()
         {
-            // Pobieramy średnie z bazy
-            var stats = await StatsService.GetAverageTeamStatsAsync();
+            int? month = SelectedMonthIndex == 0 ? null : SelectedMonthIndex;
+
+            int? year = null;
+            if (SelectedYearIndex > 0 && int.TryParse(Years[SelectedYearIndex], out int y))
+            {
+                year = y;
+            }
+
+            // Tutaj wywołujemy Service, a nie definiujemy SQL
+            var stats = await StatsService.GetAverageTeamStatsAsync(month, year);
 
             AvgGoals = stats.Gole.ToString();
             AvgPossession = $"{stats.PosiadaniePilki}%";
@@ -43,13 +92,7 @@ namespace SoccerLink.ViewModels.Stats
             AvgShotsOff = stats.StrzalyNiecelne.ToString();
             AvgCorners = stats.RzutyRozne.ToString();
             AvgFouls = stats.Faule.ToString();
-            // Uwaga: CzysteKonto w modelu SQL (SUM) zwraca liczbę
-            // Tutaj hackujemy model C# (gdzie jest bool), w serwisie zrobiliśmy rzutowanie
-            // W idealnym świecie stworzyłbyś osobny model DTO (Data Transfer Object) dla agregatów.
-            // Przyjmijmy, że w StatsService.GetAverageTeamStatsAsync przypisałeś liczbę do pola Gole (jako test) 
-            // lub dodaj pole int TotalCleanSheets do modelu.
-            // Dla uproszczenia tutaj:
-            TotalCleanSheets = stats.CzysteKonto ? "Tak" : "Nie"; // To wymaga poprawki w modelu jeśli chcemy licznik
+            TotalCleanSheets = stats.CzysteKonto ? "Tak" : "Nie";
         }
     }
 }

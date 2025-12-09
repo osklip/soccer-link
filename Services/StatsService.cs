@@ -2,21 +2,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SoccerLink.Services
 {
     public class StatsService
     {
-        // --- ZAPIS ---
-
+        // --- ZAPIS (Drużyna) ---
         public static async Task SaveTeamStatsAsync(StatystykiDruzyny stats)
         {
             if (SessionService.AktualnyTrener == null) return;
             using var client = await DatabaseConfig.CreateClientAsync();
 
-            // Najpierw usuwamy stare statystyki dla tego meczu (jeśli była edycja), żeby nie dublować
             await client.Execute("DELETE FROM StatystykiDruzyny WHERE MeczID = ? AND TrenerID = ?",
                 stats.MeczID, SessionService.AktualnyTrener.Id);
 
@@ -31,28 +28,39 @@ namespace SoccerLink.Services
                 stats.CzysteKonto ? 1 : 0);
         }
 
-        // --- ODCZYT (AGREGACJA) ---
-
-        // Metoda zwraca średnie statystyki dla wszystkich meczów danego trenera
-        public static async Task<StatystykiDruzyny> GetAverageTeamStatsAsync()
+        // --- ODCZYT (AGREGACJA - Drużyna) ---
+        public static async Task<StatystykiDruzyny> GetAverageTeamStatsAsync(int? month = null, int? year = null)
         {
             if (SessionService.AktualnyTrener == null) return new StatystykiDruzyny();
             using var client = await DatabaseConfig.CreateClientAsync();
 
-            // AVG zwraca double, więc castujemy. COUNT zlicza mecze.
             var sql = @"
                 SELECT 
-                    AVG(Gole), AVG(PosiadaniePilki), AVG(Strzaly), AVG(StrzalyCelne), 
-                    AVG(StrzalyNiecelne), AVG(RzutyRozne), AVG(Faule), SUM(CzysteKonto)
-                FROM StatystykiDruzyny
-                WHERE TrenerID = ?";
+                    AVG(s.Gole), AVG(s.PosiadaniePilki), AVG(s.Strzaly), AVG(s.StrzalyCelne), 
+                    AVG(s.StrzalyNiecelne), AVG(s.RzutyRozne), AVG(s.Faule), SUM(s.CzysteKonto)
+                FROM StatystykiDruzyny s
+                JOIN Mecz m ON s.MeczID = m.MeczID
+                WHERE s.TrenerID = ?";
 
-            var result = await client.Execute(sql, SessionService.AktualnyTrener.Id);
+            var args = new List<object> { SessionService.AktualnyTrener.Id };
+
+            if (month.HasValue && month.Value > 0)
+            {
+                sql += " AND strftime('%m', m.Data) = ?";
+                args.Add(month.Value.ToString("00"));
+            }
+
+            if (year.HasValue && year.Value > 0)
+            {
+                sql += " AND strftime('%Y', m.Data) = ?";
+                args.Add(year.Value.ToString());
+            }
+
+            var result = await client.Execute(sql, args.ToArray());
             var row = result.Rows.FirstOrDefault()?.ToArray();
 
             if (row == null || row[0] is DBNull) return new StatystykiDruzyny();
 
-            // Helper do parsowania double -> int (zaokrąglenie)
             int ToInt(object val) => val != null && double.TryParse(val.ToString(), out double d) ? (int)Math.Round(d) : 0;
 
             return new StatystykiDruzyny
@@ -78,15 +86,12 @@ namespace SoccerLink.Services
             var meczId = statsList.First().MeczID;
             var trenerId = SessionService.AktualnyTrener.Id;
 
-            // 1. Czyścimy stare wpisy dla tego meczu (aby uniknąć duplikatów przy edycji)
-            await client.Execute("DELETE FROM StatystykiZawodnika WHERE MeczID = ? AND TrenerID = ?",
-                meczId, trenerId);
+            await client.Execute("DELETE FROM StatystykiZawodnika WHERE MeczID = ? AND TrenerID = ?", meczId, trenerId);
 
-            // 2. Wstawiamy nowe
             var sql = @"
-        INSERT INTO StatystykiZawodnika 
-        (MeczID, ZawodnikID, TrenerID, Gole, Strzaly, StrzalyCelne, StrzalyNiecelne, PodaniaCelne, Faule, ZolteKartki, CzerwonaKartka, CzysteKonto) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                INSERT INTO StatystykiZawodnika 
+                (MeczID, ZawodnikID, TrenerID, Gole, Strzaly, StrzalyCelne, StrzalyNiecelne, PodaniaCelne, Faule, ZolteKartki, CzerwonaKartka, CzysteKonto) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             foreach (var s in statsList)
             {
@@ -97,21 +102,35 @@ namespace SoccerLink.Services
             }
         }
 
-        // --- ODCZYT (Szczegóły gracza - podsumowanie sezonu) ---
-        public static async Task<StatystykiZawodnika> GetPlayerStatsSummaryAsync(int zawodnikId)
+        // --- ODCZYT (Szczegóły gracza - podsumowanie sezonu z filtrami) ---
+        public static async Task<StatystykiZawodnika> GetPlayerStatsSummaryAsync(int zawodnikId, int? month = null, int? year = null)
         {
             if (SessionService.AktualnyTrener == null) return new StatystykiZawodnika();
             using var client = await DatabaseConfig.CreateClientAsync();
 
-            // Sumujemy osiągnięcia ze wszystkich meczów
             var sql = @"
-        SELECT 
-            SUM(Gole), SUM(Strzaly), SUM(StrzalyCelne), SUM(StrzalyNiecelne), 
-            SUM(PodaniaCelne), SUM(Faule), SUM(ZolteKartki), SUM(CzerwonaKartka), SUM(CzysteKonto)
-        FROM StatystykiZawodnika
-        WHERE ZawodnikID = ? AND TrenerID = ?";
+                SELECT 
+                    SUM(sz.Gole), SUM(sz.Strzaly), SUM(sz.StrzalyCelne), SUM(sz.StrzalyNiecelne), 
+                    SUM(sz.PodaniaCelne), SUM(sz.Faule), SUM(sz.ZolteKartki), SUM(sz.CzerwonaKartka), SUM(sz.CzysteKonto)
+                FROM StatystykiZawodnika sz
+                JOIN Mecz m ON sz.MeczID = m.MeczID
+                WHERE sz.ZawodnikID = ? AND sz.TrenerID = ?";
 
-            var result = await client.Execute(sql, zawodnikId, SessionService.AktualnyTrener.Id);
+            var args = new List<object> { zawodnikId, SessionService.AktualnyTrener.Id };
+
+            if (month.HasValue && month.Value > 0)
+            {
+                sql += " AND strftime('%m', m.Data) = ?";
+                args.Add(month.Value.ToString("00"));
+            }
+
+            if (year.HasValue && year.Value > 0)
+            {
+                sql += " AND strftime('%Y', m.Data) = ?";
+                args.Add(year.Value.ToString());
+            }
+
+            var result = await client.Execute(sql, args.ToArray());
             var row = result.Rows.FirstOrDefault()?.ToArray();
 
             if (row == null || row[0] is DBNull) return new StatystykiZawodnika();
@@ -139,13 +158,12 @@ namespace SoccerLink.Services
 
             using var client = await DatabaseConfig.CreateClientAsync();
 
-            // Pobieramy mecze, które NIE MAJĄ jeszcze wpisu w tabeli StatystykiDruzyny
             var sql = @"
-        SELECT m.MeczID, m.Przeciwnik, m.Data, m.Godzina, m.Miejsce 
-        FROM Mecz m
-        LEFT JOIN StatystykiDruzyny s ON m.MeczID = s.MeczID
-        WHERE m.TrenerID = ? AND s.StatDruzynyID IS NULL
-        ORDER BY m.Data DESC, m.Godzina DESC";
+                SELECT m.MeczID, m.Przeciwnik, m.Data, m.Godzina, m.Miejsce 
+                FROM Mecz m
+                LEFT JOIN StatystykiDruzyny s ON m.MeczID = s.MeczID
+                WHERE m.TrenerID = ? AND s.StatDruzynyID IS NULL
+                ORDER BY m.Data DESC, m.Godzina DESC";
 
             var result = await client.Execute(sql, trenerId);
             var list = new List<Mecz>();
@@ -155,24 +173,16 @@ namespace SoccerLink.Services
                 foreach (var row in result.Rows)
                 {
                     var c = row.ToArray();
-
-                    // Parsowanie daty i godziny (SQLite trzyma je jako TEXT)
                     string dataStr = c[2]?.ToString();
                     string godzinaStr = c[3]?.ToString();
                     DateTime dt = DateTime.Now;
 
-                    // Próba parsowania
                     if (DateTime.TryParse($"{dataStr} {godzinaStr}", out var parsedDate))
                     {
                         dt = parsedDate;
                     }
 
-                    // --- LOGIKA BLOKADY PRZYSZŁYCH MECZÓW ---
-                    // Jeśli mecz jest w przyszłości, pomijamy go (nie dodajemy do listy wyboru)
-                    if (dt > DateTime.Now)
-                    {
-                        continue;
-                    }
+                    if (dt > DateTime.Now) continue;
 
                     list.Add(new Mecz
                     {

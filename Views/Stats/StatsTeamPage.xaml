@@ -81,16 +81,30 @@
                 </Button>
             </StackPanel>
 
-            <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="4">
+            <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="8">
                 <TextBlock Text="Statystyki Drużynowe" 
                            FontSize="24" 
                            FontWeight="Bold" 
                            Foreground="#E6F6FF" 
                            HorizontalAlignment="Center"/>
 
-                <TextBlock Text="Średnie wartości (Wszystkie mecze)" 
+                <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+                    <ComboBox ItemsSource="{x:Bind ViewModel.Months}"
+                              SelectedIndex="{x:Bind ViewModel.SelectedMonthIndex, Mode=TwoWay}"
+                              Width="130"
+                              PlaceholderText="Miesiąc"
+                              Background="#32404A" Foreground="White" CornerRadius="6" BorderThickness="0"/>
+
+                    <ComboBox ItemsSource="{x:Bind ViewModel.Years}"
+                              SelectedIndex="{x:Bind ViewModel.SelectedYearIndex, Mode=TwoWay}"
+                              Width="110"
+                              PlaceholderText="Rok"
+                              Background="#32404A" Foreground="White" CornerRadius="6" BorderThickness="0"/>
+                </StackPanel>
+
+                <TextBlock Text="Średnie wartości (Wybrany okres)" 
                            Foreground="#86A9C8" 
-                           FontSize="16" 
+                           FontSize="14" 
                            FontWeight="SemiBold" 
                            HorizontalAlignment="Center"/>
             </StackPanel>

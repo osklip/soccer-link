@@ -2,6 +2,7 @@
 using SoccerLink.Models;
 using SoccerLink.Services;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -9,6 +10,9 @@ namespace SoccerLink.ViewModels.Stats
 {
     public class PlayerStatsDetailsViewModel : BaseViewModel
     {
+        private Zawodnik _currentPlayer; // Musimy pamiętać zawodnika do przeładowania
+
+        // Pola wyświetlania
         private string _playerName = "Ładowanie...";
         private string _position = "-";
         private string _goals = "-";
@@ -20,14 +24,34 @@ namespace SoccerLink.ViewModels.Stats
         private string _cards = "- / -";
         private string _cleanSheets = "-";
 
+        // Filtry
+        private int _selectedMonthIndex = 0;
+        private int _selectedYearIndex = 0;
+
         public event EventHandler RequestNavigateBack;
         public ICommand GoBackCommand { get; }
+
+        public List<string> Months { get; } = new List<string>
+        {
+            "Wszystkie", "Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec",
+            "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"
+        };
+
+        public List<string> Years { get; private set; } = new List<string> { "Wszystkie" };
 
         public PlayerStatsDetailsViewModel()
         {
             GoBackCommand = new RelayCommand(() => RequestNavigateBack?.Invoke(this, EventArgs.Empty));
+
+            // Generowanie lat
+            var currentYear = DateTime.Now.Year;
+            for (int i = 0; i < 5; i++)
+            {
+                Years.Add((currentYear - i).ToString());
+            }
         }
 
+        // --- WŁAŚCIWOŚCI ---
         public string PlayerName { get => _playerName; set => SetProperty(ref _playerName, value); }
         public string Position { get => _position; set => SetProperty(ref _position, value); }
         public string Goals { get => _goals; set => SetProperty(ref _goals, value); }
@@ -39,14 +63,48 @@ namespace SoccerLink.ViewModels.Stats
         public string Cards { get => _cards; set => SetProperty(ref _cards, value); }
         public string CleanSheets { get => _cleanSheets; set => SetProperty(ref _cleanSheets, value); }
 
+        public int SelectedMonthIndex
+        {
+            get => _selectedMonthIndex;
+            set
+            {
+                if (SetProperty(ref _selectedMonthIndex, value))
+                {
+                    _ = LoadStatsForPlayerAsync(_currentPlayer); // Odśwież po zmianie
+                }
+            }
+        }
+
+        public int SelectedYearIndex
+        {
+            get => _selectedYearIndex;
+            set
+            {
+                if (SetProperty(ref _selectedYearIndex, value))
+                {
+                    _ = LoadStatsForPlayerAsync(_currentPlayer); // Odśwież po zmianie
+                }
+            }
+        }
+
         public async Task LoadStatsForPlayerAsync(Zawodnik player)
         {
             if (player == null) return;
+            _currentPlayer = player;
 
             PlayerName = $"{player.Imie} {player.Nazwisko}";
             Position = player.Pozycja;
 
-            var stats = await StatsService.GetPlayerStatsSummaryAsync(player.ZawodnikId);
+            // Przygotowanie filtrów
+            int? month = SelectedMonthIndex == 0 ? null : SelectedMonthIndex;
+            int? year = null;
+            if (SelectedYearIndex > 0 && int.TryParse(Years[SelectedYearIndex], out int y))
+            {
+                year = y;
+            }
+
+            // Pobranie danych z serwisu z uwzględnieniem filtrów
+            var stats = await StatsService.GetPlayerStatsSummaryAsync(player.ZawodnikId, month, year);
 
             Goals = stats.Gole.ToString();
             Shots = stats.Strzaly.ToString();
