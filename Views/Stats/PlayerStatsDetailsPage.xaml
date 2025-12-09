@@ -176,4 +176,9 @@
                             <TextBlock Text="Kartki (Żółte/Czerwone)" Style="{StaticResource CardLabelTextStyle}" FontSize="11"/>
                         </StackPanel>
                     </Border>
-                    <TextBlock Text="{x:Bind ViewModel.Cards, Mode=OneWay}" Style="{StaticResource CardValueTextStyle}" Margin="0,55,0,0" FontSize="3
+                    <TextBlock Text="{x:Bind ViewModel.Cards, Mode=OneWay}" Style="{StaticResource CardValueTextStyle}" Margin="0,55,0,0" FontSize="36"/>
+                </Grid>
+            </Button>
+        </Grid>
+    </Grid>
+</Page>
