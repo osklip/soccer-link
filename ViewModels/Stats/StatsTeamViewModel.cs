@@ -82,7 +82,6 @@ namespace SoccerLink.ViewModels.Stats
                 year = y;
             }
 
-            // Tutaj wywołujemy Service, a nie definiujemy SQL
             var stats = await StatsService.GetAverageTeamStatsAsync(month, year);
 
             AvgGoals = stats.Gole.ToString();

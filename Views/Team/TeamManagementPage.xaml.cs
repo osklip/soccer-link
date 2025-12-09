@@ -14,12 +14,11 @@ namespace SoccerLink.Views
             ViewModel = new TeamManagementViewModel();
             this.InitializeComponent();
 
-            // Obs³uga nawigacji
             ViewModel.RequestNavigateBack += (s, e) => this.Frame.Navigate(typeof(DashboardPage));
             ViewModel.RequestNavigateToPlayerList += (s, e) => this.Frame.Navigate(typeof(PlayerListPage));
 
-            // Tymczasowo przekierowuje do Dashboardu, poniewa¿ ekranu Sk³adu jeszcze nie ma (zgodnie z obecnym stanem projektu)
-            ViewModel.RequestNavigateToSquad += (s, e) => this.Frame.Navigate(typeof(DashboardPage));
+            // AKTUALIZACJA: Teraz nawiguje do SquadPage
+            ViewModel.RequestNavigateToSquad += (s, e) => this.Frame.Navigate(typeof(SquadPage));
         }
     }
 }

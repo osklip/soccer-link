@@ -26,8 +26,12 @@
 		<None Remove="Views\RegisterPage.xaml" />
 		<None Remove="Views\StatsNaviPage.xaml" />
 		<None Remove="Views\StatsPlayerPage.xaml" />
+		<None Remove="Views\Stats\SquadPage.xaml" />
 		<None Remove="Views\TeamManagementPage.xaml" />
 		<None Remove="Views\UpcomingEventPage.xaml" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Page Remove="Views\Stats\SquadPage.xaml" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -44,6 +48,12 @@
 		<Content Include="Assets\squad_icon.png" />
 		<Content Include="Assets\teammanagementimage.png" />
 		<Content Include="Assets\teamstats_icon.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="Views\Team\SquadPage.xaml">
+	    <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+	  </EmbeddedResource>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -136,8 +146,6 @@
 	  <Folder Include="Views\Auth\" />
 	  <Folder Include="Views\Events\" />
 	  <Folder Include="Views\Messaging\" />
-	  <Folder Include="Views\Team\" />
-	  <Folder Include="Views\Stats\" />
 	</ItemGroup>
 
 	<PropertyGroup Condition="'$(DisableHasPackageAndPublishMenuAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">

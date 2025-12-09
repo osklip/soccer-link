@@ -102,7 +102,7 @@ namespace SoccerLink.Services
             }
         }
 
-        // --- ODCZYT (Szczegóły gracza - podsumowanie sezonu z filtrami) ---
+        // --- ODCZYT (Szczegóły gracza) ---
         public static async Task<StatystykiZawodnika> GetPlayerStatsSummaryAsync(int zawodnikId, int? month = null, int? year = null)
         {
             if (SessionService.AktualnyTrener == null) return new StatystykiZawodnika();

@@ -1,0 +1,248 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="SoccerLink.Views.SquadPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:SoccerLink.Models"
+    xmlns:helpers="using:SoccerLink.Helpers"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <helpers:BooleanToVisibilityConverter x:Key="BoolToVis" />
+
+        <Style TargetType="ComboBox" x:Key="PlayerComboStyle">
+            <Setter Property="Width" Value="140"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Opacity" Value="0.95"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+
+        <Style TargetType="TextBlock" x:Key="PositionLabelStyle">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,0,0,2"/>
+        </Style>
+
+        <DataTemplate x:Key="PlayerTemplate" x:DataType="models:Zawodnik">
+            <TextBlock>
+                <Run Text="{x:Bind Nazwisko}" FontWeight="Bold"/>
+                <Run Text="{x:Bind Imie}" FontSize="10" Foreground="Gray"/>
+            </TextBlock>
+        </DataTemplate>
+    </Page.Resources>
+
+    <Grid Background="#405861" Padding="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="0,0,0,15">
+            <Button Content="⟵ Powrót" Command="{x:Bind ViewModel.GoBackCommand}" 
+                    Background="Transparent" BorderThickness="0" Foreground="#CDE6F8" FontWeight="SemiBold" FontSize="18"/>
+
+            <Grid Margin="0,10,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal" Spacing="15" Grid.Column="0">
+                    <TextBlock Text="Ustal Skład" FontSize="24" FontWeight="Bold" Foreground="#E6F6FF" VerticalAlignment="Center"/>
+                    <ComboBox ItemsSource="{x:Bind ViewModel.Matches, Mode=OneWay}" 
+                              SelectedItem="{x:Bind ViewModel.SelectedMatch, Mode=TwoWay}"
+                              Width="250" PlaceholderText="Wybierz mecz..." DisplayMemberPath="Przeciwnik"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Spacing="10" Grid.Column="2">
+                    <TextBlock Text="Formacja:" VerticalAlignment="Center" Foreground="#CDE6F8" FontWeight="SemiBold"/>
+                    <ComboBox ItemsSource="{x:Bind ViewModel.Formations}" 
+                              SelectedItem="{x:Bind ViewModel.SelectedFormation, Mode=TwoWay}"
+                              Width="100" FontWeight="Bold"/>
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+
+        <Border Grid.Row="1" Background="#2E7D32" CornerRadius="8" BorderBrush="White" BorderThickness="4" Margin="0,0,0,10">
+            <Grid>
+                <Border VerticalAlignment="Center" Height="2" Background="White" Opacity="0.4"/>
+                <Border VerticalAlignment="Center" HorizontalAlignment="Center" Width="120" Height="120" CornerRadius="60" BorderBrush="White" BorderThickness="2" Opacity="0.4"/>
+                <Border VerticalAlignment="Top" HorizontalAlignment="Center" Width="200" Height="80" BorderBrush="White" BorderThickness="0,0,2,2" Opacity="0.4" Margin="0,-2,0,0"/>
+                <Border VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="200" Height="80" BorderBrush="White" BorderThickness="2,2,2,0" Opacity="0.4" Margin="0,0,0,-2"/>
+
+                <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,15">
+                    <TextBlock Text="Bramkarz" Style="{StaticResource PositionLabelStyle}"/>
+                    <ComboBox ItemsSource="{x:Bind ViewModel.AvailablePlayers}" SelectedItem="{x:Bind ViewModel.GK, Mode=TwoWay}" ItemTemplate="{StaticResource PlayerTemplate}" Style="{StaticResource PlayerComboStyle}" PlaceholderText="Wybierz GK"/>
+                </StackPanel>
+
+                <Grid Visibility="{x:Bind ViewModel.Is442, Mode=OneWay, Converter={StaticResource BoolToVis}}" Margin="0,20,0,70">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                            <TextBlock Text="Napastnik L" Style="{StaticResource PositionLabelStyle}"/>
+                            <ComboBox ItemsSource="{x:Bind ViewModel.AvailablePlayers}" SelectedItem="{x:Bind ViewModel.P9, Mode=TwoWay}" ItemTemplate="{StaticResource PlayerTemplate}" Style="{StaticResource PlayerComboStyle}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock Text="Napastnik P" Style="{StaticResource PositionLabelStyle}"/>
+                            <ComboBox ItemsSource="{x:Bind ViewModel.AvailablePlayers}" SelectedItem="{x:Bind ViewModel.P10, Mode=TwoWay}" ItemTemplate="{StaticResource PlayerTemplate}" Style="{StaticResource PlayerComboStyle}"/>
+                        </StackPanel>
+                    </Grid>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                            <TextBlock Text="Lewa Pom." Style="{StaticResource PositionLabelStyle}"/>
+                            <ComboBox ItemsSource="{x:Bind ViewModel.AvailablePlayers}" SelectedItem="{x:Bind ViewModel.P5, Mode=TwoWay}" ItemTemplate="{StaticResource PlayerTemplate}" Style="{StaticResource PlayerComboStyle}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock Text="Środek L" Style="{StaticResource PositionLabelStyle}"/>
+                            <ComboBox ItemsSource="{x:Bind ViewModel.AvailablePlayers}" SelectedItem="{x:Bind ViewModel.P6, Mode=TwoWay}" ItemTemplate="{StaticResource PlayerTemplate}" Style="{StaticResource PlayerComboStyle}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                            <TextBlock Text="Środek P" Style="{StaticResource PositionLabelStyle}"/>
+                            <ComboBox ItemsSource="{x:Bind ViewModel.AvailablePlayers}" SelectedItem="{x:Bind ViewModel.P7, Mode=TwoWay}" ItemTemplate="{StaticResource PlayerTemplate}" Style="{StaticResource PlayerComboStyle}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="3" VerticalAlignment="Center">
+                            <TextBlock Text="Prawa Pom." Style="{StaticResource PositionLabelStyle}"/>
+                            <ComboBox ItemsSource="{x:Bind ViewModel.AvailablePlayers}" SelectedItem="{x:Bind ViewModel.P8, Mode=TwoWay}" ItemTemplate="{StaticResource PlayerTemplate}" Style="{StaticResource PlayerComboStyle}"/>
+                        </StackPanel>
+                    </Grid>
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                            <TextBlock Text="Lewa Obr." Style="{StaticResource PositionLabelStyle}"/>
+                            <ComboBox ItemsSource="{x:Bind ViewModel.AvailablePlayers}" SelectedItem="{x:Bind ViewModel.P1, Mode=TwoWay}" ItemTemplate="{StaticResource PlayerTemplate}" Style="{StaticResource PlayerComboStyle}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock Text="Stoper L" Style="{StaticResource PositionLabelStyle}"/>
+                            <ComboBox ItemsSource="{x:Bind ViewModel.AvailablePlayers}" SelectedItem="{x:Bind ViewModel.P2, Mode=TwoWay}" ItemTemplate="{StaticResource PlayerTemplate}" Style="{StaticResource PlayerComboStyle}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                            <TextBlock Text="Stoper P" Style="{StaticResource PositionLabelStyle}"/>
+                            <ComboBox ItemsSource="{x:Bind ViewModel.AvailablePlayers}" SelectedItem="{x:Bind ViewModel.P3, Mode=TwoWay}" ItemTemplate="{StaticResource PlayerTemplate}" Style="{StaticResource PlayerComboStyle}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="3" VerticalAlignment="Center">
+                            <TextBlock Text="Prawa Obr." Style="{StaticResource PositionLabelStyle}"/>
+                            <ComboBox ItemsSource="{x:Bind ViewModel.AvailablePlayers}" SelectedItem="{x:Bind ViewModel.P4, Mode=TwoWay}" ItemTemplate="{StaticResource PlayerTemplate}" Style="{StaticResource PlayerComboStyle}"/>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+
+                <Grid Visibility="{x:Bind ViewModel.Is433, Mode=OneWay, Converter={StaticResource BoolToVis}}" Margin="0,20,0,70">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                            <TextBlock Text="Lewe Skrzydło" Style="{StaticResource PositionLabelStyle}"/>
+                            <ComboBox ItemsSource="{x:Bind ViewModel.AvailablePlayers}" SelectedItem="{x:Bind ViewModel.P8, Mode=TwoWay}" ItemTemplate="{StaticResource PlayerTemplate}" Style="{StaticResource PlayerComboStyle}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,-20,0,0">
+                            <TextBlock Text="Napastnik" Style="{StaticResource PositionLabelStyle}"/>
+                            <ComboBox ItemsSource="{x:Bind ViewModel.AvailablePlayers}" SelectedItem="{x:Bind ViewModel.P9, Mode=TwoWay}" ItemTemplate="{StaticResource PlayerTemplate}" Style="{StaticResource PlayerComboStyle}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                            <TextBlock Text="Prawe Skrzydło" Style="{StaticResource PositionLabelStyle}"/>
+                            <ComboBox ItemsSource="{x:Bind ViewModel.AvailablePlayers}" SelectedItem="{x:Bind ViewModel.P10, Mode=TwoWay}" ItemTemplate="{StaticResource PlayerTemplate}" Style="{StaticResource PlayerComboStyle}"/>
+                        </StackPanel>
+                    </Grid>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                            <TextBlock Text="Środek L" Style="{StaticResource PositionLabelStyle}"/>
+                            <ComboBox ItemsSource="{x:Bind ViewModel.AvailablePlayers}" SelectedItem="{x:Bind ViewModel.P5, Mode=TwoWay}" ItemTemplate="{StaticResource PlayerTemplate}" Style="{StaticResource PlayerComboStyle}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,20,0,0">
+                            <TextBlock Text="Def. Pomocnik" Style="{StaticResource PositionLabelStyle}"/>
+                            <ComboBox ItemsSource="{x:Bind ViewModel.AvailablePlayers}" SelectedItem="{x:Bind ViewModel.P6, Mode=TwoWay}" ItemTemplate="{StaticResource PlayerTemplate}" Style="{StaticResource PlayerComboStyle}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                            <TextBlock Text="Środek P" Style="{StaticResource PositionLabelStyle}"/>
+                            <ComboBox ItemsSource="{x:Bind ViewModel.AvailablePlayers}" SelectedItem="{x:Bind ViewModel.P7, Mode=TwoWay}" ItemTemplate="{StaticResource PlayerTemplate}" Style="{StaticResource PlayerComboStyle}"/>
+                        </StackPanel>
+                    </Grid>
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                            <TextBlock Text="Lewa Obr." Style="{StaticResource PositionLabelStyle}"/>
+                            <ComboBox ItemsSource="{x:Bind ViewModel.AvailablePlayers}" SelectedItem="{x:Bind ViewModel.P1, Mode=TwoWay}" ItemTemplate="{StaticResource PlayerTemplate}" Style="{StaticResource PlayerComboStyle}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock Text="Stoper L" Style="{StaticResource PositionLabelStyle}"/>
+                            <ComboBox ItemsSource="{x:Bind ViewModel.AvailablePlayers}" SelectedItem="{x:Bind ViewModel.P2, Mode=TwoWay}" ItemTemplate="{StaticResource PlayerTemplate}" Style="{StaticResource PlayerComboStyle}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                            <TextBlock Text="Stoper P" Style="{StaticResource PositionLabelStyle}"/>
+                            <ComboBox ItemsSource="{x:Bind ViewModel.AvailablePlayers}" SelectedItem="{x:Bind ViewModel.P3, Mode=TwoWay}" ItemTemplate="{StaticResource PlayerTemplate}" Style="{StaticResource PlayerComboStyle}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="3" VerticalAlignment="Center">
+                            <TextBlock Text="Prawa Obr." Style="{StaticResource PositionLabelStyle}"/>
+                            <ComboBox ItemsSource="{x:Bind ViewModel.AvailablePlayers}" SelectedItem="{x:Bind ViewModel.P4, Mode=TwoWay}" ItemTemplate="{StaticResource PlayerTemplate}" Style="{StaticResource PlayerComboStyle}"/>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0" Content="Wyczyść" Command="{x:Bind ViewModel.ClearCommand}" 
+                    Background="#5A707A" Foreground="White" CornerRadius="8" Padding="20,10" HorizontalAlignment="Left"/>
+
+            <Button Grid.Column="1" Content="Zapisz Skład" Command="{x:Bind ViewModel.SaveCommand}" 
+                    Background="#FFD700" Foreground="#2F4450" FontWeight="Bold" CornerRadius="8" Padding="40,12" FontSize="16" HorizontalAlignment="Center"/>
+
+            <TextBlock Grid.Column="2" Text="{x:Bind ViewModel.StatusMessage, Mode=OneWay}" 
+                       Foreground="{x:Bind ViewModel.StatusColor, Mode=OneWay}" 
+                       VerticalAlignment="Center" HorizontalAlignment="Right" FontWeight="SemiBold" TextWrapping="Wrap" MaxWidth="300" TextAlignment="Right"/>
+        </Grid>
+    </Grid>
+</Page>
