@@ -11,14 +11,17 @@
 
     <Page.Resources>
         <helpers:BooleanToVisibilityConverter x:Key="BoolToVis" />
+        <helpers:PositionToAbbreviationConverter x:Key="PosToAbbr" />
 
         <Style TargetType="ComboBox" x:Key="PlayerComboStyle">
-            <Setter Property="Width" Value="140"/>
+            <Setter Property="Width" Value="160"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#2F4450"/>
             <Setter Property="Opacity" Value="0.95"/>
             <Setter Property="CornerRadius" Value="4"/>
             <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Padding" Value="8,4,0,4"/>
         </Style>
 
         <Style TargetType="TextBlock" x:Key="PositionLabelStyle">
@@ -30,10 +33,32 @@
         </Style>
 
         <DataTemplate x:Key="PlayerTemplate" x:DataType="models:Zawodnik">
-            <TextBlock>
-                <Run Text="{x:Bind Nazwisko}" FontWeight="Bold"/>
-                <Run Text="{x:Bind Imie}" FontSize="10" Foreground="Gray"/>
-            </TextBlock>
+            <Grid>
+                <ToolTipService.ToolTip>
+                    <TextBlock>
+                        <Run Text="{x:Bind Pozycja}" FontWeight="Bold"/>
+                        <Run Text=": "/>
+                        <Run Text="{x:Bind Imie}"/>
+                        <Run Text=" "/>
+                        <Run Text="{x:Bind Nazwisko}"/>
+                    </TextBlock>
+                </ToolTipService.ToolTip>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Background="#E6F6FF" CornerRadius="3" 
+                        Margin="0,0,8,0" Padding="5,1" VerticalAlignment="Center" MinWidth="26">
+                    <TextBlock Text="{x:Bind Pozycja, Converter={StaticResource PosToAbbr}}" 
+                               FontSize="10" FontWeight="Bold" Foreground="#2A5670" 
+                               HorizontalAlignment="Center" TextAlignment="Center"/>
+                </Border>
+
+                <TextBlock Grid.Column="1" VerticalAlignment="Center" TextTrimming="CharacterEllipsis">
+                    <Run Text="{x:Bind Nazwisko}" FontWeight="Bold" Foreground="#2F4450"/> <Run Text="{x:Bind Imie}" FontSize="10" Foreground="#5A707A"/></TextBlock>
+            </Grid>
         </DataTemplate>
     </Page.Resources>
 
