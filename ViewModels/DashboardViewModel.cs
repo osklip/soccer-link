@@ -3,6 +3,7 @@ using SoccerLink.Helpers;
 using SoccerLink.Models;
 using SoccerLink.Services;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -14,22 +15,26 @@ namespace SoccerLink.ViewModels
         private DispatcherTimer _timer;
         private string _currentDateTime;
 
-        // Lewa kolumna (Inne wydarzenia) - Najbliższe
+        // Lewa kolumna (Inne wydarzenia)
         private string _nextOtherEventTitle = "Brak najbliższego wydarzenia";
         private string _nextOtherEventDate = "Data: ---";
         private string _nextOtherEventLocation = "Miejsce: ---";
 
-        // Lewa kolumna - Kolejne
         private string _subOtherEventTitle = "Brak kolejnego wydarzenia";
         private string _subOtherEventDate = "Data: ---";
         private string _subOtherEventLocation = "Miejsce: ---";
 
-        // Prawa kolumna (Mecze) - Najbliższy
+        // Prawa kolumna (Mecze)
         private string _nextMatchTitle = "Brak najbliższego meczu";
         private string _nextMatchDate = "Data: ---";
         private string _nextMatchLocation = "Miejsce: ---";
 
-        // Prawa kolumna - Kolejny
+        // Status składu
+        private string _nextMatchSquadStatus = "";
+        private string _nextMatchSquadColor = "Transparent";
+        private bool _isSquadStatusVisible = false;
+
+        // Prawa kolumna - Kolejny mecz
         private string _subMatchTitle = "Brak kolejnego meczu";
         private string _subMatchDate = "Data: ---";
         private string _subMatchLocation = "Miejsce: ---";
@@ -47,7 +52,6 @@ namespace SoccerLink.ViewModels
 
         public DashboardViewModel()
         {
-            // Inicjalizacja komend
             GoToMessagesCommand = new RelayCommand(() => RequestNavigateToMessages?.Invoke(this, EventArgs.Empty));
             GoToCalendarCommand = new RelayCommand(() => RequestNavigateToCalendar?.Invoke(this, EventArgs.Empty));
             GoToStatsCommand = new RelayCommand(() => RequestNavigateToStats?.Invoke(this, EventArgs.Empty));
@@ -56,11 +60,10 @@ namespace SoccerLink.ViewModels
             StartClock();
         }
 
-        // --- WŁAŚCIWOŚCI (Properties) ---
+        // --- WŁAŚCIWOŚCI ---
 
         public string CurrentDateTime { get => _currentDateTime; set => SetProperty(ref _currentDateTime, value); }
 
-        // Gettery/Settery dla tekstów UI
         public string NextOtherEventTitle { get => _nextOtherEventTitle; set => SetProperty(ref _nextOtherEventTitle, value); }
         public string NextOtherEventDate { get => _nextOtherEventDate; set => SetProperty(ref _nextOtherEventDate, value); }
         public string NextOtherEventLocation { get => _nextOtherEventLocation; set => SetProperty(ref _nextOtherEventLocation, value); }
@@ -72,6 +75,10 @@ namespace SoccerLink.ViewModels
         public string NextMatchTitle { get => _nextMatchTitle; set => SetProperty(ref _nextMatchTitle, value); }
         public string NextMatchDate { get => _nextMatchDate; set => SetProperty(ref _nextMatchDate, value); }
         public string NextMatchLocation { get => _nextMatchLocation; set => SetProperty(ref _nextMatchLocation, value); }
+
+        public string NextMatchSquadStatus { get => _nextMatchSquadStatus; set => SetProperty(ref _nextMatchSquadStatus, value); }
+        public string NextMatchSquadColor { get => _nextMatchSquadColor; set => SetProperty(ref _nextMatchSquadColor, value); }
+        public bool IsSquadStatusVisible { get => _isSquadStatusVisible; set => SetProperty(ref _isSquadStatusVisible, value); }
 
         public string SubMatchTitle { get => _subMatchTitle; set => SetProperty(ref _subMatchTitle, value); }
         public string SubMatchDate { get => _subMatchDate; set => SetProperty(ref _subMatchDate, value); }
@@ -94,7 +101,7 @@ namespace SoccerLink.ViewModels
 
         public async Task LoadDataAsync()
         {
-            ClearEventInfo(); // Reset do stanów domyślnych
+            ClearEventInfo();
 
             try
             {
@@ -104,25 +111,15 @@ namespace SoccerLink.ViewModels
 
                 if (allEvents != null && allEvents.Any())
                 {
-                    // 1. Mecze
-                    var matches = allEvents
-                                    .Where(e => e.EventType == "Mecz")
-                                    .OrderBy(e => e.DateTimeStart)
-                                    .ToList();
+                    var matches = allEvents.Where(e => e.EventType == "Mecz").OrderBy(e => e.DateTimeStart).ToList();
+                    var otherEvents = allEvents.Where(e => e.EventType != "Mecz").OrderBy(e => e.DateTimeStart).ToList();
 
-                    // 2. Inne (Treningi, Wydarzenia)
-                    var otherEvents = allEvents
-                                    .Where(e => e.EventType == "Trening" || e.EventType == "Wydarzenie")
-                                    .OrderBy(e => e.DateTimeStart)
-                                    .ToList();
-
-                    // Przypisanie do właściwości
                     var nextOther = otherEvents.FirstOrDefault();
                     var subOther = otherEvents.Skip(1).FirstOrDefault();
                     var nextMatch = matches.FirstOrDefault();
                     var subMatch = matches.Skip(1).FirstOrDefault();
 
-                    // Aktualizacja tekstów w UI
+                    // Uzupełnianie danych UI
                     if (nextOther != null)
                     {
                         NextOtherEventTitle = $"{nextOther.EventType}: {nextOther.Title}";
@@ -139,9 +136,33 @@ namespace SoccerLink.ViewModels
 
                     if (nextMatch != null)
                     {
-                        NextMatchTitle = $"{nextMatch.Title}"; // Bez prefixu dla meczu
+                        NextMatchTitle = $"{nextMatch.Title}";
                         NextMatchDate = $"{nextMatch.DisplayDate} ({nextMatch.DisplayTimeRange})";
                         NextMatchLocation = $"{nextMatch.Location}";
+
+                        // --- SPRAWDZANIE STANU SKŁADU DLA NAJBLIŻSZEGO MECZU ---
+                        var squad = await SquadService.GetSquadForMatchAsync(nextMatch.Id);
+
+                        var basePositions = new HashSet<string> { "GK", "P1", "P2", "P3", "P4", "P5", "P6", "P7", "P8", "P9", "P10" };
+
+                        var filledPositionsCount = squad.Count(s => basePositions.Contains(s.PozycjaKod));
+                        var missing = 11 - filledPositionsCount;
+
+                        if (missing > 0)
+                        {
+                            // POPRAWKA: Odmiana słowa (1 gracza, >1 graczy)
+                            string suffix = (missing == 1) ? "gracza" : "graczy";
+
+                            NextMatchSquadStatus = $"⚠ Brakuje {missing} {suffix}";
+                            NextMatchSquadColor = "#FF6B6B"; // Czerwony
+                            IsSquadStatusVisible = true;
+                        }
+                        else
+                        {
+                            NextMatchSquadStatus = "✅ Skład gotowy";
+                            NextMatchSquadColor = "#66BB6A"; // Zielony
+                            IsSquadStatusVisible = true;
+                        }
                     }
 
                     if (subMatch != null)
@@ -173,6 +194,11 @@ namespace SoccerLink.ViewModels
             NextMatchTitle = "Brak najbliższego meczu";
             NextMatchDate = "Data: ---";
             NextMatchLocation = "Miejsce: ---";
+
+            // Reset statusu składu
+            NextMatchSquadStatus = "";
+            NextMatchSquadColor = "Transparent";
+            IsSquadStatusVisible = false;
 
             SubMatchTitle = "Brak kolejnego meczu";
             SubMatchDate = "Data: ---";

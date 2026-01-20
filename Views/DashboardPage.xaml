@@ -1,12 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
 <Page
     x:Class="SoccerLink.Views.DashboardPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:SoccerLink.Views"
+    xmlns:helpers="using:SoccerLink.Helpers"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
+
+    <Page.Resources>
+        <helpers:BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </Page.Resources>
 
     <Grid Background="#405861" Padding="20">
         <Grid.RowDefinitions>
@@ -66,7 +70,6 @@
                 <StackPanel Grid.Column="0">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Spacing="8">
                         <TextBlock Text="Najbliższe Wydarzenie" Foreground="#CDE6F8" FontWeight="Bold" FontSize="18" TextAlignment="Center" />
-
                         <TextBlock Text="{x:Bind ViewModel.NextOtherEventTitle, Mode=OneWay}"
                                    Foreground="#E6F6FF" FontWeight="Bold" FontSize="16" TextAlignment="Center" TextWrapping="Wrap" />
                         <TextBlock Text="{x:Bind ViewModel.NextOtherEventDate, Mode=OneWay}"
@@ -79,7 +82,6 @@
 
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Bottom" Spacing="8">
                         <TextBlock Text="Kolejne Wydarzenie" Foreground="#CDE6F8" FontWeight="Bold" FontSize="18" TextAlignment="Center" />
-
                         <TextBlock Text="{x:Bind ViewModel.SubOtherEventTitle, Mode=OneWay}"
                                    Foreground="#E6F6FF" FontWeight="Bold" FontSize="16" TextAlignment="Center" TextWrapping="Wrap"/>
                         <TextBlock Text="{x:Bind ViewModel.SubOtherEventDate, Mode=OneWay}"
@@ -92,7 +94,6 @@
                 <StackPanel Grid.Column="1">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Spacing="8">
                         <TextBlock Text="Najbliższy Mecz" Foreground="#CDE6F8" FontWeight="Bold" FontSize="18" TextAlignment="Center" />
-
                         <TextBlock Text="{x:Bind ViewModel.NextMatchTitle, Mode=OneWay}"
                                    Foreground="#E6F6FF" FontWeight="Bold" FontSize="16" TextAlignment="Center" TextWrapping="Wrap"/>
                         <TextBlock Text="{x:Bind ViewModel.NextMatchDate, Mode=OneWay}"
@@ -105,7 +106,6 @@
 
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Bottom" Spacing="8">
                         <TextBlock Text="Kolejny Mecz" Foreground="#CDE6F8" FontWeight="Bold" FontSize="18" TextAlignment="Center" />
-
                         <TextBlock Text="{x:Bind ViewModel.SubMatchTitle, Mode=OneWay}"
                                    Foreground="#E6F6FF" FontWeight="Bold" FontSize="16" TextAlignment="Center" TextWrapping="Wrap"/>
                         <TextBlock Text="{x:Bind ViewModel.SubMatchDate, Mode=OneWay}"
@@ -123,9 +123,17 @@
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="8">
                     <TextBlock Text="Zarządzaj zespołem" Foreground="#CDE6F8" FontWeight="Bold" FontSize="20" TextAlignment="Center" />
                     <Image Source="/Assets/teammanagementimage.png" Width="96" Height="96" />
+
+                    <Viewbox MaxHeight="35" StretchDirection="DownOnly" Margin="0,5,0,0">
+                        <Border Background="{x:Bind ViewModel.NextMatchSquadColor, Mode=OneWay}" 
+                                CornerRadius="8" Padding="12,6"
+                                Visibility="{x:Bind ViewModel.IsSquadStatusVisible, Mode=OneWay, Converter={StaticResource BoolToVis}}">
+                            <TextBlock Text="{x:Bind ViewModel.NextMatchSquadStatus, Mode=OneWay}"
+                                       Foreground="White" FontWeight="Bold" FontSize="14" TextAlignment="Center"/>
+                        </Border>
+                    </Viewbox>
                 </StackPanel>
             </Button>
         </Border>
-
     </Grid>
 </Page>

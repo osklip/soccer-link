@@ -17,26 +17,41 @@ namespace SoccerLink.ViewModels.Team
         private string _statusColor = "White";
         private string _selectedFormation = "4-4-2";
 
+        // Pola dla statusu kompletności składu (Nowe)
+        private string _completenessInfo;
+        private string _completenessColor = "Transparent";
+
         public ObservableCollection<Mecz> Matches { get; } = new();
         public ObservableCollection<Zawodnik> AvailablePlayers { get; } = new();
         public List<string> Formations { get; } = new List<string> { "4-4-2", "4-3-3" };
 
-        // Flagi widoczności
         public bool Is442 => SelectedFormation == "4-4-2";
         public bool Is433 => SelectedFormation == "4-3-3";
 
-        // Zawodnicy
-        private Zawodnik _gk; public Zawodnik GK { get => _gk; set => SetProperty(ref _gk, value); }
-        private Zawodnik _p1; public Zawodnik P1 { get => _p1; set => SetProperty(ref _p1, value); }
-        private Zawodnik _p2; public Zawodnik P2 { get => _p2; set => SetProperty(ref _p2, value); }
-        private Zawodnik _p3; public Zawodnik P3 { get => _p3; set => SetProperty(ref _p3, value); }
-        private Zawodnik _p4; public Zawodnik P4 { get => _p4; set => SetProperty(ref _p4, value); }
-        private Zawodnik _p5; public Zawodnik P5 { get => _p5; set => SetProperty(ref _p5, value); }
-        private Zawodnik _p6; public Zawodnik P6 { get => _p6; set => SetProperty(ref _p6, value); }
-        private Zawodnik _p7; public Zawodnik P7 { get => _p7; set => SetProperty(ref _p7, value); }
-        private Zawodnik _p8; public Zawodnik P8 { get => _p8; set => SetProperty(ref _p8, value); }
-        private Zawodnik _p9; public Zawodnik P9 { get => _p9; set => SetProperty(ref _p9, value); }
-        private Zawodnik _p10; public Zawodnik P10 { get => _p10; set => SetProperty(ref _p10, value); }
+        // Właściwości informujące o kompletności składu (Nowe)
+        public string CompletenessInfo { get => _completenessInfo; set => SetProperty(ref _completenessInfo, value); }
+        public string CompletenessColor { get => _completenessColor; set => SetProperty(ref _completenessColor, value); }
+
+        // ZAWODNICY (Podstawowa 11)
+        // Settery zostały rozbudowane o usuwanie duplikatów i aktualizację statusu
+        private Zawodnik _gk; public Zawodnik GK { get => _gk; set { if (SetProperty(ref _gk, value)) { ClearDuplicateSelection(value, "GK"); UpdateCompletenessStatus(); } } }
+        private Zawodnik _p1; public Zawodnik P1 { get => _p1; set { if (SetProperty(ref _p1, value)) { ClearDuplicateSelection(value, "P1"); UpdateCompletenessStatus(); } } }
+        private Zawodnik _p2; public Zawodnik P2 { get => _p2; set { if (SetProperty(ref _p2, value)) { ClearDuplicateSelection(value, "P2"); UpdateCompletenessStatus(); } } }
+        private Zawodnik _p3; public Zawodnik P3 { get => _p3; set { if (SetProperty(ref _p3, value)) { ClearDuplicateSelection(value, "P3"); UpdateCompletenessStatus(); } } }
+        private Zawodnik _p4; public Zawodnik P4 { get => _p4; set { if (SetProperty(ref _p4, value)) { ClearDuplicateSelection(value, "P4"); UpdateCompletenessStatus(); } } }
+        private Zawodnik _p5; public Zawodnik P5 { get => _p5; set { if (SetProperty(ref _p5, value)) { ClearDuplicateSelection(value, "P5"); UpdateCompletenessStatus(); } } }
+        private Zawodnik _p6; public Zawodnik P6 { get => _p6; set { if (SetProperty(ref _p6, value)) { ClearDuplicateSelection(value, "P6"); UpdateCompletenessStatus(); } } }
+        private Zawodnik _p7; public Zawodnik P7 { get => _p7; set { if (SetProperty(ref _p7, value)) { ClearDuplicateSelection(value, "P7"); UpdateCompletenessStatus(); } } }
+        private Zawodnik _p8; public Zawodnik P8 { get => _p8; set { if (SetProperty(ref _p8, value)) { ClearDuplicateSelection(value, "P8"); UpdateCompletenessStatus(); } } }
+        private Zawodnik _p9; public Zawodnik P9 { get => _p9; set { if (SetProperty(ref _p9, value)) { ClearDuplicateSelection(value, "P9"); UpdateCompletenessStatus(); } } }
+        private Zawodnik _p10; public Zawodnik P10 { get => _p10; set { if (SetProperty(ref _p10, value)) { ClearDuplicateSelection(value, "P10"); UpdateCompletenessStatus(); } } }
+
+        // REZERWOWI (R1-R5) (Nowe)
+        private Zawodnik _r1; public Zawodnik R1 { get => _r1; set { if (SetProperty(ref _r1, value)) ClearDuplicateSelection(value, "R1"); } }
+        private Zawodnik _r2; public Zawodnik R2 { get => _r2; set { if (SetProperty(ref _r2, value)) ClearDuplicateSelection(value, "R2"); } }
+        private Zawodnik _r3; public Zawodnik R3 { get => _r3; set { if (SetProperty(ref _r3, value)) ClearDuplicateSelection(value, "R3"); } }
+        private Zawodnik _r4; public Zawodnik R4 { get => _r4; set { if (SetProperty(ref _r4, value)) ClearDuplicateSelection(value, "R4"); } }
+        private Zawodnik _r5; public Zawodnik R5 { get => _r5; set { if (SetProperty(ref _r5, value)) ClearDuplicateSelection(value, "R5"); } }
 
         public ICommand SaveCommand { get; }
         public ICommand ClearCommand { get; }
@@ -49,6 +64,62 @@ namespace SoccerLink.ViewModels.Team
             ClearCommand = new RelayCommand(ResetPositions);
             GoBackCommand = new RelayCommand(() => RequestNavigateBack?.Invoke(this, EventArgs.Empty));
         }
+
+        // Metoda zapobiegająca duplikatom: Jeśli wybierzesz gracza X na pozycję A, usuwa go z pozycji B
+        private void ClearDuplicateSelection(Zawodnik player, string currentPosCode)
+        {
+            if (player == null || player.ZawodnikId <= 0) return;
+
+            // Sprawdź każdą inną pozycję. Jeśli jest tam ten sam gracz, ustaw null.
+            if (currentPosCode != "GK" && GK?.ZawodnikId == player.ZawodnikId) GK = null;
+            if (currentPosCode != "P1" && P1?.ZawodnikId == player.ZawodnikId) P1 = null;
+            if (currentPosCode != "P2" && P2?.ZawodnikId == player.ZawodnikId) P2 = null;
+            if (currentPosCode != "P3" && P3?.ZawodnikId == player.ZawodnikId) P3 = null;
+            if (currentPosCode != "P4" && P4?.ZawodnikId == player.ZawodnikId) P4 = null;
+            if (currentPosCode != "P5" && P5?.ZawodnikId == player.ZawodnikId) P5 = null;
+            if (currentPosCode != "P6" && P6?.ZawodnikId == player.ZawodnikId) P6 = null;
+            if (currentPosCode != "P7" && P7?.ZawodnikId == player.ZawodnikId) P7 = null;
+            if (currentPosCode != "P8" && P8?.ZawodnikId == player.ZawodnikId) P8 = null;
+            if (currentPosCode != "P9" && P9?.ZawodnikId == player.ZawodnikId) P9 = null;
+            if (currentPosCode != "P10" && P10?.ZawodnikId == player.ZawodnikId) P10 = null;
+
+            if (currentPosCode != "R1" && R1?.ZawodnikId == player.ZawodnikId) R1 = null;
+            if (currentPosCode != "R2" && R2?.ZawodnikId == player.ZawodnikId) R2 = null;
+            if (currentPosCode != "R3" && R3?.ZawodnikId == player.ZawodnikId) R3 = null;
+            if (currentPosCode != "R4" && R4?.ZawodnikId == player.ZawodnikId) R4 = null;
+            if (currentPosCode != "R5" && R5?.ZawodnikId == player.ZawodnikId) R5 = null;
+        }
+
+        // Metoda sprawdzająca czy podstawowa 11 jest pełna
+        private void UpdateCompletenessStatus()
+        {
+            int missingCount = 0;
+
+            if (!IsValidPlayer(GK)) missingCount++;
+            if (!IsValidPlayer(P1)) missingCount++;
+            if (!IsValidPlayer(P2)) missingCount++;
+            if (!IsValidPlayer(P3)) missingCount++;
+            if (!IsValidPlayer(P4)) missingCount++;
+            if (!IsValidPlayer(P5)) missingCount++;
+            if (!IsValidPlayer(P6)) missingCount++;
+            if (!IsValidPlayer(P7)) missingCount++;
+            if (!IsValidPlayer(P8)) missingCount++;
+            if (!IsValidPlayer(P9)) missingCount++;
+            if (!IsValidPlayer(P10)) missingCount++;
+
+            if (missingCount > 0)
+            {
+                CompletenessInfo = $"⚠ Brakuje {missingCount} w podst. składzie";
+                CompletenessColor = "#FF6B6B"; // Jasny czerwony
+            }
+            else
+            {
+                CompletenessInfo = "✅ Skład gotowy";
+                CompletenessColor = "#66BB6A"; // Zielony
+            }
+        }
+
+        private bool IsValidPlayer(Zawodnik z) => z != null && z.ZawodnikId > 0;
 
         public Mecz SelectedMatch
         {
@@ -84,6 +155,7 @@ namespace SoccerLink.ViewModels.Team
         {
             AvailablePlayers.Clear();
             var players = await ZawodnikService.PobierzZawodnikowDlaAktualnegoTreneraAsync();
+            // Pusta opcja do odznaczania
             AvailablePlayers.Add(new Zawodnik { ZawodnikId = -1, Nazwisko = "(Brak)", Imie = "---" });
             foreach (var p in players) AvailablePlayers.Add(p);
 
@@ -102,14 +174,16 @@ namespace SoccerLink.ViewModels.Team
         private void ResetPositions()
         {
             GK = P1 = P2 = P3 = P4 = P5 = P6 = P7 = P8 = P9 = P10 = null;
+            R1 = R2 = R3 = R4 = R5 = null;
             StatusMessage = "Wyczyszczono skład.";
             StatusColor = "#FFD700";
+            UpdateCompletenessStatus();
         }
 
         private async Task LoadSquadForMatchAsync()
         {
             if (SelectedMatch == null) return;
-            ResetPositions();
+            ResetPositions(); // To zresetuje też status na "Brakuje..."
 
             var squadEntries = await SquadService.GetSquadForMatchAsync(SelectedMatch.MeczID);
 
@@ -129,28 +203,22 @@ namespace SoccerLink.ViewModels.Team
                     else if (entry.PozycjaKod == "P8") P8 = player;
                     else if (entry.PozycjaKod == "P9") P9 = player;
                     else if (entry.PozycjaKod == "P10") P10 = player;
+                    // Rezerwowi
+                    else if (entry.PozycjaKod == "R1") R1 = player;
+                    else if (entry.PozycjaKod == "R2") R2 = player;
+                    else if (entry.PozycjaKod == "R3") R3 = player;
+                    else if (entry.PozycjaKod == "R4") R4 = player;
+                    else if (entry.PozycjaKod == "R5") R5 = player;
                 }
             }
             StatusMessage = "Wczytano skład.";
             StatusColor = "#E6F6FF";
+            UpdateCompletenessStatus(); // Upewnij się, że status jest aktualny po wczytaniu
         }
 
         private async void SaveSquad()
         {
             if (SelectedMatch == null) { StatusMessage = "Wybierz mecz!"; StatusColor = "Red"; return; }
-
-            // WALIDACJA: Sprawdź czy są duplikaty
-            var allSlots = new List<Zawodnik> { GK, P1, P2, P3, P4, P5, P6, P7, P8, P9, P10 };
-            var selectedRealPlayers = allSlots.Where(p => p != null && p.ZawodnikId > 0).ToList();
-
-            var distinctCount = selectedRealPlayers.Select(p => p.ZawodnikId).Distinct().Count();
-
-            if (selectedRealPlayers.Count != distinctCount)
-            {
-                StatusMessage = "BŁĄD: Jeden zawodnik jest wybrany na kilku pozycjach!";
-                StatusColor = "#E74C3C"; // Czerwony
-                return;
-            }
 
             var entries = new List<SkladEntry>();
             void Add(Zawodnik p, string code) { if (p != null && p.ZawodnikId > 0) entries.Add(new SkladEntry { MeczID = SelectedMatch.MeczID, ZawodnikID = p.ZawodnikId, PozycjaKod = code }); }
@@ -158,6 +226,8 @@ namespace SoccerLink.ViewModels.Team
             Add(GK, "GK");
             Add(P1, "P1"); Add(P2, "P2"); Add(P3, "P3"); Add(P4, "P4"); Add(P5, "P5");
             Add(P6, "P6"); Add(P7, "P7"); Add(P8, "P8"); Add(P9, "P9"); Add(P10, "P10");
+            // Zapis rezerwowych
+            Add(R1, "R1"); Add(R2, "R2"); Add(R3, "R3"); Add(R4, "R4"); Add(R5, "R5");
 
             try
             {
