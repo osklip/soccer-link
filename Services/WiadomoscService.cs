@@ -9,11 +9,22 @@ namespace SoccerLink.Services
 {
     class WiadomoscService
     {
-        // Metoda do wysyłania wiadomości do wielu odbiorców
+        // Metoda do wysyłania wiadomości masowych (istniejąca)
         public static async Task SendMessagesAsync(List<int> recipientIds, string subject, string body)
         {
             if (SessionService.AktualnyTrener == null) return;
             if (recipientIds == null || !recipientIds.Any()) return;
+
+            foreach (var recipientId in recipientIds)
+            {
+                await WyslijWiadomoscPrywatnaAsync(recipientId, subject, body);
+            }
+        }
+
+        // NOWA METODA: Wysyłanie pojedynczej wiadomości (używana przy powołaniach)
+        public static async Task WyslijWiadomoscPrywatnaAsync(int recipientId, string subject, string body)
+        {
+            if (SessionService.AktualnyTrener == null) return;
 
             var senderId = SessionService.AktualnyTrener.Id;
             var sendDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
@@ -25,19 +36,15 @@ namespace SoccerLink.Services
                 (TypNadawcy, NadawcaID, TypOdbiorcy, OdbiorcaID, Tresc, DataWyslania, Temat) 
                 VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-            foreach (var recipientId in recipientIds)
-            {
-                // Zakładamy, że wysyłamy od Trenera do Zawodnika (na podstawie NewMessagePage)
-                await client.Execute(sql,
-                    "Trener",      // TypNadawcy
-                    senderId,      // NadawcaID
-                    "Zawodnik",    // TypOdbiorcy
-                    recipientId,   // OdbiorcaID
-                    body,          // Tresc
-                    sendDate,      // DataWyslania
-                    subject        // Temat
-                );
-            }
+            await client.Execute(sql,
+                "Trener",      // TypNadawcy
+                senderId,      // NadawcaID
+                "Zawodnik",    // TypOdbiorcy
+                recipientId,   // OdbiorcaID
+                body,          // Tresc
+                sendDate,      // DataWyslania
+                subject        // Temat
+            );
         }
 
         public static async Task<List<Wiadomosc>> PobierzWiadomosciDlaAktualnegoTreneraAsync()
@@ -48,24 +55,22 @@ namespace SoccerLink.Services
             using var client = await DatabaseConfig.CreateClientAsync();
 
             var sql = @"
-    SELECT 
-        w.WiadomoscID, w.TypNadawcy, w.NadawcaID, w.TypOdbiorcy, w.OdbiorcaID, w.Tresc, w.DataWyslania, w.Temat,
-        CASE 
-            WHEN w.TypNadawcy = 'Zawodnik' THEN z.Imie || ' ' || z.Nazwisko
-            WHEN w.TypNadawcy = 'Trener'   THEN t.Imie || ' ' || t.Nazwisko
-            ELSE w.TypNadawcy
-        END AS NadawcaNazwa
-    FROM Wiadomosc w
-    LEFT JOIN Zawodnik z ON w.TypNadawcy = 'Zawodnik' AND w.NadawcaID = z.ZawodnikID
-    LEFT JOIN Trener   t ON w.TypNadawcy = 'Trener'   AND w.NadawcaID = t.TrenerID
-    WHERE 
-        (w.TypOdbiorcy = 'Trener' AND w.OdbiorcaID = ?)
-        OR
-        (w.TypNadawcy = 'Trener' AND w.NadawcaID = ?)
-    ORDER BY w.WiadomoscID DESC;  -- ZMIANA: Sortowanie po ID zamiast po dacie
-";
+                SELECT 
+                    w.WiadomoscID, w.TypNadawcy, w.NadawcaID, w.TypOdbiorcy, w.OdbiorcaID, w.Tresc, w.DataWyslania, w.Temat,
+                    CASE 
+                        WHEN w.TypNadawcy = 'Zawodnik' THEN z.Imie || ' ' || z.Nazwisko
+                        WHEN w.TypNadawcy = 'Trener'   THEN t.Imie || ' ' || t.Nazwisko
+                        ELSE w.TypNadawcy
+                    END AS NadawcaNazwa
+                FROM Wiadomosc w
+                LEFT JOIN Zawodnik z ON w.TypNadawcy = 'Zawodnik' AND w.NadawcaID = z.ZawodnikID
+                LEFT JOIN Trener   t ON w.TypNadawcy = 'Trener'   AND w.NadawcaID = t.TrenerID
+                WHERE 
+                    (w.TypOdbiorcy = 'Trener' AND w.OdbiorcaID = ?)
+                    OR
+                    (w.TypNadawcy = 'Trener' AND w.NadawcaID = ?)
+                ORDER BY w.WiadomoscID DESC;";
 
-            // Przekazujemy trenerId dwukrotnie, bo w SQL są dwa znaki zapytania '?'
             var result = await client.Execute(sql, trenerId, trenerId);
 
             var list = new List<Wiadomosc>();

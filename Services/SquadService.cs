@@ -8,22 +8,9 @@ namespace SoccerLink.Services
 {
     public class SquadService
     {
-        // Metoda tworząca tabelę. 
-        // UWAGA: Dodałem DROP TABLE, aby naprawić błąd "no such column". 
-        // Przy pierwszym uruchomieniu usunie starą tabelę i stworzy poprawną.
         public static async Task EnsureTableExistsAsync()
         {
             using var client = await DatabaseConfig.CreateClientAsync();
-
-            // Twardy reset tabeli przy zmianie struktury (dla celów deweloperskich)
-            // Jeśli chcesz zachować dane w przyszłości, użyj ALTER TABLE lub migracji.
-            // Na teraz - usuwamy starą wersję, żeby dodać kolumnę PozycjaKod.
-            // await client.Execute("DROP TABLE IF EXISTS Sklad"); 
-
-            // Wersja bezpieczniejsza: Tworzymy tylko jeśli nie istnieje. 
-            // Jeśli masz błąd "no such column", odkomentuj powyższą linię "DROP TABLE" na jedno uruchomienie!
-            // LUB: Zmienimy nazwę tabeli na 'SkladMeczowy', żeby stworzył nową, czystą tabelę.
-
             var sql = @"
                 CREATE TABLE IF NOT EXISTS SkladMeczowy (
                     SkladID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -34,24 +21,47 @@ namespace SoccerLink.Services
             await client.Execute(sql);
         }
 
+        // ZMODYFIKOWANA METODA: Zapisuje skład i wysyła powiadomienia
         public static async Task SaveSquadAsync(int meczId, List<SkladEntry> entries)
         {
             if (SessionService.AktualnyTrener == null) return;
+
             await EnsureTableExistsAsync();
+            await AvailabilityService.EnsureTableExistsAsync(); // Upewniamy się, że tabela dostępności istnieje
 
             using var client = await DatabaseConfig.CreateClientAsync();
 
-            // 1. Usuwamy stary skład dla tego meczu (nadpisanie)
+            // 1. Usuwamy stary skład dla tego meczu
             await client.Execute("DELETE FROM SkladMeczowy WHERE MeczID = ?", meczId);
 
-            // 2. Dodajemy nowy
-            var sql = "INSERT INTO SkladMeczowy (MeczID, ZawodnikID, PozycjaKod) VALUES (?, ?, ?)";
+            var sqlInsert = "INSERT INTO SkladMeczowy (MeczID, ZawodnikID, PozycjaKod) VALUES (?, ?, ?)";
 
             foreach (var entry in entries)
             {
                 if (entry.ZawodnikID > 0)
                 {
-                    await client.Execute(sql, meczId, entry.ZawodnikID, entry.PozycjaKod);
+                    // A. Zapis do bazy składu
+                    await client.Execute(sqlInsert, meczId, entry.ZawodnikID, entry.PozycjaKod);
+
+                    // B. Inicjalizacja dostępności (status Oczekujący)
+                    await AvailabilityService.InicjujDostepnoscAsync(meczId, entry.ZawodnikID);
+
+                    // C. Przygotowanie treści wiadomości
+                    string opisPozycji = entry.PozycjaKod;
+
+                    // Prosta logika zamiany kodów na tekst (dostosuj do swoich kodów)
+                    if (opisPozycji.Contains("SUB") || opisPozycji.Contains("Bench"))
+                        opisPozycji = "Ławka rezerwowych";
+                    else if (opisPozycji == "GK") opisPozycji = "Bramkarz";
+                    // ... możesz dodać więcej warunków
+
+                    string temat = "Powołanie na mecz";
+                    string tresc = $"Zostałeś powołany na mecz (ID: {meczId}). " +
+                                   $"Twoja przydzielona rola/pozycja: {opisPozycji}. " +
+                                   $"Proszę o potwierdzenie obecności w zakładce Mecze.";
+
+                    // D. Wysłanie wiadomości do konkretnego zawodnika
+                    await WiadomoscService.WyslijWiadomoscPrywatnaAsync(entry.ZawodnikID, temat, tresc);
                 }
             }
         }
