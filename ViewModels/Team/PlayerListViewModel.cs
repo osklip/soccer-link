@@ -33,7 +33,7 @@ namespace SoccerLink.ViewModels.Team
             }
             catch (Exception ex)
             {
-                // Tutaj można dodać obsługę błędu (np. Property StatusMessage)
+                
                 System.Diagnostics.Debug.WriteLine(ex.Message);
             }
         }

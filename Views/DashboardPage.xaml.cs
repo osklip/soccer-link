@@ -14,7 +14,7 @@ namespace SoccerLink.Views
             ViewModel = new DashboardViewModel();
             this.InitializeComponent();
 
-            // Subskrypcja nawigacji
+         
             ViewModel.RequestNavigateToMessages += (s, e) => this.Frame.Navigate(typeof(MessagesPage));
             ViewModel.RequestNavigateToCalendar += (s, e) => this.Frame.Navigate(typeof(CalendarPage));
             ViewModel.RequestNavigateToStats += (s, e) => this.Frame.Navigate(typeof(StatsNaviPage));

@@ -9,7 +9,7 @@ namespace SoccerLink.Services
 {
     class WiadomoscService
     {
-        // Metoda do wysyłania wiadomości masowych (istniejąca)
+        
         public static async Task SendMessagesAsync(List<int> recipientIds, string subject, string body)
         {
             if (SessionService.AktualnyTrener == null) return;
@@ -21,7 +21,7 @@ namespace SoccerLink.Services
             }
         }
 
-        // NOWA METODA: Wysyłanie pojedynczej wiadomości (używana przy powołaniach)
+        
         public static async Task WyslijWiadomoscPrywatnaAsync(int recipientId, string subject, string body)
         {
             if (SessionService.AktualnyTrener == null) return;
@@ -37,13 +37,13 @@ namespace SoccerLink.Services
                 VALUES (?, ?, ?, ?, ?, ?, ?)";
 
             await client.Execute(sql,
-                "Trener",      // TypNadawcy
-                senderId,      // NadawcaID
-                "Zawodnik",    // TypOdbiorcy
-                recipientId,   // OdbiorcaID
-                body,          // Tresc
-                sendDate,      // DataWyslania
-                subject        // Temat
+                "Trener",      
+                senderId,      
+                "Zawodnik",    
+                recipientId,   
+                body,          
+                sendDate,      
+                subject        
             );
         }
 

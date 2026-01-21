@@ -8,7 +8,7 @@ namespace SoccerLink.Services
 {
     public class StatsService
     {
-        // --- ZAPIS (Drużyna) ---
+        
         public static async Task SaveTeamStatsAsync(StatystykiDruzyny stats)
         {
             if (SessionService.AktualnyTrener == null) return;
@@ -28,7 +28,7 @@ namespace SoccerLink.Services
                 stats.CzysteKonto ? 1 : 0);
         }
 
-        // --- ODCZYT (AGREGACJA - Drużyna) ---
+        
         public static async Task<StatystykiDruzyny> GetAverageTeamStatsAsync(int? month = null, int? year = null)
         {
             if (SessionService.AktualnyTrener == null) return new StatystykiDruzyny();
@@ -76,7 +76,7 @@ namespace SoccerLink.Services
             };
         }
 
-        // --- ZAPIS (Lista zawodników) ---
+        
         public static async Task SavePlayerStatsListAsync(List<StatystykiZawodnika> statsList)
         {
             if (statsList == null || !statsList.Any()) return;
@@ -102,7 +102,7 @@ namespace SoccerLink.Services
             }
         }
 
-        // --- ODCZYT (Szczegóły gracza) ---
+        
         public static async Task<StatystykiZawodnika> GetPlayerStatsSummaryAsync(int zawodnikId, int? month = null, int? year = null)
         {
             if (SessionService.AktualnyTrener == null) return new StatystykiZawodnika();

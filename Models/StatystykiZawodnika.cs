@@ -15,10 +15,10 @@ namespace SoccerLink.Models
         public int Strzaly { get; set; }
         public int StrzalyCelne { get; set; }
         public int StrzalyNiecelne { get; set; }
-        public int PodaniaCelne { get; set; } // Wcześniej w UI było "Passes"
+        public int PodaniaCelne { get; set; } 
         public int Faule { get; set; }
         public int ZolteKartki { get; set; }
-        public bool CzerwonaKartka { get; set; } // W bazie 0/1, tutaj bool dla wygody
+        public bool CzerwonaKartka { get; set; } 
         public bool CzysteKonto { get; set; }
     }
 }

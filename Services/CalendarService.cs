@@ -10,11 +10,10 @@ namespace SoccerLink.Services
 {
     class CalendarService
     {
-        // Formaty używane w bazie danych (SQLite trzyma to jako TEXT)
+        
         private static readonly string[] _formats = { "yyyy-MM-dd HH:mm", "yyyy-MM-dd H:mm" };
 
-        // --- ZAPIS (INSERT) ---
-        // Rozbijamy DateTime na stringi, aby pasowały do istniejącej struktury tabel
+       
 
         public static async Task AddMeczAsync(Mecz mecz)
         {
@@ -23,7 +22,7 @@ namespace SoccerLink.Services
 
             var sql = "INSERT INTO Mecz (SkladMeczowyID, Przeciwnik, Data, Godzina, Miejsce, TrenerID) VALUES (0, ?, ?, ?, ?, ?);";
 
-            // Konwersja DateTime -> Stringi dla bazy
+            
             string dataStr = mecz.DataRozpoczecia.ToString("yyyy-MM-dd");
             string godzinaStr = mecz.DataRozpoczecia.ToString("HH:mm");
 
@@ -58,7 +57,7 @@ namespace SoccerLink.Services
             await client.Execute(sql, wydarzenie.Nazwa, wydarzenie.Miejsce, dataStr, startStr, endStr, wydarzenie.Opis, SessionService.AktualnyTrener.Id);
         }
 
-        // --- AKTUALIZACJA (UPDATE) ---
+       
 
         public static async Task UpdateEventAsync(UpcomingEvent e)
         {
@@ -66,7 +65,7 @@ namespace SoccerLink.Services
             using var client = await DatabaseConfig.CreateClientAsync();
             var tid = SessionService.AktualnyTrener.Id;
 
-            // Konwersja DateTime na format bazy danych
+            
             var dataStr = e.DateTimeStart.ToString("yyyy-MM-dd");
             var godzinaStr = e.DateTimeStart.ToString("HH:mm");
 
@@ -87,8 +86,7 @@ namespace SoccerLink.Services
             }
         }
 
-        // --- ODCZYT (SELECT) ---
-        // Tutaj UpcomingEvent jest już poprawnym modelem z DateTime, więc tylko mapujemy kolumny tekstowe z bazy na niego.
+       
 
         public static async Task<List<UpcomingEvent>> GetAllEventsAsync()
         {
@@ -101,14 +99,14 @@ namespace SoccerLink.Services
             {
                 using var client = await DatabaseConfig.CreateClientAsync();
 
-                // 1. Mecze
+                
                 var meczRes = await client.Execute("SELECT MeczID, Przeciwnik, Data, Godzina, Miejsce FROM Mecz WHERE TrenerID = ? ORDER BY Data, Godzina", trenerId);
                 if (meczRes.Rows != null)
                 {
                     foreach (var row in meczRes.Rows)
                     {
                         var c = row.ToArray();
-                        // Sklejamy Data + Godzina w jeden DateTime
+                        
                         if (DateTime.TryParseExact($"{c[2]} {c[3]}", _formats, null, DateTimeStyles.None, out var dt))
                         {
                             allEvents.Add(new UpcomingEvent
@@ -124,7 +122,7 @@ namespace SoccerLink.Services
                     }
                 }
 
-                // 2. Treningi
+                
                 var trenRes = await client.Execute("SELECT TreningID, Typ, Data, GodzinaRozpoczecia, GodzinaZakonczenia, Miejsce FROM Trening WHERE TrenerID = ? ORDER BY Data, GodzinaRozpoczecia", trenerId);
                 if (trenRes.Rows != null)
                 {
@@ -139,14 +137,14 @@ namespace SoccerLink.Services
                                 Id = int.Parse(c[0].ToString()),
                                 Title = c[1].ToString(),
                                 DateTimeStart = dt,
-                                TimeEnd = c[4].ToString(), // To na razie zostaje stringiem w UpcomingEvent (do wyświetlania)
+                                TimeEnd = c[4].ToString(), 
                                 Location = c[5].ToString()
                             });
                         }
                     }
                 }
 
-                // 3. Wydarzenia
+                
                 var wydRes = await client.Execute("SELECT WydarzenieID, Nazwa, Data, GodzinaStart, GodzinaKoniec, Miejsce, Opis FROM Wydarzenie WHERE TrenerID = ? ORDER BY Data, GodzinaStart", trenerId);
                 if (wydRes.Rows != null)
                 {
@@ -171,7 +169,7 @@ namespace SoccerLink.Services
             }
             catch (Exception ex)
             {
-                // Logowanie błędu można dodać tutaj
+                
                 System.Diagnostics.Debug.WriteLine($"DB Error: {ex.Message}");
             }
             return allEvents.OrderBy(e => e.DateTimeStart).ToList();
@@ -190,7 +188,7 @@ namespace SoccerLink.Services
             using var client = await DatabaseConfig.CreateClientAsync();
             var tid = SessionService.AktualnyTrener.Id;
 
-            // Ustalanie nazwy tabeli i kolumny ID
+            
             string table = eventType switch
             {
                 "Mecz" => "Mecz",
@@ -199,10 +197,10 @@ namespace SoccerLink.Services
                 _ => throw new Exception("Nieznany typ wydarzenia")
             };
 
-            // Ważne: Kolumny w bazie nazywają się MeczID, TreningID, WydarzenieID
+            
             string col = eventType + "ID";
 
-            // Wykonanie zapytania SQL
+            
             await client.Execute($"DELETE FROM {table} WHERE {col}=? AND TrenerID=?", eventId, tid);
         }
     }

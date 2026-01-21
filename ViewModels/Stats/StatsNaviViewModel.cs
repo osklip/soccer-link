@@ -6,13 +6,13 @@ namespace SoccerLink.ViewModels.Stats
 {
     public class StatsNaviViewModel : BaseViewModel
     {
-        // Zdarzenia, na które nasłuchuje widok
+        
         public event EventHandler RequestNavigateBack;
         public event EventHandler RequestNavigateToSoloStats;
         public event EventHandler RequestNavigateToTeamStats;
         public event EventHandler RequestNavigateToAddStats;
 
-        // Komendy bindowane do przycisków
+        
         public ICommand GoBackCommand { get; }
         public ICommand GoToSoloStatsCommand { get; }
         public ICommand GoToTeamStatsCommand { get; }

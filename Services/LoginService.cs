@@ -15,15 +15,14 @@ namespace SoccerLink.Services
 
             using var client = await DatabaseConfig.CreateClientAsync();
 
-            // ZMIANA 1: Używamy '?' zamiast '@email'
+            
             var sql = @"
                 SELECT TrenerID, AdresEmail, Haslo, Imie, Nazwisko, NumerTelefonu
                 FROM Trener
                 WHERE AdresEmail = ?
                 LIMIT 1;";
 
-            // ZMIANA 2: Przekazujemy 'email' bezpośrednio jako drugi argument
-            // Biblioteka podstawi go pod znak zapytania
+            
             var result = await client.Execute(sql, email);
 
             if (result.Rows == null || !result.Rows.Any())

@@ -8,12 +8,12 @@ namespace SoccerLink.ViewModels.Events
 {
     public class AddEventViewModel : BaseViewModel
     {
-        private int _selectedTypeIndex = 0; // 0: Wydarzenie, 1: Trening, 2: Mecz
+        private int _selectedTypeIndex = 0; 
         private string _title = string.Empty;
         private DateTimeOffset? _date = DateTimeOffset.Now;
         private string _location = string.Empty;
-        private string _timeStart = string.Empty; // Format HH:mm
-        private string _timeEnd = string.Empty;   // Format HH:mm
+        private string _timeStart = string.Empty; 
+        private string _timeEnd = string.Empty;   
         private string _description = string.Empty;
         private string _statusMessage = string.Empty;
         private string _statusColor = "Red";
@@ -27,7 +27,7 @@ namespace SoccerLink.ViewModels.Events
             UpdateUiState();
         }
 
-        // --- WŁAŚCIWOŚCI ---
+        
 
         public int SelectedTypeIndex { get => _selectedTypeIndex; set { if (SetProperty(ref _selectedTypeIndex, value)) UpdateUiState(); } }
         public string Title { get => _title; set => SetProperty(ref _title, value); }
@@ -47,18 +47,18 @@ namespace SoccerLink.ViewModels.Events
         {
             switch (_selectedTypeIndex)
             {
-                case 2: // Mecz
+                case 2: 
                     TitlePlaceholder = "Przeciwnik (np. FC Dobre Wnioski)";
                     IsTimeEndVisible = false;
                     IsDescriptionVisible = false;
                     break;
-                case 1: // Trening
+                case 1: 
                     TitlePlaceholder = "Typ treningu (np. Taktyka)";
                     IsTimeEndVisible = true;
                     IsDescriptionVisible = false;
                     break;
                 case 0:
-                default: // Wydarzenie
+                default: 
                     TitlePlaceholder = "Nazwa wydarzenia (np. Zebranie)";
                     IsTimeEndVisible = true;
                     IsDescriptionVisible = true;
@@ -66,7 +66,7 @@ namespace SoccerLink.ViewModels.Events
             }
         }
 
-        // Helper do parsowania daty i godziny
+        
         private DateTime? ParseDateTime(DateTimeOffset? date, string time)
         {
             if (!date.HasValue || string.IsNullOrWhiteSpace(time)) return null;
@@ -78,7 +78,7 @@ namespace SoccerLink.ViewModels.Events
             {
                 return result;
             }
-            // Fallback dla pojedynczych cyfr np 8:00
+            
             if (DateTime.TryParseExact(fullStr, "yyyy-MM-dd H:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime result2))
             {
                 return result2;
@@ -103,7 +103,7 @@ namespace SoccerLink.ViewModels.Events
                 return false;
             }
 
-            // Parsowanie daty rozpoczęcia
+            
             DateTime? startDt = ParseDateTime(Date, TimeStart);
             if (startDt == null)
             {
@@ -111,17 +111,17 @@ namespace SoccerLink.ViewModels.Events
                 return false;
             }
 
-            // --- NOWA LOGIKA: BLOKADA DATY Z PRZESZŁOŚCI ---
+           
             if (startDt < DateTime.Now)
             {
                 StatusMessage = "Nie można dodawać wydarzeń z przeszłości.";
                 return false;
             }
-            // -------------------------------------------------
+           
 
-            // Parsowanie daty zakończenia (jeśli wymagana)
-            DateTime endDt = startDt.Value; // domyślnie to samo co start
-            if (_selectedTypeIndex != 2) // Jeśli nie mecz, to parsujemy koniec
+            
+            DateTime endDt = startDt.Value; 
+            if (_selectedTypeIndex != 2) 
             {
                 if (string.IsNullOrWhiteSpace(TimeEnd))
                 {
@@ -148,7 +148,7 @@ namespace SoccerLink.ViewModels.Events
             {
                 switch (_selectedTypeIndex)
                 {
-                    case 2: // Mecz
+                    case 2: 
                         var mecz = new Mecz
                         {
                             Przeciwnik = Title.Trim(),
@@ -158,7 +158,7 @@ namespace SoccerLink.ViewModels.Events
                         await CalendarService.AddMeczAsync(mecz);
                         break;
 
-                    case 1: // Trening
+                    case 1: 
                         var trening = new Trening
                         {
                             Typ = Title.Trim(),
@@ -170,7 +170,7 @@ namespace SoccerLink.ViewModels.Events
                         break;
 
                     case 0:
-                    default: // Wydarzenie
+                    default: 
                         var wydarzenie = new Wydarzenie
                         {
                             Nazwa = Title.Trim(),

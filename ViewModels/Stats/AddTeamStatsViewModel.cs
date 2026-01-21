@@ -1,6 +1,6 @@
 ﻿using SoccerLink.Models;
 using SoccerLink.Services;
-using SoccerLink.Helpers; // Dla RelayCommand
+using SoccerLink.Helpers; 
 using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -11,7 +11,7 @@ namespace SoccerLink.ViewModels.Stats
     {
         private Mecz _selectedMatch;
 
-        // Pola formularza
+        
         private string _goals;
         private string _possession;
         private string _shots;
@@ -21,7 +21,7 @@ namespace SoccerLink.ViewModels.Stats
         private string _fouls;
         private bool _cleanSheet;
 
-        public event EventHandler RequestClose; // Zdarzenie zamknięcia strony
+        public event EventHandler RequestClose; 
 
         public AddTeamStatsViewModel()
         {
@@ -32,10 +32,10 @@ namespace SoccerLink.ViewModels.Stats
         public void Initialize(Mecz match)
         {
             _selectedMatch = match;
-            // Tutaj można by też ładować istniejące statystyki, jeśli chcemy edytować
+            
         }
 
-        // Properties (stringi, żeby łatwo bindować do TextBoxów, konwersja przy zapisie)
+        
         public string Goals { get => _goals; set => SetProperty(ref _goals, value); }
         public string Possession { get => _possession; set => SetProperty(ref _possession, value); }
         public string Shots { get => _shots; set => SetProperty(ref _shots, value); }

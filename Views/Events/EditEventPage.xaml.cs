@@ -6,7 +6,7 @@ using System;
 
 namespace SoccerLink.Views
 {
-    // PRZYWRÓCONA KLASA: Potrzebna do nawigacji z CalendarPage
+    
     public class EditEventArgs
     {
         public string EventType { get; set; }

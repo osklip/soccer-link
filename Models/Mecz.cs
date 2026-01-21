@@ -8,13 +8,13 @@ namespace SoccerLink.Models
 {
     public class Mecz
     {
-        public int MeczID { get; set; } // MeczyID INTEGER PRIMARY KEY AUTOINCREMENT
-        public int SkladMeczowyID { get; set; } // SkladMeczowyID INTEGER NOT NULL
-        public string Przeciwnik { get; set; } // Przeciwnik TEXT NOT NULL
-        public DateTime DataRozpoczecia { get; set; } // Data TEXT NOT NULL
+        public int MeczID { get; set; } 
+        public int SkladMeczowyID { get; set; } 
+        public string Przeciwnik { get; set; } 
+        public DateTime DataRozpoczecia { get; set; } 
         public string DataDisplay => DataRozpoczecia.ToString("dd.MM.yyyy");
-        public string GodzinaDisplay => DataRozpoczecia.ToString("HH:mm"); // Godzina TEXT NOT NULL
-        public string Miejsce { get; set; } // Miejsce TEXT NOT NULL
-        public int TrenerID { get; set; } // TrenerID INTEGER NOT NULL
+        public string GodzinaDisplay => DataRozpoczecia.ToString("HH:mm");
+        public string Miejsce { get; set; } 
+        public int TrenerID { get; set; } 
     }
 }

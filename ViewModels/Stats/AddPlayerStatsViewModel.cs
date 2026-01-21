@@ -9,12 +9,12 @@ using System.Collections.Generic;
 
 namespace SoccerLink.ViewModels.Stats
 {
-    // Wrapper dla pojedynczego wiersza (Gracza) na liście
+    
     public class PlayerStatsItemViewModel : BaseViewModel
     {
         public Zawodnik Player { get; }
 
-        // Dane do zapisu
+        
         private int _goals; public int Goals { get => _goals; set => SetProperty(ref _goals, value); }
         private int _shots; public int Shots { get => _shots; set => SetProperty(ref _shots, value); }
         private int _shotsOn; public int ShotsOnTarget { get => _shotsOn; set => SetProperty(ref _shotsOn, value); }
@@ -25,7 +25,7 @@ namespace SoccerLink.ViewModels.Stats
         private bool _red; public bool HasRedCard { get => _red; set => SetProperty(ref _red, value); }
         private bool _clean; public bool CleanSheet { get => _clean; set => SetProperty(ref _clean, value); }
 
-        // Komendy dla przycisków +/-
+        
         public ICommand IncGoalCommand { get; }
         public ICommand DecGoalCommand { get; }
         public ICommand IncShotCommand { get; }
@@ -45,36 +45,36 @@ namespace SoccerLink.ViewModels.Stats
         {
             Player = player;
 
-            // Gole
+            
             IncGoalCommand = new RelayCommand(() => Goals++);
             DecGoalCommand = new RelayCommand(() => { if (Goals > 0) Goals--; });
 
-            // Strzały (Ogółem)
+            
             IncShotCommand = new RelayCommand(() => Shots++);
             DecShotCommand = new RelayCommand(() => { if (Shots > 0) Shots--; });
 
-            // Strzały Celne
+            
             IncShotOnCommand = new RelayCommand(() => ShotsOnTarget++);
             DecShotOnCommand = new RelayCommand(() => { if (ShotsOnTarget > 0) ShotsOnTarget--; });
 
-            // Strzały Niecelne
+            
             IncShotOffCommand = new RelayCommand(() => ShotsOffTarget++);
             DecShotOffCommand = new RelayCommand(() => { if (ShotsOffTarget > 0) ShotsOffTarget--; });
 
-            // Podania
+            
             IncPassCommand = new RelayCommand(() => Passes++);
             DecPassCommand = new RelayCommand(() => { if (Passes > 0) Passes--; });
 
-            // Faule
+            
             IncFoulCommand = new RelayCommand(() => Fouls++);
             DecFoulCommand = new RelayCommand(() => { if (Fouls > 0) Fouls--; });
 
-            // Żółte kartki
+            
             IncYellowCommand = new RelayCommand(() => YellowCards++);
             DecYellowCommand = new RelayCommand(() => { if (YellowCards > 0) YellowCards--; });
         }
 
-        // Helper do łatwej zmiany statystyk z poziomu głównego VM (np. globalne czyste konto)
+        
         public void SetCleanSheet(bool value) => CleanSheet = value;
     }
 
@@ -100,7 +100,7 @@ namespace SoccerLink.ViewModels.Stats
             {
                 if (SetProperty(ref _globalCleanSheet, value))
                 {
-                    // Aktualizuj wszystkich graczy
+                    
                     foreach (var p in PlayersList) p.SetCleanSheet(value);
                 }
             }
@@ -114,7 +114,7 @@ namespace SoccerLink.ViewModels.Stats
             _selectedMatch = match;
             PlayersList.Clear();
 
-            // Pobierz graczy z bazy
+            
             var players = await ZawodnikService.PobierzZawodnikowDlaAktualnegoTreneraAsync();
 
             foreach (var p in players)

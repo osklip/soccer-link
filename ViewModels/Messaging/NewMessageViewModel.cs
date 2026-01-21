@@ -10,7 +10,7 @@ using System.Windows.Input;
 
 namespace SoccerLink.ViewModels.Messaging
 {
-    // Wrapper dla zawodnika, aby obsłużyć zaznaczanie (CheckBox) w MVVM
+   
     public class RecipientItemViewModel : BaseViewModel
     {
         public Zawodnik Player { get; }
@@ -50,8 +50,7 @@ namespace SoccerLink.ViewModels.Messaging
             CancelCommand = new RelayCommand(() => RequestNavigateBack?.Invoke(this, EventArgs.Empty));
         }
 
-        // --- WŁAŚCIWOŚCI ---
-
+        
         public string Subject { get => _subject; set => SetProperty(ref _subject, value); }
         public string Body { get => _body; set => SetProperty(ref _body, value); }
 
@@ -64,12 +63,12 @@ namespace SoccerLink.ViewModels.Messaging
         public ICommand SendCommand { get; }
         public ICommand CancelCommand { get; }
 
-        // --- METODY ---
+        
 
         public async Task LoadRecipientsAsync()
         {
             StatusMessage = "Ładowanie adresatów...";
-            StatusColor = "#E6F6FF"; // Jasny niebieski jako info
+            StatusColor = "#E6F6FF"; 
             Recipients.Clear();
 
             try
@@ -79,7 +78,7 @@ namespace SoccerLink.ViewModels.Messaging
                 foreach (var p in players.OrderBy(x => x.Nazwisko))
                 {
                     var item = new RecipientItemViewModel(p);
-                    // Subskrypcja zmiany zaznaczenia, aby aktualizować licznik
+                    
                     item.PropertyChanged += (s, e) =>
                     {
                         if (e.PropertyName == nameof(RecipientItemViewModel.IsSelected))
@@ -117,7 +116,7 @@ namespace SoccerLink.ViewModels.Messaging
             StatusMessage = "";
             StatusColor = "Red";
 
-            // Walidacja
+            
             if (string.IsNullOrWhiteSpace(Subject) || string.IsNullOrWhiteSpace(Body))
             {
                 StatusMessage = "Temat i treść wiadomości są wymagane.";
@@ -135,7 +134,7 @@ namespace SoccerLink.ViewModels.Messaging
                 return;
             }
 
-            // Wysyłka
+            
             _isSending = true;
             (SendCommand as RelayCommand)?.RaiseCanExecuteChanged();
             StatusColor = "#E6F6FF";

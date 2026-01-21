@@ -14,10 +14,8 @@ namespace SoccerLink.Models
         public string TypOdbiorcy { get; set; }
         public int OdbiorcaID { get; set; }
         public string Tresc { get; set; }
-        public string DataWyslania { get; set; }   // na razie jako string (SQLite TEXT)
+        public string DataWyslania { get; set; }   
         public string Temat { get; set; }
-
-        // NOWE POLE – będzie używane w UI
         public string NadawcaNazwa { get; set; }
     }
 }

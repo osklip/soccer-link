@@ -17,7 +17,7 @@ namespace SoccerLink.Views
             ViewModel.RequestNavigateBack += (s, e) => this.Frame.Navigate(typeof(DashboardPage));
             ViewModel.RequestNavigateToPlayerList += (s, e) => this.Frame.Navigate(typeof(PlayerListPage));
 
-            // AKTUALIZACJA: Teraz nawiguje do SquadPage
+            
             ViewModel.RequestNavigateToSquad += (s, e) => this.Frame.Navigate(typeof(SquadPage));
         }
     }

@@ -1,7 +1,7 @@
 ﻿using SoccerLink.Helpers;
 using SoccerLink.Services;
 using System;
-using System.Text.RegularExpressions; // Dodano do obsługi Regex
+using System.Text.RegularExpressions; 
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -26,7 +26,7 @@ namespace SoccerLink.ViewModels.Auth
             GoToLoginCommand = new RelayCommand(GoToLogin);
         }
 
-        // Właściwości (Bindings)
+        
         public string Email { get => _email; set { SetProperty(ref _email, value); UpdateCommandState(); } }
         public string Password { get => _password; set { SetProperty(ref _password, value); UpdateCommandState(); } }
         public string PasswordRepeat { get => _passwordRepeat; set { SetProperty(ref _passwordRepeat, value); UpdateCommandState(); } }
@@ -44,7 +44,7 @@ namespace SoccerLink.ViewModels.Auth
 
         private bool CanRegister()
         {
-            // Podstawowe sprawdzenie czy pola nie są puste, żeby w ogóle aktywować przycisk
+            
             return !string.IsNullOrWhiteSpace(Email) &&
                    !string.IsNullOrWhiteSpace(Password) &&
                    !string.IsNullOrWhiteSpace(PasswordRepeat) &&
@@ -58,23 +58,14 @@ namespace SoccerLink.ViewModels.Auth
             StatusMessage = "";
             StatusColor = "Red";
 
-            // --- WALIDACJA DANYCH ---
-
-            // 1. Walidacja adresu Email (format)
-            // Regex sprawdza: ciągznaków @ ciągznaków . domena (2-4 znaki)
+            
             if (!Regex.IsMatch(Email.Trim(), @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
             {
                 StatusMessage = "Niepoprawny format adresu email.";
                 return;
             }
 
-            // 2. Walidacja Hasła
-            // Wymagania: 1 duża, 1 mała, 1 cyfra, 1 znak specjalny, min. 8 znaków
-            // (?=.*[a-z]) - co najmniej jedna mała litera
-            // (?=.*[A-Z]) - co najmniej jedna duża litera
-            // (?=.*\d)    - co najmniej jedna cyfra
-            // (?=.*[\W_]) - co najmniej jeden znak specjalny (nie-alfanumeryczny lub podkreślnik)
-            // .{8,}       - minimum 8 znaków
+            
             var passwordRegex = new Regex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$");
             if (!passwordRegex.IsMatch(Password))
             {
@@ -88,27 +79,25 @@ namespace SoccerLink.ViewModels.Auth
                 return;
             }
 
-            // 3. Walidacja Imienia i Nazwiska (brak cyfr)
-            // Sprawdzamy, czy string zawiera jakąkolwiek cyfrę (\d)
+            
             if (Regex.IsMatch(FirstName, @"\d") || Regex.IsMatch(LastName, @"\d"))
             {
                 StatusMessage = "Imię i Nazwisko nie mogą zawierać cyfr.";
                 return;
             }
 
-            // 4. Walidacja Numeru Telefonu (równo 9 cyfr, same cyfry)
-            // ^\d{9}$ - początek, dokładnie 9 cyfr, koniec
+            
             if (!Regex.IsMatch(PhoneNumber.Trim(), @"^\d{9}$"))
             {
                 StatusMessage = "Numer telefonu musi składać się z dokładnie 9 cyfr.";
                 return;
             }
 
-            // --- KONIEC WALIDACJI FORMATU ---
+            
 
             try
             {
-                // Unikalność w bazie jest sprawdzana wewnątrz RegisterService
+                
                 bool result = await RegisterService.RegisterAsync(Email, Password, FirstName, LastName, PhoneNumber);
 
                 if (result)
@@ -120,7 +109,7 @@ namespace SoccerLink.ViewModels.Auth
                 }
                 else
                 {
-                    // Jeśli RegisterService zwróci false, oznacza to, że email lub telefon już istnieje w bazie
+                    
                     StatusMessage = "Użytkownik z takim adresem email lub numerem telefonu już istnieje.";
                 }
             }

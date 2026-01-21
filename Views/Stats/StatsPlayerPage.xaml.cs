@@ -32,7 +32,7 @@ namespace SoccerLink.Views
             if (PlayersListView.SelectedItem is Zawodnik selectedPlayer)
             {
                 ViewModel.SelectPlayer(selectedPlayer);
-                PlayersListView.SelectedItem = null; // Reset wyboru
+                PlayersListView.SelectedItem = null; 
             }
         }
     }

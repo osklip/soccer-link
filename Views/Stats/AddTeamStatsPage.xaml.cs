@@ -15,7 +15,7 @@ namespace SoccerLink.Views
             ViewModel = new AddTeamStatsViewModel();
             this.InitializeComponent();
 
-            // Obs³uga nawigacji powrotnej wywo³ywanej z ViewModelu
+            
             ViewModel.RequestClose += (s, e) =>
             {
                 if (this.Frame.CanGoBack) this.Frame.GoBack();

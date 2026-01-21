@@ -19,21 +19,20 @@ namespace SoccerLink.ViewModels.Events
         private string _statusMessage = "";
         private bool _isStatusVisible = false;
 
-        // Zdarzenia nawigacyjne
+        
         public event EventHandler RequestNavigateBack;
         public event EventHandler RequestNavigateToAdd;
-        // USUNIĘTO: public event EventHandler<int> RequestNavigateToAttendance;
+        
         public event EventHandler<UpcomingEvent> RequestNavigateToEdit;
         public event EventHandler<UpcomingEvent> RequestNavigateToDelete;
 
-        // Komendy
+        
         public ICommand GoBackCommand { get; }
         public ICommand AddEventCommand { get; }
         public ICommand PrevWeekCommand { get; }
         public ICommand NextWeekCommand { get; }
 
-        // Komendy z parametrem
-        // USUNIĘTO: public ICommand CheckAttendanceCommand { get; }
+        
         public ICommand EditEventCommand { get; }
         public ICommand DeleteEventCommand { get; }
 
@@ -44,7 +43,7 @@ namespace SoccerLink.ViewModels.Events
             PrevWeekCommand = new RelayCommand(PrevWeek);
             NextWeekCommand = new RelayCommand(NextWeek);
 
-            // USUNIĘTO inicjalizację CheckAttendanceCommand
+            
 
             EditEventCommand = new RelayCommand<int>(id =>
             {

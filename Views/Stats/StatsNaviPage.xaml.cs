@@ -14,7 +14,7 @@ namespace SoccerLink.Views
             ViewModel = new StatsNaviViewModel();
             this.InitializeComponent();
 
-            // Obs³uga nawigacji z ViewModelu
+            
             ViewModel.RequestNavigateBack += (s, e) => this.Frame.Navigate(typeof(DashboardPage));
             ViewModel.RequestNavigateToSoloStats += (s, e) => this.Frame.Navigate(typeof(StatsPlayerPage));
             ViewModel.RequestNavigateToTeamStats += (s, e) => this.Frame.Navigate(typeof(StatsTeamPage));

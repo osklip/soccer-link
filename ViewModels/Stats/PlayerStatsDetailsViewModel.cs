@@ -10,9 +10,9 @@ namespace SoccerLink.ViewModels.Stats
 {
     public class PlayerStatsDetailsViewModel : BaseViewModel
     {
-        private Zawodnik _currentPlayer; // Musimy pamiętać zawodnika do przeładowania
+        private Zawodnik _currentPlayer; 
 
-        // Pola wyświetlania
+        
         private string _playerName = "Ładowanie...";
         private string _position = "-";
         private string _goals = "-";
@@ -24,7 +24,7 @@ namespace SoccerLink.ViewModels.Stats
         private string _cards = "- / -";
         private string _cleanSheets = "-";
 
-        // Filtry
+        
         private int _selectedMonthIndex = 0;
         private int _selectedYearIndex = 0;
 
@@ -43,7 +43,7 @@ namespace SoccerLink.ViewModels.Stats
         {
             GoBackCommand = new RelayCommand(() => RequestNavigateBack?.Invoke(this, EventArgs.Empty));
 
-            // Generowanie lat
+            
             var currentYear = DateTime.Now.Year;
             for (int i = 0; i < 5; i++)
             {
@@ -51,7 +51,7 @@ namespace SoccerLink.ViewModels.Stats
             }
         }
 
-        // --- WŁAŚCIWOŚCI ---
+        
         public string PlayerName { get => _playerName; set => SetProperty(ref _playerName, value); }
         public string Position { get => _position; set => SetProperty(ref _position, value); }
         public string Goals { get => _goals; set => SetProperty(ref _goals, value); }
@@ -70,7 +70,7 @@ namespace SoccerLink.ViewModels.Stats
             {
                 if (SetProperty(ref _selectedMonthIndex, value))
                 {
-                    _ = LoadStatsForPlayerAsync(_currentPlayer); // Odśwież po zmianie
+                    _ = LoadStatsForPlayerAsync(_currentPlayer); 
                 }
             }
         }
@@ -82,7 +82,7 @@ namespace SoccerLink.ViewModels.Stats
             {
                 if (SetProperty(ref _selectedYearIndex, value))
                 {
-                    _ = LoadStatsForPlayerAsync(_currentPlayer); // Odśwież po zmianie
+                    _ = LoadStatsForPlayerAsync(_currentPlayer); 
                 }
             }
         }
@@ -95,7 +95,7 @@ namespace SoccerLink.ViewModels.Stats
             PlayerName = $"{player.Imie} {player.Nazwisko}";
             Position = player.Pozycja;
 
-            // Przygotowanie filtrów
+            
             int? month = SelectedMonthIndex == 0 ? null : SelectedMonthIndex;
             int? year = null;
             if (SelectedYearIndex > 0 && int.TryParse(Years[SelectedYearIndex], out int y))
@@ -103,7 +103,7 @@ namespace SoccerLink.ViewModels.Stats
                 year = y;
             }
 
-            // Pobranie danych z serwisu z uwzględnieniem filtrów
+           
             var stats = await StatsService.GetPlayerStatsSummaryAsync(player.ZawodnikId, month, year);
 
             Goals = stats.Gole.ToString();

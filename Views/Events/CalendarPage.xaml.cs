@@ -18,7 +18,7 @@ namespace SoccerLink.Views
             ViewModel.RequestNavigateBack += (s, e) => this.Frame.Navigate(typeof(DashboardPage));
             ViewModel.RequestNavigateToAdd += (s, e) => this.Frame.Navigate(typeof(AddEventPage));
 
-            // USUNIÊTO: Obs³uga nawigacji do AttendancePage (Obecnoœæ)
+            
 
             ViewModel.RequestNavigateToEdit += (s, evt) => this.Frame.Navigate(typeof(EditEventPage), new EditEventArgs { EventType = evt.EventType, EventId = evt.Id });
             ViewModel.RequestNavigateToDelete += (s, evt) => this.Frame.Navigate(typeof(ConfirmDeleteEventPage), new ConfirmDeleteEventArgs { EventType = evt.EventType, EventId = evt.Id });

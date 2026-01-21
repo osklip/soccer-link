@@ -15,7 +15,7 @@ namespace SoccerLink.Views
             ViewModel = new SelectMatchViewModel();
             this.InitializeComponent();
 
-            // Nawigacja
+            
             ViewModel.RequestNavigateBack += (s, e) => this.Frame.Navigate(typeof(StatsNaviPage));
             ViewModel.RequestNavigateToStatsHub += (s, match) => this.Frame.Navigate(typeof(AddStatsHubPage), match);
 
@@ -32,7 +32,7 @@ namespace SoccerLink.Views
             if (MatchesListView.SelectedItem is Mecz selectedMatch)
             {
                 ViewModel.SelectMatch(selectedMatch);
-                MatchesListView.SelectedItem = null; // Reset zaznaczenia
+                MatchesListView.SelectedItem = null; 
             }
         }
     }

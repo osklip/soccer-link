@@ -12,7 +12,7 @@ namespace SoccerLink.Helpers
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            // Jeśli wartość to true -> Pokaż (Visible), w przeciwnym razie -> Ukryj (Collapsed)
+
             if (value is bool boolValue && boolValue)
             {
                 return Visibility.Visible;

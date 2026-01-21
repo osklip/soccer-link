@@ -15,7 +15,7 @@ namespace SoccerLink.ViewModels.Events
         private string _eventType;
         private UpcomingEvent _originalEvent;
 
-        // Pola edycyjne
+        
         private string _title;
         private string _location;
         private DateTimeOffset? _date;
@@ -23,7 +23,7 @@ namespace SoccerLink.ViewModels.Events
         private string _timeEnd;
         private string _description;
 
-        // UI State
+        
         private string _headerText = "Edycja Wydarzenia";
         private string _eventInfoText = "";
         private string _titleLabel = "Nazwa";
@@ -40,7 +40,7 @@ namespace SoccerLink.ViewModels.Events
             CancelCommand = new RelayCommand(() => RequestNavigateBack?.Invoke(this, EventArgs.Empty));
         }
 
-        // --- WŁAŚCIWOŚCI ---
+        
 
         public string Title { get => _title; set => SetProperty(ref _title, value); }
         public string Location { get => _location; set => SetProperty(ref _location, value); }
@@ -48,7 +48,7 @@ namespace SoccerLink.ViewModels.Events
         public string TimeStart { get => _timeStart; set => SetProperty(ref _timeStart, value); }
         public string TimeEnd { get => _timeEnd; set => SetProperty(ref _timeEnd, value); }
         public string Description { get => _description; set => SetProperty(ref _description, value); }
-        public string EventType { get => _eventType; set => SetProperty(ref _eventType, value); } // Tylko do odczytu w UI
+        public string EventType { get => _eventType; set => SetProperty(ref _eventType, value); } 
 
         public string HeaderText { get => _headerText; set => SetProperty(ref _headerText, value); }
         public string EventInfoText { get => _eventInfoText; set => SetProperty(ref _eventInfoText, value); }
@@ -63,7 +63,7 @@ namespace SoccerLink.ViewModels.Events
         public ICommand SaveCommand { get; }
         public ICommand CancelCommand { get; }
 
-        // --- METODY ---
+        
 
         public async Task LoadEventAsync(int eventId, string eventType)
         {
@@ -84,7 +84,7 @@ namespace SoccerLink.ViewModels.Events
                     return;
                 }
 
-                // Mapowanie modelu na pola ViewModelu
+                
                 Title = _originalEvent.Title;
                 Location = _originalEvent.Location;
                 Date = _originalEvent.DateTimeStart;
@@ -118,7 +118,7 @@ namespace SoccerLink.ViewModels.Events
                     IsTimeEndVisible = true;
                     IsDescriptionVisible = false;
                     break;
-                default: // Wydarzenie
+                default: 
                     TitleLabel = "Nazwa wydarzenia";
                     IsTimeEndVisible = true;
                     IsDescriptionVisible = true;
@@ -145,7 +145,7 @@ namespace SoccerLink.ViewModels.Events
                 return;
             }
 
-            // Parsowanie daty i czasu
+            
             if (!Date.HasValue)
             {
                 StatusMessage = "Data jest wymagana.";
@@ -157,7 +157,7 @@ namespace SoccerLink.ViewModels.Events
 
             if (!DateTime.TryParseExact(fullDateStr, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime newStart))
             {
-                // Fallback dla formatu H:mm
+                
                 if (!DateTime.TryParseExact(fullDateStr, "yyyy-MM-dd H:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out newStart))
                 {
                     StatusMessage = "Niepoprawny format godziny rozpoczęcia (HH:mm).";
@@ -165,7 +165,7 @@ namespace SoccerLink.ViewModels.Events
                 }
             }
 
-            // Aktualizacja obiektu modelu
+            
             _originalEvent.Title = Title.Trim();
             _originalEvent.Location = Location?.Trim() ?? "";
             _originalEvent.DateTimeStart = newStart;

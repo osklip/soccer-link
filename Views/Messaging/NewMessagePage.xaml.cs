@@ -14,7 +14,7 @@ namespace SoccerLink.Views
             ViewModel = new NewMessageViewModel();
             this.InitializeComponent();
 
-            // Nawigacja powrotna
+            
             ViewModel.RequestNavigateBack += (s, e) =>
             {
                 if (this.Frame.CanGoBack) this.Frame.GoBack();

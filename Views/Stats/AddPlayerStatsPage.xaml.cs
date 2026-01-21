@@ -15,7 +15,7 @@ namespace SoccerLink.Views
             ViewModel = new AddPlayerStatsViewModel();
             this.InitializeComponent();
 
-            // Obs³uga proœby o zamkniêcie (powrót) wys³anej z ViewModelu
+            
             ViewModel.RequestClose += (s, e) =>
             {
                 if (this.Frame.CanGoBack)
@@ -29,11 +29,11 @@ namespace SoccerLink.Views
         {
             base.OnNavigatedTo(e);
 
-            // Przekazanie parametru (Meczu) do ViewModelu
+            
             if (e.Parameter is Mecz match)
             {
                 ViewModel.Initialize(match);
-                // Opcjonalnie ustawiamy tytu³ w CodeBehind, jeœli nie bindujemy go w ViewModelu
+                
                 MatchTitleText.Text = $"{match.DataDisplay} vs {match.Przeciwnik}";
             }
         }

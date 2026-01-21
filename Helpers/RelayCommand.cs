@@ -3,7 +3,7 @@ using System.Windows.Input;
 
 namespace SoccerLink.Helpers
 {
-    // Wersja bez parametrów (istniejąca)
+
     public class RelayCommand : ICommand
     {
         private readonly Action _execute;
@@ -21,7 +21,7 @@ namespace SoccerLink.Helpers
         public void Execute(object parameter) => _execute();
     }
 
-    // NOWA WERSJA: Generyczna, obsługująca parametry (np. int id)
+
     public class RelayCommand<T> : ICommand
     {
         private readonly Action<T> _execute;

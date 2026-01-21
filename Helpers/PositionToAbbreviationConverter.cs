@@ -10,14 +10,12 @@ namespace SoccerLink.Helpers
             var position = value as string;
             if (string.IsNullOrEmpty(position)) return "";
 
-            // Zamiana pełnej nazwy na skrót
             return position.ToLower().Trim() switch
             {
                 "bramkarz" => "BR",
                 "obrońca" => "OBR",
                 "pomocnik" => "POM",
                 "napastnik" => "NAP",
-                // Domyślnie: pierwsze 2 litery wielkimi literami (jeśli inna nazwa)
                 _ => position.Length >= 2 ? position.Substring(0, 2).ToUpper() : position.ToUpper()
             };
         }

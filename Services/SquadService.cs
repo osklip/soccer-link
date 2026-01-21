@@ -21,17 +21,17 @@ namespace SoccerLink.Services
             await client.Execute(sql);
         }
 
-        // ZMODYFIKOWANA METODA: Zapisuje skład i wysyła powiadomienia
+        
         public static async Task SaveSquadAsync(int meczId, List<SkladEntry> entries)
         {
             if (SessionService.AktualnyTrener == null) return;
 
             await EnsureTableExistsAsync();
-            await AvailabilityService.EnsureTableExistsAsync(); // Upewniamy się, że tabela dostępności istnieje
+            await AvailabilityService.EnsureTableExistsAsync(); 
 
             using var client = await DatabaseConfig.CreateClientAsync();
 
-            // 1. Usuwamy stary skład dla tego meczu
+            
             await client.Execute("DELETE FROM SkladMeczowy WHERE MeczID = ?", meczId);
 
             var sqlInsert = "INSERT INTO SkladMeczowy (MeczID, ZawodnikID, PozycjaKod) VALUES (?, ?, ?)";
@@ -40,27 +40,26 @@ namespace SoccerLink.Services
             {
                 if (entry.ZawodnikID > 0)
                 {
-                    // A. Zapis do bazy składu
+                    
                     await client.Execute(sqlInsert, meczId, entry.ZawodnikID, entry.PozycjaKod);
 
-                    // B. Inicjalizacja dostępności (status Oczekujący)
+                    
                     await AvailabilityService.InicjujDostepnoscAsync(meczId, entry.ZawodnikID);
 
-                    // C. Przygotowanie treści wiadomości
+                    
                     string opisPozycji = entry.PozycjaKod;
 
-                    // Prosta logika zamiany kodów na tekst (dostosuj do swoich kodów)
                     if (opisPozycji.Contains("SUB") || opisPozycji.Contains("Bench"))
                         opisPozycji = "Ławka rezerwowych";
                     else if (opisPozycji == "GK") opisPozycji = "Bramkarz";
-                    // ... możesz dodać więcej warunków
+                   
 
                     string temat = "Powołanie na mecz";
                     string tresc = $"Zostałeś powołany na mecz (ID: {meczId}). " +
                                    $"Twoja przydzielona rola/pozycja: {opisPozycji}. " +
                                    $"Proszę o potwierdzenie obecności w zakładce Mecze.";
 
-                    // D. Wysłanie wiadomości do konkretnego zawodnika
+                    
                     await WiadomoscService.WyslijWiadomoscPrywatnaAsync(entry.ZawodnikID, temat, tresc);
                 }
             }

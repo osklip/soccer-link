@@ -8,7 +8,7 @@ namespace SoccerLink.ViewModels.Stats
 {
     public class StatsTeamViewModel : BaseViewModel
     {
-        // Pola wyświetlane w widoku
+        
         private string _avgGoals = "-";
         private string _avgPossession = "-";
         private string _avgShots = "-";
@@ -18,7 +18,7 @@ namespace SoccerLink.ViewModels.Stats
         private string _avgFouls = "-";
         private string _totalCleanSheets = "-";
 
-        // Filtry
+        
         private int _selectedMonthIndex = 0;
         private int _selectedYearIndex = 0;
 

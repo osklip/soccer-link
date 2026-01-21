@@ -13,11 +13,11 @@ namespace SoccerLink.ViewModels.Auth
     public class LoginViewModel : BaseViewModel
     {
         private string _email;
-        private string _password; // Przechowujemy hasło w VM (LoginService wymaga stringa)
+        private string _password; 
         private string _errorMessage;
         private bool _isErrorVisible;
 
-        // Zdarzenia nawigacyjne (View je subskrybuje)
+        
         public event EventHandler RequestNavigateToDashboard;
         public event EventHandler RequestNavigateToRegister;
 

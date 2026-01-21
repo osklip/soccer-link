@@ -15,7 +15,7 @@ namespace SoccerLink.Services
 
             using var client = await DatabaseConfig.CreateClientAsync();
 
-            // Zastąpienie @trenerId znakiem '?'
+            
             var sql = @"
                 SELECT ZawodnikID, Imie, Nazwisko, Pozycja, NumerTelefonu, AdresEmail, CzyDyspozycyjny, NumerKoszulki
                 FROM Zawodnik

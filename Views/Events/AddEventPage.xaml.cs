@@ -14,7 +14,7 @@ namespace SoccerLink.Views
 
         public AddEventPage()
         {
-            // Inicjalizacja ViewModelu przed komponentami
+            
             ViewModel = new AddEventViewModel();
             this.InitializeComponent();
         }
@@ -24,7 +24,7 @@ namespace SoccerLink.Views
             bool success = await ViewModel.AddEventAsync();
             if (success)
             {
-                // Krótkie opóŸnienie, ¿eby u¿ytkownik zobaczy³ komunikat "Sukces"
+               
                 await Task.Delay(500);
                 this.Frame.Navigate(typeof(CalendarPage));
             }

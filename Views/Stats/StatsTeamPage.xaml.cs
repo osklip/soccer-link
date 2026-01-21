@@ -41,7 +41,7 @@ namespace SoccerLink.Views
             DateTextBlock.Text = DateTime.Now.ToString("dd MMM yyyy   HH:mm", polishCulture);
         }
 
-        // Nawigacja
+        
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(StatsNaviPage));
