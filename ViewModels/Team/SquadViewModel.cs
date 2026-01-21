@@ -157,7 +157,12 @@ namespace SoccerLink.ViewModels.Team
             var players = await ZawodnikService.PobierzZawodnikowDlaAktualnegoTreneraAsync();
             // Pusta opcja do odznaczania
             AvailablePlayers.Add(new Zawodnik { ZawodnikId = -1, Nazwisko = "(Brak)", Imie = "---" });
-            foreach (var p in players) AvailablePlayers.Add(p);
+
+            // Filtrowanie zawodników: tylko ci z CzyDyspozycyjny == 1
+            foreach (var p in players.Where(z => z.CzyDyspozycyjny == 1))
+            {
+                AvailablePlayers.Add(p);
+            }
 
             Matches.Clear();
             var allEvents = await CalendarService.GetAllEventsAsync();

@@ -129,7 +129,7 @@
                                 CornerRadius="8" Padding="12,6"
                                 Visibility="{x:Bind ViewModel.IsSquadStatusVisible, Mode=OneWay, Converter={StaticResource BoolToVis}}">
                             <TextBlock Text="{x:Bind ViewModel.NextMatchSquadStatus, Mode=OneWay}"
-                                       Foreground="White" FontWeight="Bold" FontSize="14" TextAlignment="Center"/>
+                                       Foreground="White" FontWeight="Bold" FontSize="28" TextAlignment="Center"/>
                         </Border>
                     </Viewbox>
                 </StackPanel>

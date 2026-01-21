@@ -15,7 +15,6 @@ namespace SoccerLink.ViewModels
         private DispatcherTimer _timer;
         private string _currentDateTime;
 
-        // Lewa kolumna (Inne wydarzenia)
         private string _nextOtherEventTitle = "Brak najbliższego wydarzenia";
         private string _nextOtherEventDate = "Data: ---";
         private string _nextOtherEventLocation = "Miejsce: ---";
@@ -24,22 +23,18 @@ namespace SoccerLink.ViewModels
         private string _subOtherEventDate = "Data: ---";
         private string _subOtherEventLocation = "Miejsce: ---";
 
-        // Prawa kolumna (Mecze)
         private string _nextMatchTitle = "Brak najbliższego meczu";
         private string _nextMatchDate = "Data: ---";
         private string _nextMatchLocation = "Miejsce: ---";
 
-        // Status składu
         private string _nextMatchSquadStatus = "";
         private string _nextMatchSquadColor = "Transparent";
         private bool _isSquadStatusVisible = false;
 
-        // Prawa kolumna - Kolejny mecz
         private string _subMatchTitle = "Brak kolejnego meczu";
         private string _subMatchDate = "Data: ---";
         private string _subMatchLocation = "Miejsce: ---";
 
-        // Zdarzenia nawigacyjne
         public event EventHandler RequestNavigateToMessages;
         public event EventHandler RequestNavigateToCalendar;
         public event EventHandler RequestNavigateToStats;
@@ -59,8 +54,6 @@ namespace SoccerLink.ViewModels
 
             StartClock();
         }
-
-        // --- WŁAŚCIWOŚCI ---
 
         public string CurrentDateTime { get => _currentDateTime; set => SetProperty(ref _currentDateTime, value); }
 
@@ -83,8 +76,6 @@ namespace SoccerLink.ViewModels
         public string SubMatchTitle { get => _subMatchTitle; set => SetProperty(ref _subMatchTitle, value); }
         public string SubMatchDate { get => _subMatchDate; set => SetProperty(ref _subMatchDate, value); }
         public string SubMatchLocation { get => _subMatchLocation; set => SetProperty(ref _subMatchLocation, value); }
-
-        // --- METODY ---
 
         private void StartClock()
         {
@@ -119,7 +110,6 @@ namespace SoccerLink.ViewModels
                     var nextMatch = matches.FirstOrDefault();
                     var subMatch = matches.Skip(1).FirstOrDefault();
 
-                    // Uzupełnianie danych UI
                     if (nextOther != null)
                     {
                         NextOtherEventTitle = $"{nextOther.EventType}: {nextOther.Title}";
@@ -140,7 +130,6 @@ namespace SoccerLink.ViewModels
                         NextMatchDate = $"{nextMatch.DisplayDate} ({nextMatch.DisplayTimeRange})";
                         NextMatchLocation = $"{nextMatch.Location}";
 
-                        // --- SPRAWDZANIE STANU SKŁADU DLA NAJBLIŻSZEGO MECZU ---
                         var squad = await SquadService.GetSquadForMatchAsync(nextMatch.Id);
 
                         var basePositions = new HashSet<string> { "GK", "P1", "P2", "P3", "P4", "P5", "P6", "P7", "P8", "P9", "P10" };
@@ -150,17 +139,8 @@ namespace SoccerLink.ViewModels
 
                         if (missing > 0)
                         {
-                            // POPRAWKA: Odmiana słowa (1 gracza, >1 graczy)
-                            string suffix = (missing == 1) ? "gracza" : "graczy";
-
-                            NextMatchSquadStatus = $"⚠ Brakuje {missing} {suffix}";
-                            NextMatchSquadColor = "#FF6B6B"; // Czerwony
-                            IsSquadStatusVisible = true;
-                        }
-                        else
-                        {
-                            NextMatchSquadStatus = "✅ Skład gotowy";
-                            NextMatchSquadColor = "#66BB6A"; // Zielony
+                            NextMatchSquadStatus = "⚠";
+                            NextMatchSquadColor = "#FF6B6B";
                             IsSquadStatusVisible = true;
                         }
                     }
@@ -195,7 +175,6 @@ namespace SoccerLink.ViewModels
             NextMatchDate = "Data: ---";
             NextMatchLocation = "Miejsce: ---";
 
-            // Reset statusu składu
             NextMatchSquadStatus = "";
             NextMatchSquadColor = "Transparent";
             IsSquadStatusVisible = false;
