@@ -1,161 +1,33 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
 		<TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
 		<TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
 		<RootNamespace>SoccerLink</RootNamespace>
 		<ApplicationManifest>app.manifest</ApplicationManifest>
-		<Platforms>x86;x64;ARM64</Platforms>
-		<RuntimeIdentifiers>win-x86;win-x64;win-arm64</RuntimeIdentifiers>
-		<PublishProfile>win-$(Platform).pubxml</PublishProfile>
+
+		<Platforms>x64</Platforms>
+		<RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
+
 		<UseWinUI>true</UseWinUI>
-		<EnableMsixTooling>true</EnableMsixTooling>
-		<Nullable>enable</Nullable>
+
+		<WindowsPackageType>None</WindowsPackageType>
+		<WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+		<SelfContained>true</SelfContained>
+		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
 	</PropertyGroup>
-	<ItemGroup>
-		<None Remove="RegisterPage.xaml" />
-		<None Remove="Views\AddEventPage.xaml" />
-		<None Remove="Views\CalendarPage.xaml" />
-		<None Remove="Views\ConfirmDeleteEventPage.xaml" />
-		<None Remove="Views\DashboardPage.xaml" />
-		<None Remove="Views\EditEventPage.xaml" />
-		<None Remove="Views\LoginPage.xaml" />
-		<None Remove="Views\MessagesPage.xaml" />
-		<None Remove="Views\NewMessagePage.xaml" />
-		<None Remove="Views\PlayerListPage.xaml" />
-		<None Remove="Views\RegisterPage.xaml" />
-		<None Remove="Views\StatsNaviPage.xaml" />
-		<None Remove="Views\StatsPlayerPage.xaml" />
-		<None Remove="Views\Stats\SquadPage.xaml" />
-		<None Remove="Views\TeamManagementPage.xaml" />
-		<None Remove="Views\UpcomingEventPage.xaml" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Page Remove="Views\Stats\SquadPage.xaml" />
-	</ItemGroup>
 
 	<ItemGroup>
-		<Content Include="Assets\SplashScreen.scale-200.png" />
-		<Content Include="Assets\LockScreenLogo.scale-200.png" />
-		<Content Include="Assets\Square150x150Logo.scale-200.png" />
-		<Content Include="Assets\Square44x44Logo.scale-200.png" />
-		<Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
-		<Content Include="Assets\StoreLogo.png" />
-		<Content Include="Assets\Wide310x150Logo.scale-200.png" />
-		<Content Include="Assets\calendar_icon.png" />
-		<Content Include="Assets\messages_icon.png" />
-		<Content Include="Assets\players_icon.png" />
-		<Content Include="Assets\squad_icon.png" />
-		<Content Include="Assets\teammanagementimage.png" />
-		<Content Include="Assets\teamstats_icon.png" />
-	</ItemGroup>
+		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.5.240627000" />
+		<PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1" />
 
-	<ItemGroup>
-	  <EmbeddedResource Include="Views\Team\SquadPage.xaml">
-	    <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-	  </EmbeddedResource>
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.0" />
+		<PackageReference Include="Libsql.Client" Version="0.5.1" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<Manifest Include="$(ApplicationManifest)" />
 	</ItemGroup>
-
-	<ItemGroup Condition="'$(DisableMsixProjectCapabilityAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
-		<ProjectCapability Include="Msix" />
-	</ItemGroup>
-	<ItemGroup>
-		<PackageReference Include="Libsql.Client" Version="0.5.1" />
-		<PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.6901" />
-		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.251003001" />
-		<PackageReference Include="Nelknet.LibSQL.Data" Version="0.2.4" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Page Update="Views\ConfirmDeleteEventPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </Page>
-	</ItemGroup>
-	<ItemGroup>
-	  <Page Update="Views\EditEventPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </Page>
-	</ItemGroup>
-	<ItemGroup>
-	  <Page Update="Views\AddEventPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </Page>
-	  <Page Update="Views\AddStatsHubPage.xaml">
-	    <SubType>Designer</SubType>
-	  </Page>
-	</ItemGroup>
-	<ItemGroup>
-		<Page Update="Views\StatsPlayerPage.xaml">
-			<Generator>MSBuild:Compile</Generator>
-		</Page>
-	</ItemGroup>
-	<ItemGroup>
-		<Page Update="Views\PlayerListPage.xaml">
-			<Generator>MSBuild:Compile</Generator>
-		</Page>
-	</ItemGroup>
-	<ItemGroup>
-		<Page Update="Views\RegisterPage.xaml">
-			<Generator>MSBuild:Compile</Generator>
-		</Page>
-	</ItemGroup>
-	<ItemGroup>
-		<Page Update="Views\LoginPage.xaml">
-			<Generator>MSBuild:Compile</Generator>
-		</Page>
-	</ItemGroup>
-	<ItemGroup>
-		<Page Update="RegisterPage.xaml">
-			<Generator>MSBuild:Compile</Generator>
-		</Page>
-	</ItemGroup>
-	<ItemGroup>
-		<Page Update="Views\TeamManagementPage.xaml">
-			<Generator>MSBuild:Compile</Generator>
-		</Page>
-	</ItemGroup>
-	<ItemGroup>
-		<Page Update="Views\UpcomingEventPage.xaml">
-			<Generator>MSBuild:Compile</Generator>
-		</Page>
-	</ItemGroup>
-	<ItemGroup>
-		<Page Update="Views\StatsNaviPage.xaml">
-			<Generator>MSBuild:Compile</Generator>
-		</Page>
-	</ItemGroup>
-	<ItemGroup>
-		<Page Update="Views\CalendarPage.xaml">
-			<Generator>MSBuild:Compile</Generator>
-		</Page>
-	</ItemGroup>
-	<ItemGroup>
-		<Page Update="Views\MessagesPage.xaml">
-			<Generator>MSBuild:Compile</Generator>
-		</Page>
-	</ItemGroup>
-	<ItemGroup>
-		<Page Update="Views\DashboardPage.xaml">
-			<Generator>MSBuild:Compile</Generator>
-		</Page>
-	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Views\Auth\" />
-	  <Folder Include="Views\Events\" />
-	  <Folder Include="Views\Messaging\" />
-	</ItemGroup>
-
-	<PropertyGroup Condition="'$(DisableHasPackageAndPublishMenuAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
-		<HasPackageAndPublishMenu>true</HasPackageAndPublishMenu>
-	</PropertyGroup>
-
-	<PropertyGroup>
-		<PublishReadyToRun Condition="'$(Configuration)' == 'Debug'">False</PublishReadyToRun>
-		<PublishReadyToRun Condition="'$(Configuration)' != 'Debug'">True</PublishReadyToRun>
-		<PublishTrimmed Condition="'$(Configuration)' == 'Debug'">False</PublishTrimmed>
-		<PublishTrimmed Condition="'$(Configuration)' != 'Debug'">True</PublishTrimmed>
-	</PropertyGroup>
 </Project>
